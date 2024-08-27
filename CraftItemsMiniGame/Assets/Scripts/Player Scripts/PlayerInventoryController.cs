@@ -24,7 +24,7 @@ public class PlayerInventoryController : MonoBehaviour
         if (added)
         {
             Debug.Log($"{nearbyItem.itemData.itemName} zosta³ podniesiony.");
-            Destroy(nearbyItem.gameObject); 
+            Destroy(nearbyItem.gameObject);
         }
         else
         {
