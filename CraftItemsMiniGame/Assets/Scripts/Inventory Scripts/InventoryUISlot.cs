@@ -12,8 +12,7 @@ public class InventorySlot : MonoBehaviour
     public void SetItem(ItemData item)
     {
         currentItem = item;
-        iconImage.sprite = item.itemIcon;
-        itemButton.onClick.RemoveAllListeners();
+        iconImage.sprite = item.itemIcon;     
     }
 
     public void ClearSlot()

@@ -1,16 +1,30 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    public List<InventorySlot> slots; 
-    private List<ItemData> itemsInInventory;
+    [SerializeField]
+    private List<InventorySlot> slots = new List<InventorySlot>(); 
+    public List<InventorySlot> InventorySlots { get => slots; set => slots = value; }
+    [SerializeField]
+    private List<ItemData> itemsInInventory=new List<ItemData>();
+
+    [Header("Selected main Info")]
+    [SerializeField]
+    private Image selectedItemImage;
+    [SerializeField]
+    private TextMeshProUGUI selectedItemNameText;
+    [SerializeField]
+    private TextMeshProUGUI selectedItemNameDesc;
 
     public void UpdateInventoryUI()
     {
-        itemsInInventory.Clear();
-        itemsInInventory.TrimExcess();
-        itemsInInventory = Inventory.Instance.GetInventoryItems();
+        
+      //  itemsInInventory.Clear();
+     //   itemsInInventory.TrimExcess();
+       itemsInInventory = Inventory.Instance.GetInventoryItems();
 
         for (int i = 0; i < slots.Count; i++)
         {
@@ -20,16 +34,16 @@ public class InventoryUI : MonoBehaviour
             }
             else
             {
-                slots[i].ClearSlot();
+              //  slots[i].ClearSlot();
             }
         }
-    }
-    public void ToggleInventoryUI()
+    } 
+
+    public void SetSelectedItemInfo(InventorySlot slot)
     {
-        gameObject.SetActive(!gameObject.activeSelf);
-        if (gameObject.activeSelf)
-        {
-            UpdateInventoryUI();
-        }
+        if (slot.currentItem == null) return;
+        selectedItemImage.sprite = slot.currentItem.itemIcon;
+        selectedItemNameText.text = slot.currentItem.itemName;
+        selectedItemNameDesc.text = slot.currentItem.itemDescription;
     }
 }

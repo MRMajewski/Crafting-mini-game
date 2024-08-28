@@ -6,24 +6,33 @@ public class PlayerInventoryController : MonoBehaviour
 {
     [SerializeField]
     private Inventory inventory;
+    [SerializeField]
+    private InventoryUI inventoryUI;
+    [SerializeField]
+    private UIPanelController UIPanel;
     private PickupItem nearbyItem;
 
     private void Update()
     {
         if (!Input.anyKey) return;
 
-        if (Input.GetKeyDown(KeyCode.R) && nearbyItem != null && nearbyItem.IsPlayerInRange)
+        if (Input.GetKeyDown(KeyCode.E) && nearbyItem != null)
         {
             PickupNearbyItem();
+        }           
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            UIPanel.ToggleInventoryPanel();
+           // inventoryUI.ToggleInventoryUI();
         }
     }
 
     private void PickupNearbyItem()
     {
-        bool added = inventory.AddItem(nearbyItem.itemData.itemID);
+        bool added = inventory.AddItem(nearbyItem.ItemData.itemID);
         if (added)
         {
-            Debug.Log($"{nearbyItem.itemData.itemName} zosta³ podniesiony.");
+            Debug.Log($"{nearbyItem.ItemData.itemName} zosta³ podniesiony.");
             Destroy(nearbyItem.gameObject);
         }
         else

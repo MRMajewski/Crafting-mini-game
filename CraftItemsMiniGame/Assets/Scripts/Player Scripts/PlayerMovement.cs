@@ -30,21 +30,16 @@ public class PlayerMovement : MonoBehaviour
         }
         if (isMoving)
         {
-            HandleMovement();
+            HandleMovement(x,z);
         }    
     }
 
-    private void HandleMovement()
+    private void HandleMovement(float x,float z)
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
         Vector3 modeDirection = transform.right * x + transform.forward * z;
         controller.Move(modeDirection * movementSpeed * Time.deltaTime);
 
         bool isCurrentlyMoving = Mathf.Abs(x) > 0.01f || Mathf.Abs(z) > 0.01f;
-
-        Debug.Log("x: " + x + ", z: " + z);
 
         if (isCurrentlyMoving != isMoving)
         {
