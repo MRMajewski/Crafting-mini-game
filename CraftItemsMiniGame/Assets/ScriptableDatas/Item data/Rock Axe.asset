@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Rock Axe
   itemID: rockAxe
   itemDescription: for chopping more wood
-  prefab: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 30a1e4d4fbd683c4cbd1d88152988c01, type: 3}
+  prefab: {fileID: 18008095503012359, guid: 84c8653ce7697ba4396ffbacedd6a70f, type: 3}
