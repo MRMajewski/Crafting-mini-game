@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Lifting
+      name: Lift up
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 106
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
