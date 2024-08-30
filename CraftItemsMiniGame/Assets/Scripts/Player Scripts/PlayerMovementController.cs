@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementController : MonoBehaviour
 {
     [SerializeField]
     private CharacterController controller;
@@ -12,8 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private float rotationSpeed = 180f;
     [SerializeField]
     private Transform playerModelTransform;
-    [SerializeField]
-    private Animator animator;
+    public Transform PlayerModelTransform { get=>playerModelTransform; }
     private bool isMoving = false;
 
     void Update()
@@ -26,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
         if (isCurrentlyMoving != isMoving)
         {
             isMoving = isCurrentlyMoving;
-            animator.SetBool("isMoving", isMoving);
+            PlayerMainController.Instance.Animator.SetBool("isMoving", isMoving);
         }
         if (isMoving)
         {
@@ -44,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         if (isCurrentlyMoving != isMoving)
         {
             isMoving = isCurrentlyMoving;
-            animator.SetBool("isMoving", isMoving);
+            PlayerMainController.Instance.Animator.SetBool("isMoving", isMoving);
         }
 
         if (isMoving)

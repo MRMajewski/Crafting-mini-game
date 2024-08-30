@@ -9,11 +9,17 @@ public class Inventory : MonoBehaviour
     public ItemDatabase itemDatabase; 
 
     private List<ItemData> inventoryItems = new List<ItemData>();
+    public List<ItemData> InventoryItems { get => inventoryItems; }
 
     public int maxInventorySize = 9;
 
     [SerializeField]
-    private Vector3 dropPosition;
+    private float dropDistance;
+
+    [SerializeField]
+    private Transform playerTransform;
+    [SerializeField]
+    private Transform itemsParent;
 
     private void Awake()
     {
@@ -47,7 +53,6 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogWarning($"Nie znaleziono przedmiotu z ID: {itemID}");
         }
-
         return false;
     }
 
@@ -65,21 +70,18 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogWarning($"Przedmiot z ID {itemID} nie znajduje siê w ekwipunku.");
         }
-
         return false;
     }
 
-    public List<ItemData> GetInventoryItems()
-    {
-        return inventoryItems;
-    }
     public void DropItem(string itemID)
     {
         ItemData itemToDrop = inventoryItems.Find(item => item.itemID == itemID);
 
         if (itemToDrop != null)
         {
-            Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity);
+            Vector3 dropPosition = playerTransform.position + playerTransform.GetChild(0).forward * dropDistance;
+
+            Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity, itemsParent);
             RemoveItem(itemID);
             Debug.Log($"{itemToDrop.itemName} zosta³ wyrzucony na scenê.");
         }
@@ -87,10 +89,5 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogWarning($"Przedmiot z ID {itemID} nie znajduje siê w ekwipunku.");
         }
-    }
-
-    public List<ItemData> GetItems()
-    {
-        return inventoryItems;
     }
 }

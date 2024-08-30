@@ -18,13 +18,19 @@ public class InventoryUI : MonoBehaviour
     private TextMeshProUGUI selectedItemNameText;
     [SerializeField]
     private TextMeshProUGUI selectedItemNameDesc;
+    [SerializeField]
+    private InventorySlot currentlySelectedSlot;
 
+    [Header("Selected default")]
+    [SerializeField]
+    private Sprite selectedItemImageDefault;
+    [SerializeField]
+    private string selectedItemNameTextDefault;
+    [SerializeField]
+    private string selectedItemNameDescDefault;
     public void UpdateInventoryUI()
     {
-        
-      //  itemsInInventory.Clear();
-     //   itemsInInventory.TrimExcess();
-       itemsInInventory = Inventory.Instance.GetInventoryItems();
+       itemsInInventory = Inventory.Instance.InventoryItems;
 
         for (int i = 0; i < slots.Count; i++)
         {
@@ -32,18 +38,45 @@ public class InventoryUI : MonoBehaviour
             {
                 slots[i].SetItem(itemsInInventory[i]);
             }
-            else
-            {
-              //  slots[i].ClearSlot();
-            }
         }
-    } 
+    }
+
 
     public void SetSelectedItemInfo(InventorySlot slot)
     {
-        if (slot.currentItem == null) return;
-        selectedItemImage.sprite = slot.currentItem.itemIcon;
-        selectedItemNameText.text = slot.currentItem.itemName;
-        selectedItemNameDesc.text = slot.currentItem.itemDescription;
+        currentlySelectedSlot = slot;
+
+        if (slot.currentItem == null)
+        {
+            ClearSelectedSlot();
+        }
+        else
+        {
+            selectedItemImage.sprite = slot.currentItem.itemIcon;
+            selectedItemNameText.text = slot.currentItem.itemName;
+            selectedItemNameDesc.text = slot.currentItem.itemDescription;
+        }            
+    }
+
+    public void ClearSlot(InventorySlot slot)
+    {
+        slot.ClearSlot();
+    }
+
+    public void ClearSelectedSlot()
+    {
+        selectedItemImage.sprite = selectedItemImageDefault;
+        selectedItemNameText.text = selectedItemNameTextDefault;
+        selectedItemNameDesc.text = selectedItemNameDescDefault;
+    }
+
+    public void DropSelectedItem()
+    {
+        if (currentlySelectedSlot.currentItem == null) return;
+
+        Inventory.Instance.DropItem(currentlySelectedSlot.currentItem.itemID);
+      //  Inventory.Instance.DropItem();
+        ClearSlot(currentlySelectedSlot);
+        ClearSelectedSlot();
     }
 }
