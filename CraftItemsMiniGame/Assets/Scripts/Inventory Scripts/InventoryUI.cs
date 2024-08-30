@@ -74,9 +74,15 @@ public class InventoryUI : MonoBehaviour
     {
         if (currentlySelectedSlot.currentItem == null) return;
 
-        Inventory.Instance.DropItem(currentlySelectedSlot.currentItem.itemID);
-      //  Inventory.Instance.DropItem();
+        Inventory.Instance.DropItem(currentlySelectedSlot.currentItem.itemName);
         ClearSlot(currentlySelectedSlot);
         ClearSelectedSlot();
+
+        //
+    }
+
+    public InventorySlot FindFirstEmptyInventorySlot()
+    {
+        return slots.Find(slot => !slot.IsFilled);
     }
 }

@@ -28,10 +28,10 @@ public class CraftingSystem : MonoBehaviour
             {
                 foreach (var item in recipe.requiredItems)
                 {
-                    inventory.RemoveItem(item.itemID);
+                    inventory.RemoveItem(item.itemName);
                 }
 
-                inventory.AddItem(recipe.resultItem.itemID);
+                inventory.AddItem(recipe.resultItem.itemName);
                 Debug.Log($"Crafting successful! Created {recipe.resultItem.itemName}");
             }
             else

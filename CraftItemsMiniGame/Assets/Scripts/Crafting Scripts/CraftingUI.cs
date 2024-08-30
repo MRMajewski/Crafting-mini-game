@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,72 +12,81 @@ public class CraftingUI : MonoBehaviour
 
     private List<ItemData> itemsToCraft = new List<ItemData>();
 
-    //public void AddItemToCrafting(ItemData item)
-    //{
-    //    if (itemsToCraft.Count < 2) // Maksymalnie dwa przedmioty do craftingu
-    //    {
-    //        itemsToCraft.Add(item);
-    //        UpdateCraftingSlots();
-    //    }
-    //}
-    public void AddItemToCrafting(InventorySlot item)
+    private void Start()
     {
-        if (itemsToCraft.Contains(item.currentItem))
+        craftButton.interactable = false; // Na start przycisk Craft nieaktywny
+    }
+
+
+    public void OnInventorySlotClicked(InventorySlot inventorySlot)
+    {
+        if (inventorySlot.IsFilled && itemsToCraft.Count < craftingSlots.Count)
         {
-            itemsToCraft.Remove(item.currentItem);
-        }
-        else
-        {
-            if (itemsToCraft.Count < craftingSlots.Count)
+            InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
+         //   if (emptyCraftingSlot != null)
             {
-                itemsToCraft.Add(item.currentItem);
+                itemsToCraft.Add(inventorySlot.currentItem);
+                emptyCraftingSlot.SetItem(inventorySlot.currentItem);
+                inventorySlot.ClearSlot();
+                UpdateCraftButtonState();
             }
         }
-
-        UpdateCraftingSlots();
     }
-    private void UpdateCraftingSlots()
+    public void OnCraftSlotClicked(InventorySlot craftingSlot)
+    {
+        if (craftingSlot.IsFilled)
+        {
+
+            itemsToCraft.Remove(craftingSlot.currentItem);
+            InventorySlot emptyInventorySlot = Inventory.Instance.InventoryUI.FindFirstEmptyInventorySlot();
+            if (emptyInventorySlot != null)
+            {
+                emptyInventorySlot.SetItem(craftingSlot.currentItem);
+            }
+            craftingSlot.ClearSlot();
+            UpdateCraftButtonState();
+        }
+    }
+
+    private InventorySlot FindFirstEmptyCraftingSlot()
+    {
+        return craftingSlots.Find(slot => !slot.IsFilled);
+    }
+
+
+    private ItemData GetNextItemForCrafting()
+    {
+        return Inventory.Instance.InventoryItems.Find(item => !itemsToCraft.Contains(item));
+    }
+
+    private void UpdateCraftButtonState()
+    {
+        craftButton.interactable = itemsToCraft.Count == craftingSlots.Count;
+    }
+
+    public void OnCraftButtonClicked()
+    {
+        if (itemsToCraft.Count == craftingSlots.Count)
+        {
+            CraftingSystem.Instance.Craft(itemsToCraft);
+            itemsToCraft.Clear();
+            UpdateCraftingSlots();
+        }
+    }
+
+    public void UpdateCraftingSlots()
     {
         for (int i = 0; i < craftingSlots.Count; i++)
         {
             if (i < itemsToCraft.Count)
             {
                 craftingSlots[i].SetItem(itemsToCraft[i]);
-                craftingSlots[i].itemButton.interactable = true;
             }
             else
             {
                 craftingSlots[i].ClearSlot();
-                craftingSlots[i].itemButton.interactable = false;
             }
         }
-
-        // Aktywuj przycisk craft, gdy oba sloty s¹ zape³nione
-        craftButton.interactable = (itemsToCraft.Count == craftingSlots.Count);
-    }
-
-
-    //public void UpdateCraftingSlots()
-    //{
-    //    //for (int i = 0; i < craftingSlots.Count; i++)
-    //    //{
-    //    //    if (i < itemsToCraft.Count)
-    //    //    {
-    //    //        craftingSlots[i].GetComponentInChildren<TextMeshProUGUI>().text = itemsToCraft[i].itemName;
-    //    //        craftingSlots[i].interactable = true;
-    //    //    }
-    //    //    else
-    //    //    {
-    //    //        craftingSlots[i].GetComponentInChildren<TextMeshProUGUI>().text = "Empty";
-    //    //        craftingSlots[i].interactable = false;
-    //    //    }
-    //    //}
-    //}
-
-    public void OnCraftButtonClicked()
-    {
-        CraftingSystem.Instance.Craft(itemsToCraft);
-        itemsToCraft.Clear();
-        UpdateCraftingSlots();
+        UpdateCraftButtonState();
     }
 }

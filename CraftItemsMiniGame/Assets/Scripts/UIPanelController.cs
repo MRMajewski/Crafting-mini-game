@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum InventoryMode
 {
     Inventory,
@@ -10,7 +9,7 @@ public enum InventoryMode
 }
 public class UIPanelController : MonoBehaviour
 {
-    public InventoryMode currentMode;
+    public InventoryMode currentMode=InventoryMode.Inventory;
 
     [SerializeField]
     private GameObject mainPanel;
@@ -32,12 +31,12 @@ public class UIPanelController : MonoBehaviour
         currentMode = (InventoryMode) modeIndex;
        UpdateUIForMode(currentMode);
     }
-    public void OpenInventoryPanel()
-    {
-        OpenUIPanel();
+    //public void OpenInventoryPanel()
+    //{
+    //    OpenUIPanel();
 
-        inventoryUI.UpdateInventoryUI();
-    }
+    //    inventoryUI.UpdateInventoryUI();
+    //}
     public void UpdateUIForMode(InventoryMode mode)
     {
         switch (mode)
@@ -51,7 +50,6 @@ public class UIPanelController : MonoBehaviour
                 craftingPanelGameObject.SetActive(true);
                 break;
         }
-
     }
 
     public void OnSlotClicked(InventorySlot slot)
@@ -62,7 +60,7 @@ public class UIPanelController : MonoBehaviour
                 inventoryUI.SetSelectedItemInfo(slot);
                 break;
             case InventoryMode.Crafting:
-                craftingUI.AddItemToCrafting(slot);
+                craftingUI.OnCraftSlotClicked(slot);
                 break;
         }
     }
@@ -77,7 +75,6 @@ public class UIPanelController : MonoBehaviour
     public void OpenUIPanel()
     {
         mainPanel.SetActive(true);
-        inventoryUI.UpdateInventoryUI();
     }
 
     public void CloseUIPanel()
@@ -94,6 +91,7 @@ public class UIPanelController : MonoBehaviour
         else
         {
             OpenUIPanel();
+            inventoryUI.UpdateInventoryUI();
         }
     }
 }

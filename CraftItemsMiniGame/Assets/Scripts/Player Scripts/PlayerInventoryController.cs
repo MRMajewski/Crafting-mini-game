@@ -42,7 +42,7 @@ public class PlayerInventoryController : MonoBehaviour
         if (nearbyItem == null)
             yield return null;
 
-        bool wasAdded = Inventory.Instance.AddItem(nearbyItem.ItemData.itemID);
+        bool wasAdded = Inventory.Instance.AddItem(nearbyItem.ItemData.itemName);
         if (wasAdded)
         {
             Destroy(nearbyItem.gameObject);

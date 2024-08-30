@@ -21,6 +21,11 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private Transform itemsParent;
 
+    [SerializeField]
+    private InventoryUI inventoryUI;
+
+    public InventoryUI InventoryUI { get => inventoryUI; }
+
     private void Awake()
     {
         if (Instance == null)
@@ -32,14 +37,15 @@ public class Inventory : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public bool AddItem(string itemID)
+    public bool AddItem(string itemName)
     {
-        ItemData itemToAdd = itemDatabase.GetItemByID(itemID);
+        ItemData itemToAdd = itemDatabase.GetItemByID(itemName);
 
         if (itemToAdd != null)
         {
             if (inventoryItems.Count < maxInventorySize)
             {
+
                 inventoryItems.Add(itemToAdd);
                 Debug.Log($"{itemToAdd.itemName} zosta³ dodany do ekwipunku.");
                 return true;
@@ -51,14 +57,14 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Nie znaleziono przedmiotu z ID: {itemID}");
+            Debug.LogWarning($"Nie znaleziono przedmiotu : {itemName}");
         }
         return false;
     }
 
-    public bool RemoveItem(string itemID)
+    public bool RemoveItem(string itemName)
     {
-        ItemData itemToRemove = inventoryItems.Find(item => item.itemID == itemID);
+        ItemData itemToRemove = inventoryItems.Find(item => item.itemName == itemName);
 
         if (itemToRemove != null)
         {
@@ -68,26 +74,26 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Przedmiot z ID {itemID} nie znajduje siê w ekwipunku.");
+            Debug.LogWarning($"Przedmiot z ID {itemName} nie znajduje siê w ekwipunku.");
         }
         return false;
     }
 
-    public void DropItem(string itemID)
+    public void DropItem(string itemName)
     {
-        ItemData itemToDrop = inventoryItems.Find(item => item.itemID == itemID);
+        ItemData itemToDrop = inventoryItems.Find(item => item.itemName == itemName);
 
         if (itemToDrop != null)
         {
             Vector3 dropPosition = playerTransform.position + playerTransform.GetChild(0).forward * dropDistance;
 
             Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity, itemsParent);
-            RemoveItem(itemID);
+            RemoveItem(itemName);
             Debug.Log($"{itemToDrop.itemName} zosta³ wyrzucony na scenê.");
         }
         else
         {
-            Debug.LogWarning($"Przedmiot z ID {itemID} nie znajduje siê w ekwipunku.");
+            Debug.LogWarning($"Przedmiot z ID {itemName} nie znajduje siê w ekwipunku.");
         }
     }
 }
