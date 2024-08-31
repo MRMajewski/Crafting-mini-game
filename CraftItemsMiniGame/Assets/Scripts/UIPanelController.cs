@@ -31,21 +31,20 @@ public class UIPanelController : MonoBehaviour
         currentMode = (InventoryMode) modeIndex;
        UpdateUIForMode(currentMode);
     }
-    //public void OpenInventoryPanel()
-    //{
-    //    OpenUIPanel();
 
-    //    inventoryUI.UpdateInventoryUI();
-    //}
     public void UpdateUIForMode(InventoryMode mode)
     {
+        inventoryUI.ClearSelectedSlot();
+
         switch (mode)
         {
             case InventoryMode.Inventory:
+                inventoryUI.ClearSelectedSlot();
                 inventoryItemDataGameObject.SetActive(true);
                 craftingPanelGameObject.SetActive(false);
                 break;
             case InventoryMode.Crafting:
+                craftingUI.ClearCraftingPanel();
                 inventoryItemDataGameObject.SetActive(false);
                 craftingPanelGameObject.SetActive(true);
                 break;
@@ -60,7 +59,7 @@ public class UIPanelController : MonoBehaviour
                 inventoryUI.SetSelectedItemInfo(slot);
                 break;
             case InventoryMode.Crafting:
-                craftingUI.OnCraftSlotClicked(slot);
+                craftingUI.OnInventorySlotClicked(slot);
                 break;
         }
     }

@@ -741,11 +741,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1506931277}
         m_TargetAssemblyTypeName: CraftingUI, Assembly-CSharp
-        m_MethodName: TransferResultItemToInventory
-        m_Mode: 1
+        m_MethodName: OnCraftSlotClicked
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 334879665}
+          m_ObjectArgumentAssemblyTypeName: InventorySlot, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3714,7 +3714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1506931275
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3800,10 +3800,10 @@ RectTransform:
   - {fileID: 360383372}
   m_Father: {fileID: 166841357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50.311996, y: -33.402}
+  m_SizeDelta: {x: 60.623993, y: 66.804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1508711049
 MonoBehaviour:
@@ -3889,11 +3889,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1506931277}
         m_TargetAssemblyTypeName: CraftingUI, Assembly-CSharp
-        m_MethodName: TransferResultItemToInventory
-        m_Mode: 1
+        m_MethodName: OnCraftSlotClicked
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1508711052}
+          m_ObjectArgumentAssemblyTypeName: InventorySlot, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5160,10 +5160,10 @@ RectTransform:
   - {fileID: 393714451}
   m_Father: {fileID: 166841357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 150.93599, y: -33.402}
+  m_SizeDelta: {x: 60.623993, y: 66.804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841039213
 MonoBehaviour:
@@ -5249,11 +5249,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1506931277}
         m_TargetAssemblyTypeName: CraftingUI, Assembly-CSharp
-        m_MethodName: TransferResultItemToInventory
-        m_Mode: 1
+        m_MethodName: OnCraftSlotClicked
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1841039216}
+          m_ObjectArgumentAssemblyTypeName: InventorySlot, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5435,7 +5435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1877896779
 RectTransform:
   m_ObjectHideFlags: 0

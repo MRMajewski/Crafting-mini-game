@@ -17,7 +17,7 @@ public class CraftingSystem : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void Craft(List<ItemData> itemsToCraft)
+    public ItemData Craft(List<ItemData> itemsToCraft)
     {
         RecipeData recipe = recipeDatabase.GetRecipeForItems(itemsToCraft);
 
@@ -31,17 +31,21 @@ public class CraftingSystem : MonoBehaviour
                     inventory.RemoveItem(item.itemName);
                 }
 
-                inventory.AddItem(recipe.resultItem.itemName);
+            //    inventory.AddItem(recipe.resultItem.itemName);
                 Debug.Log($"Crafting successful! Created {recipe.resultItem.itemName}");
+                return recipe.resultItem;
             }
             else
             {
                 Debug.Log("Crafting failed!");
+                return null;
             }
         }
         else
         {
+           
             Debug.Log("No matching recipe found!");
+            return null;
         }
     }
 }

@@ -49,9 +49,9 @@ public class PlayerInventoryController : MonoBehaviour
             PlayerMainController.Instance.PlayerMovement.enabled = true;
             nearbyItem = null;
 
-            DetectNearbyItems();
+            //           DetectNearbyItems();
         }
-     
+        DetectNearbyItems();
     }
 
     private void RotateTowardsNearbyItem()

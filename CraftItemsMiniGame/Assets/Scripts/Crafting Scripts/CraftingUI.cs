@@ -8,35 +8,35 @@ public class CraftingUI : MonoBehaviour
     [SerializeField]
     private List<InventorySlot> craftingSlots = new List<InventorySlot>(); // Sloty na przedmioty do craftingu
     [SerializeField]
+    private InventorySlot resultSlot;
+    [SerializeField]
     private Button craftButton;
 
     private List<ItemData> itemsToCraft = new List<ItemData>();
 
+    [SerializeField]
+    private TextMeshProUGUI resultNameText;
+
     private void Start()
     {
-        craftButton.interactable = false; // Na start przycisk Craft nieaktywny
+        craftButton.interactable = false; 
     }
-
-
     public void OnInventorySlotClicked(InventorySlot inventorySlot)
     {
         if (inventorySlot.IsFilled && itemsToCraft.Count < craftingSlots.Count)
         {
             InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
-         //   if (emptyCraftingSlot != null)
-            {
-                itemsToCraft.Add(inventorySlot.currentItem);
-                emptyCraftingSlot.SetItem(inventorySlot.currentItem);
-                inventorySlot.ClearSlot();
-                UpdateCraftButtonState();
-            }
+
+            itemsToCraft.Add(inventorySlot.currentItem);
+            emptyCraftingSlot.SetItem(inventorySlot.currentItem);
+            inventorySlot.ClearSlot();
+            UpdateCraftButtonState();
         }
     }
     public void OnCraftSlotClicked(InventorySlot craftingSlot)
     {
         if (craftingSlot.IsFilled)
         {
-
             itemsToCraft.Remove(craftingSlot.currentItem);
             InventorySlot emptyInventorySlot = Inventory.Instance.InventoryUI.FindFirstEmptyInventorySlot();
             if (emptyInventorySlot != null)
@@ -48,11 +48,27 @@ public class CraftingUI : MonoBehaviour
         }
     }
 
+    public void OnCraftingSlotClicked(InventorySlot craftingSlot)
+    {
+        if (craftingSlot.IsFilled)
+        {
+            ItemData itemToReturn = craftingSlot.currentItem;
+            InventorySlot emptyInventorySlot = Inventory.Instance.InventoryUI.FindFirstEmptyInventorySlot();
+
+            if (emptyInventorySlot != null)
+            {
+                emptyInventorySlot.SetItem(itemToReturn);
+                craftingSlot.ClearSlot();
+                Inventory.Instance.InventoryUI.UpdateInventoryUI();
+                UpdateCraftButtonState();
+            }
+        }
+    }
+
     private InventorySlot FindFirstEmptyCraftingSlot()
     {
         return craftingSlots.Find(slot => !slot.IsFilled);
     }
-
 
     private ItemData GetNextItemForCrafting()
     {
@@ -68,9 +84,18 @@ public class CraftingUI : MonoBehaviour
     {
         if (itemsToCraft.Count == craftingSlots.Count)
         {
-            CraftingSystem.Instance.Craft(itemsToCraft);
+            ItemData resultItem = CraftingSystem.Instance.Craft(itemsToCraft);
             itemsToCraft.Clear();
-            UpdateCraftingSlots();
+
+            foreach (var slot in craftingSlots)
+            {
+                slot.ClearSlot();
+            }
+            if (resultItem != null)
+            {
+                UpdateMainCraftSlot(resultItem);
+                Inventory.Instance.InventoryUI.UpdateInventoryUI();
+            }
         }
     }
 
@@ -87,6 +112,21 @@ public class CraftingUI : MonoBehaviour
                 craftingSlots[i].ClearSlot();
             }
         }
+        UpdateCraftButtonState();
+    }
+
+    public void ClearCraftingPanel()
+    {
+        foreach (var craftingSlot in craftingSlots)
+        {
+            craftingSlot.ClearSlot();
+        }
+        resultSlot.ClearSlot();
+    }
+    public void UpdateMainCraftSlot(ItemData results)
+    {
+        resultSlot.SetItem(results);
+        resultNameText.text = results.itemName;
         UpdateCraftButtonState();
     }
 }
