@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 803335243101366664}
   - component: {fileID: 5551007336106507135}
   m_Layer: 0
-  m_Name: WoodPrefab
+  m_Name: Wood_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

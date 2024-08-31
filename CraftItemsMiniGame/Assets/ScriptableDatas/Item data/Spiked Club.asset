@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Spiked Club
   m_EditorClassIdentifier: 
   itemName: Spiked Club
-  itemID: spikedClub
   itemDescription: serious business
-  prefab: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 1eeb73210e25cdc4098111c0a79a027b, type: 3}
+  prefab: {fileID: 1897615796286920486, guid: e1b2d754902456c4aa72a07475102277, type: 3}

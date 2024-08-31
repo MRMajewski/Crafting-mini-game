@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Nail
   m_EditorClassIdentifier: 
   itemName: Nail
-  itemID: nail
   itemDescription: iron nail
-  prefab: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 30552adbbb1c0e642b7c126ae9632d78, type: 3}
+  prefab: {fileID: 2482902454399190816, guid: a7cc688fd4d606141b7418df415f4f76, type: 3}
