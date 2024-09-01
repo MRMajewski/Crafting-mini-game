@@ -426,6 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDatabase: {fileID: 11400000, guid: 81f72be8e4394da47ada3c4bbf6a3655, type: 2}
+  inventoryItems: []
   maxInventorySize: 9
   dropDistance: 1
   playerTransform: {fileID: 387454287}
@@ -741,7 +742,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1506931277}
         m_TargetAssemblyTypeName: CraftingUI, Assembly-CSharp
-        m_MethodName: OnCraftSlotClicked
+        m_MethodName: OnCraftingSlotClicked
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 334879665}
@@ -798,8 +799,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1508711048}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.1, y: 0}
-  m_AnchorMax: {x: 0.9, y: 1}
+  m_AnchorMin: {x: 0.1, y: 0.1}
+  m_AnchorMax: {x: 0.9, y: 0.9}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1011,8 +1012,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1841039212}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.1, y: 0}
-  m_AnchorMax: {x: 0.9, y: 1}
+  m_AnchorMin: {x: 0.1, y: 0.1}
+  m_AnchorMax: {x: 0.9, y: 0.9}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1770,8 +1771,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 334879661}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.15, y: 0}
-  m_AnchorMax: {x: 0.85, y: 1}
+  m_AnchorMin: {x: 0.15, y: 0.15}
+  m_AnchorMax: {x: 0.85, y: 0.85}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3764,6 +3765,7 @@ MonoBehaviour:
   - {fileID: 1841039216}
   resultSlot: {fileID: 334879665}
   craftButton: {fileID: 1209440673}
+  itemsToCraft: []
   resultNameText: {fileID: 2114501051}
 --- !u!1 &1508711047
 GameObject:
@@ -3889,7 +3891,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1506931277}
         m_TargetAssemblyTypeName: CraftingUI, Assembly-CSharp
-        m_MethodName: OnCraftSlotClicked
+        m_MethodName: OnCraftingSlotClicked
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1508711052}
@@ -5249,7 +5251,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1506931277}
         m_TargetAssemblyTypeName: CraftingUI, Assembly-CSharp
-        m_MethodName: OnCraftSlotClicked
+        m_MethodName: OnCraftingSlotClicked
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1841039216}
@@ -5902,7 +5904,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Spiked Club
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

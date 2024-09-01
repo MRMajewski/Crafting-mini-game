@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,8 @@ public class Inventory : MonoBehaviour
 
     public InventoryUI InventoryUI { get => inventoryUI; }
 
+    public event Action OnInventoryChange; 
+
     private void Awake()
     {
         if (Instance == null)
@@ -49,6 +52,7 @@ public class Inventory : MonoBehaviour
 
                 inventoryItems.Add(itemToAdd);
                 Debug.Log($"{itemToAdd.itemName} zosta³ dodany do ekwipunku.");
+                OnInventoryChange?.Invoke();
                 return true;
             }
             else
@@ -71,6 +75,7 @@ public class Inventory : MonoBehaviour
         {
             inventoryItems.Remove(itemToRemove);
             Debug.Log($"{itemToRemove.itemName} zosta³ usuniêty z ekwipunku.");
+            OnInventoryChange?.Invoke();
             return true;
         }
         else
@@ -96,5 +101,11 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogWarning($"Przedmiot z ID {itemName} nie znajduje siê w ekwipunku.");
         }
+    }
+
+    public void InstantlyAddItemToInventory(ItemData itemData)
+    {
+      InventoryItems.Add(itemData);
+       inventoryUI.UpdateInventoryUI();
     }
 }

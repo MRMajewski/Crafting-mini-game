@@ -28,6 +28,18 @@ public class InventoryUI : MonoBehaviour
     private string selectedItemNameTextDefault;
     [SerializeField]
     private string selectedItemNameDescDefault;
+
+
+    private void Start()
+    {
+        Inventory.Instance.OnInventoryChange += UpdateInventoryUI;
+    }
+
+    private void OnDestroy()
+    {
+        Inventory.Instance.OnInventoryChange -= UpdateInventoryUI;
+    }
+
     public void UpdateInventoryUI()
     {
        itemsInInventory = Inventory.Instance.InventoryItems;
@@ -37,6 +49,10 @@ public class InventoryUI : MonoBehaviour
             if (i < itemsInInventory.Count)
             {
                 slots[i].SetItem(itemsInInventory[i]);
+            }
+            else if(slots[i].IsFilled)
+            {
+                slots[i].ClearSlot();
             }
         }
     }
