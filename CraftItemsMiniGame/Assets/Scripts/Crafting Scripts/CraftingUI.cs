@@ -12,6 +12,7 @@ public class CraftingUI : MonoBehaviour
     [SerializeField]
     private Button craftButton;
 
+    [SerializeField]
     private List<ItemData> itemsToCraft = new List<ItemData>();
 
     [SerializeField]
@@ -119,9 +120,11 @@ public class CraftingUI : MonoBehaviour
     {
         foreach (var craftingSlot in craftingSlots)
         {
+            OnCraftingSlotClicked(craftingSlot);
             craftingSlot.ClearSlot();
         }
-        resultSlot.ClearSlot();
+        OnCraftingSlotClicked(resultSlot);
+     //   resultSlot.ClearSlot();
     }
     public void UpdateMainCraftSlot(ItemData results)
     {

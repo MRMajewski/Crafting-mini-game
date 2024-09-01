@@ -35,16 +35,16 @@ public class UIPanelController : MonoBehaviour
     public void UpdateUIForMode(InventoryMode mode)
     {
         inventoryUI.ClearSelectedSlot();
-
+        craftingUI.ClearCraftingPanel();
         switch (mode)
         {
             case InventoryMode.Inventory:
-                inventoryUI.ClearSelectedSlot();
+             //   inventoryUI.ClearSelectedSlot();
                 inventoryItemDataGameObject.SetActive(true);
                 craftingPanelGameObject.SetActive(false);
                 break;
             case InventoryMode.Crafting:
-                craftingUI.ClearCraftingPanel();
+              
                 inventoryItemDataGameObject.SetActive(false);
                 craftingPanelGameObject.SetActive(true);
                 break;

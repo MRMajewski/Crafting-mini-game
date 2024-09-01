@@ -8,6 +8,7 @@ public class Inventory : MonoBehaviour
 
     public ItemDatabase itemDatabase; 
 
+    [SerializeField]
     private List<ItemData> inventoryItems = new List<ItemData>();
     public List<ItemData> InventoryItems { get => inventoryItems; }
 

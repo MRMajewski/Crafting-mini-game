@@ -11,12 +11,15 @@ public class PlayerInventoryController : MonoBehaviour
     private PickupItem nearbyItem;
 
     [SerializeField]
-    private float detectionRadius = 1.5f;
+    private float detectionRadius = 1.5f; 
+
+    private bool canPickUpItem = true; // Dodany bool sprawdzaj¹cy, czy trwa animacja podnoszenia
+
     private void Update()
     {
         if (!Input.anyKey) return;
 
-        if (Input.GetKeyDown(KeyCode.E) && nearbyItem != null)
+        if (Input.GetKeyDown(KeyCode.E) && nearbyItem != null && canPickUpItem)
         {
             PickUpItem();
         }           
@@ -29,6 +32,7 @@ public class PlayerInventoryController : MonoBehaviour
     {
         if (nearbyItem != null)
         {
+            canPickUpItem = false;
             RotateTowardsNearbyItem();
             PlayerMainController.Instance.PlayerMovement.enabled = false;
             PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger"); 
@@ -40,7 +44,11 @@ public class PlayerInventoryController : MonoBehaviour
         yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length+0.1f);
 
         if (nearbyItem == null)
+        {
+            DetectNearbyItems();
             yield return null;
+        }
+         
 
         bool wasAdded = Inventory.Instance.AddItem(nearbyItem.ItemData.itemName);
         if (wasAdded)
@@ -51,6 +59,7 @@ public class PlayerInventoryController : MonoBehaviour
 
             //           DetectNearbyItems();
         }
+        canPickUpItem = true;
         DetectNearbyItems();
     }
 
