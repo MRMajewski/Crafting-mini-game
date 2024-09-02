@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CraftingUI : MonoBehaviour
 {
     [SerializeField]
-    private List<InventorySlot> craftingSlots = new List<InventorySlot>(); // Sloty na przedmioty do craftingu
+    private List<InventorySlot> craftingSlots = new List<InventorySlot>();
     [SerializeField]
     private InventorySlot resultSlot;
     [SerializeField]
@@ -18,53 +18,58 @@ public class CraftingUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI resultNameText;
 
+    [SerializeField]
+    private TextMeshProUGUI resultInfoText;
+
+    public TextMeshProUGUI ResultInfoText { get => resultInfoText; set => resultInfoText = value; }
     private void Start()
     {
-        craftButton.interactable = false; 
+        UpdateCraftButtonState();
     }
     public void OnInventorySlotClicked(InventorySlot inventorySlot)
     {
         if (inventorySlot.IsFilled && itemsToCraft.Count < craftingSlots.Count)
         {
-            InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
-
-            itemsToCraft.Add(inventorySlot.currentItem);
-            emptyCraftingSlot.SetItem(inventorySlot.currentItem);
+            AddItemToCrafting(inventorySlot.currentItem);
             inventorySlot.ClearSlot();
-            UpdateCraftButtonState();
         }
+    }
+    private void AddItemToCrafting(ItemData item)
+    {
+        InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
+        itemsToCraft.Add(item);
+        emptyCraftingSlot.SetItem(item);
+        Inventory.Instance.InstantlyRemoveItemFromInventory(item);
+        UpdateCraftButtonState();
     }
 
     public void OnCraftingSlotClicked(InventorySlot craftingSlot)
     {
         if (craftingSlot.IsFilled)
         {
-            ItemData itemToReturn = craftingSlot.currentItem;
-            InventorySlot emptyInventorySlot = Inventory.Instance.InventoryUI.FindFirstEmptyInventorySlot();
-
-            if (emptyInventorySlot != null)
-            {
-                emptyInventorySlot.SetItem(itemToReturn);
-                craftingSlot.ClearSlot();
-                Inventory.Instance.InstantlyAddItemToInventory(itemToReturn);
-                UpdateCraftButtonState();
-            }
+            RemoveItemFromCrafting(craftingSlot.currentItem);
+            craftingSlot.ClearSlot();
         }
     }
-
+    private void RemoveItemFromCrafting(ItemData item)
+    {
+        InventorySlot emptyInventorySlot = Inventory.Instance.InventoryUI.FindFirstEmptyInventorySlot();
+        if (emptyInventorySlot != null)
+        {
+            emptyInventorySlot.SetItem(item);
+            itemsToCraft.Remove(item);
+            Inventory.Instance.InstantlyAddItemToInventory(item);
+            UpdateCraftButtonState();
+        }
+    }
     private InventorySlot FindFirstEmptyCraftingSlot()
     {
         return craftingSlots.Find(slot => !slot.IsFilled);
     }
 
-    private ItemData GetNextItemForCrafting()
-    {
-        return Inventory.Instance.InventoryItems.Find(item => !itemsToCraft.Contains(item));
-    }
-
     private void UpdateCraftButtonState()
     {
-        craftButton.interactable = itemsToCraft.Count == craftingSlots.Count;
+        craftButton.interactable = (itemsToCraft.Count == craftingSlots.Count) && !resultSlot.IsFilled;
     }
 
     public void OnCraftButtonClicked()
@@ -73,6 +78,8 @@ public class CraftingUI : MonoBehaviour
         {
             ItemData resultItem = CraftingSystem.Instance.Craft(itemsToCraft);
             itemsToCraft.Clear();
+            ClearCraftingPanel();
+
 
             foreach (var slot in craftingSlots)
             {
@@ -81,8 +88,11 @@ public class CraftingUI : MonoBehaviour
             if (resultItem != null)
             {
                 UpdateMainCraftSlot(resultItem);
-                Inventory.Instance.InventoryUI.UpdateInventoryUI();
             }
+        }
+        else
+        {
+            ClearCraftingPanel();
         }
     }
 
@@ -105,14 +115,20 @@ public class CraftingUI : MonoBehaviour
     public void ClearCraftingPanel()
     {
         itemsToCraft.Clear();
-        foreach (var craftingSlot in craftingSlots)
-        {
-            OnCraftingSlotClicked(craftingSlot);
-            craftingSlot.ClearSlot();
-        }
+        ClearCraftingSlots();
+
         OnCraftingSlotClicked(resultSlot);
-     //   resultSlot.ClearSlot();
+        resultInfoText.text = "";
+        resultNameText.text = "";
     }
+    private void ClearCraftingSlots()
+    {
+        foreach (var slot in craftingSlots)
+        {
+            slot.ClearSlot();
+        }
+    }
+
     public void UpdateMainCraftSlot(ItemData results)
     {
         resultSlot.SetItem(results);

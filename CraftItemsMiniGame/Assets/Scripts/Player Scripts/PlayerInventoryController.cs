@@ -54,11 +54,10 @@ public class PlayerInventoryController : MonoBehaviour
         if (wasAdded)
         {
             Destroy(nearbyItem.gameObject);
-            PlayerMainController.Instance.PlayerMovement.enabled = true;
+           
             nearbyItem = null;
-
-            //           DetectNearbyItems();
         }
+        PlayerMainController.Instance.PlayerMovement.enabled = true;
         canPickUpItem = true;
         DetectNearbyItems();
     }

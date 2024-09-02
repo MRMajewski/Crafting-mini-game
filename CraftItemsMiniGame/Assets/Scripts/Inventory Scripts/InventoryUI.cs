@@ -29,17 +29,6 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     private string selectedItemNameDescDefault;
 
-
-    private void Start()
-    {
-        Inventory.Instance.OnInventoryChange += UpdateInventoryUI;
-    }
-
-    private void OnDestroy()
-    {
-        Inventory.Instance.OnInventoryChange -= UpdateInventoryUI;
-    }
-
     public void UpdateInventoryUI()
     {
        itemsInInventory = Inventory.Instance.InventoryItems;
@@ -50,13 +39,12 @@ public class InventoryUI : MonoBehaviour
             {
                 slots[i].SetItem(itemsInInventory[i]);
             }
-            else if(slots[i].IsFilled)
+            else if (i>=itemsInInventory.Count)
             {
                 slots[i].ClearSlot();
             }
         }
     }
-
 
     public void SetSelectedItemInfo(InventorySlot slot)
     {
@@ -88,13 +76,11 @@ public class InventoryUI : MonoBehaviour
 
     public void DropSelectedItem()
     {
-        if (currentlySelectedSlot.currentItem == null) return;
+        if (currentlySelectedSlot == null || currentlySelectedSlot.currentItem==null) return;
 
         Inventory.Instance.DropItem(currentlySelectedSlot.currentItem.itemName);
         ClearSlot(currentlySelectedSlot);
         ClearSelectedSlot();
-
-        //
     }
 
     public InventorySlot FindFirstEmptyInventorySlot()

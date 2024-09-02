@@ -7,51 +7,64 @@ public class RecipeDatabase : ScriptableObject
 {
     public List<RecipeData> recipes = new List<RecipeData>();
 
-    public RecipeData GetRecipeByItems(List<ItemData> items)
+    public RecipeData GetRecipeByItems(List<ItemData> itemsToCraft)
     {
         foreach (RecipeData recipe in recipes)
         {
-            if (HasRequiredItems(recipe, items))
+            if (HasRequiredItems(recipe, itemsToCraft))
             {
                 return recipe;
             }
         }
         return null;
     }
-    public RecipeData GetRecipeForItems(List<ItemData> items)
+
+    public RecipeData GetRecipeForItems(List<ItemData> itemsToCraft)
     {
         foreach (var recipe in recipes)
         {
-            if (recipe.requiredItems.Count == items.Count)
+            if (recipe.requiredItems.Count == itemsToCraft.Count)
             {
-                bool match = true;
-                foreach (var item in recipe.requiredItems)
+                List<ItemData> requiredItemsCopy = new List<ItemData>(recipe.requiredItems);
+
+                bool allItemsMatched = true;
+
+                foreach (var item in itemsToCraft)
                 {
-                    if (!items.Contains(item))
+                    if (requiredItemsCopy.Contains(item))
                     {
-                        match = false;
+                        requiredItemsCopy.Remove(item);
+                    }
+                    else
+                    {
+                        allItemsMatched = false;
                         break;
                     }
                 }
-                if (match)
+
+                if (allItemsMatched && requiredItemsCopy.Count == 0)
                 {
                     return recipe;
                 }
             }
         }
-        return null;
+        return null; 
     }
 
-
-    private bool HasRequiredItems(RecipeData recipe, List<ItemData> items)
+    private bool HasRequiredItems(RecipeData recipe, List<ItemData> itemsToCraft)
     {
-        foreach (ItemData requiredItem in recipe.requiredItems)
+        if (recipe.requiredItems.Count != itemsToCraft.Count)
+            return false;
+
+        List<ItemData> requiredItemsCopy = new List<ItemData>(recipe.requiredItems);
+
+        foreach (ItemData requiredItem in itemsToCraft)
         {
-            if (!items.Contains(requiredItem))
+            if (!requiredItemsCopy.Remove(requiredItem));
             {
                 return false;
             }
         }
-        return true;
+        return requiredItemsCopy.Count == 0;
     }
 }

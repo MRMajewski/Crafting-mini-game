@@ -74,6 +74,7 @@ public class Inventory : MonoBehaviour
         if (itemToRemove != null)
         {
             inventoryItems.Remove(itemToRemove);
+            inventoryItems.TrimExcess();
             Debug.Log($"{itemToRemove.itemName} zosta³ usuniêty z ekwipunku.");
             OnInventoryChange?.Invoke();
             return true;
@@ -105,7 +106,18 @@ public class Inventory : MonoBehaviour
 
     public void InstantlyAddItemToInventory(ItemData itemData)
     {
-      InventoryItems.Add(itemData);
+       InventoryItems.Add(itemData);
        inventoryUI.UpdateInventoryUI();
+    }
+    public void InstantlyRemoveItemFromInventory(ItemData itemData)
+    {
+        InventoryItems.Remove(itemData);
+        inventoryUI.UpdateInventoryUI();
+    }
+
+    public void InstantlyRemoveItemFromInventory(InventorySlot inventorySlot)
+    {
+        InventoryItems.Remove(inventorySlot.currentItem);
+        inventoryUI.UpdateInventoryUI();
     }
 }
