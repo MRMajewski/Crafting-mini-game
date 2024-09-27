@@ -68,10 +68,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Temporary auto-generated Android Assets
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
-CraftItemsMiniGame/Temp/__Backupscenes/0.backup
-CraftItemsMiniGame/Temp/UnityLockfile
-CraftItemsMiniGame/Temp/FSTimeGet-b466c2adafe5f6445b72ff359091aee2
-CraftItemsMiniGame/Temp/FSTimeGet-5f8b0c5c5672ea44798f41f7f8b80312
-CraftItemsMiniGame/Temp/FSTimeGet-220bec70af7ddea4885593a2f164e950
+/CraftItemsMiniGame/Library
+/CraftItemsMiniGame/Library/Bee
+/CraftItemsMiniGame/Library
