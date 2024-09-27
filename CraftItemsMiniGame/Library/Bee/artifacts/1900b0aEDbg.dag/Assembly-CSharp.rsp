@@ -339,6 +339,7 @@
 -analyzer:"C:/GAMEDEV/Unity Editor/2022.3.46f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Assets/Mini Simple Characters Demo/Readme/Scripts/Readme.cs"
 "Assets/Assets/Stylized Tools/Scripts/OpenURL.cs"
+"Assets/Assets/Zololgo/OrbitZoomPanCamera/Scripts/OrbitZoomPanCamera.cs"
 "Assets/Scripts/CameraFollow.cs"
 "Assets/Scripts/Crafting Scripts/CraftingSystem.cs"
 "Assets/Scripts/Crafting Scripts/CraftingUI.cs"
