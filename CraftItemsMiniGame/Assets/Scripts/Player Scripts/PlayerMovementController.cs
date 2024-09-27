@@ -14,6 +14,8 @@ public class PlayerMovementController : MonoBehaviour
     private Transform playerModelTransform;
     public Transform PlayerModelTransform { get=>playerModelTransform; }
     private bool isMoving = false;
+    private const float moveRadius = 9f; 
+    private Vector3 centerPosition = new Vector3(0, 1, 0);
 
     void Update()
     {
@@ -32,11 +34,24 @@ public class PlayerMovementController : MonoBehaviour
             HandleMovement(x,z);
         }    
     }
-
-    private void HandleMovement(float x,float z)
+    private void HandleMovement(float x, float z)
     {
-        Vector3 modeDirection = transform.right * x + transform.forward * z;
-        controller.Move(modeDirection * movementSpeed * Time.deltaTime);
+        Vector3 moveDirection = transform.right * x + transform.forward * z;
+
+        Vector3 newPosition = controller.transform.position + moveDirection * movementSpeed * Time.deltaTime;
+
+        Vector3 directionFromCenter = newPosition - centerPosition;
+
+        if (newPosition.magnitude <= moveRadius)
+        {
+            controller.Move(moveDirection * movementSpeed * Time.deltaTime);
+        }
+        else
+        {
+            Vector3 clampedPosition = centerPosition + directionFromCenter.normalized * moveRadius;
+            controller.Move(clampedPosition - controller.transform.position); 
+
+        }
 
         bool isCurrentlyMoving = Mathf.Abs(x) > 0.01f || Mathf.Abs(z) > 0.01f;
 
@@ -48,12 +63,7 @@ public class PlayerMovementController : MonoBehaviour
 
         if (isMoving)
         {
-            controller.Move(modeDirection * movementSpeed * Time.deltaTime);
-            RotatePlayerModel(modeDirection);
-        }
-        if (modeDirection != Vector3.zero)
-        {
-            RotatePlayerModel(modeDirection);
+            RotatePlayerModel(moveDirection);
         }
     }
 

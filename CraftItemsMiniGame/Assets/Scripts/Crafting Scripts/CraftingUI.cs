@@ -31,9 +31,11 @@ public class CraftingUI : MonoBehaviour
         if (inventorySlot.IsFilled && itemsToCraft.Count < craftingSlots.Count)
         {
             AddItemToCrafting(inventorySlot.currentItem);
-            inventorySlot.ClearSlot();
+            Inventory.Instance.InventoryUI.UpdateInventoryUI();
         }
     }
+
+
     private void AddItemToCrafting(ItemData item)
     {
         InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
