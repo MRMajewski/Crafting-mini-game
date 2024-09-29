@@ -28,7 +28,7 @@ public class PlayerInventoryController : MonoBehaviour
             UIPanel.ToggleInventoryPanel();
         }
     }
-    private void PickUpItem()
+    public void PickUpItem()
     {
         if (nearbyItem != null)
         {
