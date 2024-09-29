@@ -37,7 +37,7 @@ public class PlayerMovementController : MonoBehaviour
     private void HandleMovement(float x, float z)
     {
         Vector3 moveDirection = transform.right * x + transform.forward * z;
-
+        moveDirection.y = 0f;
         Vector3 newPosition = controller.transform.position + moveDirection * movementSpeed * Time.deltaTime;
 
         Vector3 directionFromCenter = newPosition - centerPosition;
@@ -49,7 +49,8 @@ public class PlayerMovementController : MonoBehaviour
         else
         {
             Vector3 clampedPosition = centerPosition + directionFromCenter.normalized * moveRadius;
-            controller.Move(clampedPosition - controller.transform.position); 
+            clampedPosition.y = 1f;
+            controller.Move(clampedPosition - controller.transform.position);
 
         }
 
