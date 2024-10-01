@@ -37,8 +37,8 @@ public class PlayerMainController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             RaycastHit hit;
-            float rayDistance = 1f; 
-            LayerMask layerMask = LayerMask.GetMask("Default");
+            float rayDistance = 2f; 
+            LayerMask layerMask = LayerMask.GetMask("Interactable");
 
             Vector3 rayOrigin = PlayerMovement.PlayerModelTransform.transform.position;
             Vector3 rayDirection =PlayerMovement.PlayerModelTransform.transform.forward;
