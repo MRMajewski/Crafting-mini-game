@@ -28,9 +28,43 @@ public class PlayerMainController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        DrawRay();
+        if (!Input.anyKey) return;
+
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+            float rayDistance = 1f; 
+            LayerMask layerMask = LayerMask.GetMask("Default");
+
+            Vector3 rayOrigin = PlayerMovement.PlayerModelTransform.transform.position;
+            Vector3 rayDirection =PlayerMovement.PlayerModelTransform.transform.forward;
+
+
+            if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance, layerMask))
+            {
+                IInteractable interactedItem = hit.collider.GetComponent<IInteractable>();
+   
+                if (interactedItem != null)
+                {
+                    Debug.Log("Obiekt raycastowny: " + hit.collider.gameObject.name);
+                    interactedItem.Interact();
+                }
+
+            }
+        }
     }
+
+    private void DrawRay()
+    {
+        Vector3 rayOrigin = PlayerMovement.PlayerModelTransform.gameObject.transform.position;  
+        Vector3 rayDirection = PlayerMovement.PlayerModelTransform.gameObject.transform.forward; 
+
+        Debug.DrawLine(rayOrigin, rayOrigin+ rayDirection, Color.green);
+    }
+
+
 }

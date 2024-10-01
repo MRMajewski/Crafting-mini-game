@@ -18,49 +18,67 @@ public class PlayerInventoryController : MonoBehaviour
     private void Update()
     {
         if (!Input.anyKey) return;
-
-        if (Input.GetKeyDown(KeyCode.E) && nearbyItem != null && canPickUpItem)
-        {
-            PickUpItem();
-        }           
+          
         if (Input.GetKeyDown(KeyCode.I))
         {
             UIPanel.ToggleInventoryPanel();
         }
     }
-    public void PickUpItem()
+    //public void PickUpItem()
+    //{
+    //    if (nearbyItem != null)
+    //    {
+    //        canPickUpItem = false;
+    //        RotateTowardsNearbyItem();
+    //        PlayerMainController.Instance.PlayerMovement.enabled = false;
+    //        PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger"); 
+    //        StartCoroutine(AddItemAfterAnimation());
+    //    }
+    //}
+
+    public void PickUpItem(PickupItem item)
     {
-        if (nearbyItem != null)
-        {
-            canPickUpItem = false;
-            RotateTowardsNearbyItem();
-            PlayerMainController.Instance.PlayerMovement.enabled = false;
-            PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger"); 
-            StartCoroutine(AddItemAfterAnimation());
-        }
+        PlayerMainController.Instance.PlayerMovement.enabled = false;
+        PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger");
+        StartCoroutine(AddItemAfterAnimation(item));
     }
-    private IEnumerator AddItemAfterAnimation()
+    private IEnumerator AddItemAfterAnimation(PickupItem item)
     {
         yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length+0.1f);
 
-        if (nearbyItem == null)
-        {
-            DetectNearbyItems();
-            yield return null;
-        }
-         
-
-        bool wasAdded = Inventory.Instance.AddItem(nearbyItem.ItemData.itemName);
+        bool wasAdded = Inventory.Instance.AddItem(item.ItemData.itemName);
         if (wasAdded)
         {
-            Destroy(nearbyItem.gameObject);
+            Destroy(item.gameObject);
            
-            nearbyItem = null;
+          //  nearbyItem = null;
         }
         PlayerMainController.Instance.PlayerMovement.enabled = true;
         canPickUpItem = true;
-        DetectNearbyItems();
+      //  DetectNearbyItems();
     }
+    //private IEnumerator AddItemAfterAnimation()
+    //{
+    //    yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+
+    //    if (nearbyItem == null)
+    //    {
+    //        DetectNearbyItems();
+    //        yield return null;
+    //    }
+
+
+    //    bool wasAdded = Inventory.Instance.AddItem(nearbyItem.ItemData.itemName);
+    //    if (wasAdded)
+    //    {
+    //        Destroy(nearbyItem.gameObject);
+
+    //        nearbyItem = null;
+    //    }
+    //    PlayerMainController.Instance.PlayerMovement.enabled = true;
+    //    canPickUpItem = true;
+    //    DetectNearbyItems();
+    //}
 
     private void RotateTowardsNearbyItem()
     {
@@ -69,6 +87,7 @@ public class PlayerInventoryController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
         PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.DORotate(targetRotation.eulerAngles, 0.3f);
     }
+
     private void DetectNearbyItems()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);

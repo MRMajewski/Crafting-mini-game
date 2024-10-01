@@ -76,3 +76,8 @@ crashlytics-build.properties
 /CraftItemsMiniGame/UserSettings
 /CraftItemsMiniGame/UserSettings
 /CraftItemsMiniGame/UserSettings/Layouts
+/CraftItemsMiniGame/Assets/Scripts/obj
+/CraftItemsMiniGame/obj
+/CraftItemsMiniGame/obj/Debug
+CraftItemsMiniGame/obj/Debug/Assembly-CSharp-Editor.csproj.AssemblyReference.cache
+CraftItemsMiniGame/obj/Debug/Assembly-CSharp-Editor.csproj.AssemblyReference.cache
