@@ -29,6 +29,10 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     private string selectedItemNameDescDefault;
 
+
+    [SerializeField]
+    private Button dropItemButton;
+
     public void UpdateInventoryUI()
     {
        itemsInInventory = Inventory.Instance.InventoryItems;
@@ -59,6 +63,7 @@ public class InventoryUI : MonoBehaviour
             selectedItemImage.sprite = slot.currentItem.itemIcon;
             selectedItemNameText.text = slot.currentItem.itemName;
             selectedItemNameDesc.text = slot.currentItem.itemDescription;
+            dropItemButton.interactable = true;
         }            
     }
 
@@ -72,6 +77,7 @@ public class InventoryUI : MonoBehaviour
         selectedItemImage.sprite = selectedItemImageDefault;
         selectedItemNameText.text = selectedItemNameTextDefault;
         selectedItemNameDesc.text = selectedItemNameDescDefault;
+        dropItemButton.interactable = false;
     }
 
     public void DropSelectedItem()
