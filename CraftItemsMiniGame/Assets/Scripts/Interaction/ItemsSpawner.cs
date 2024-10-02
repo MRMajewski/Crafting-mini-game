@@ -26,11 +26,15 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
     {
         if (objectToSpawn != null && spawnLocations != null)
         {
-             PlayerMainController.Instance.PlayerMovement.enabled = false;   
-            
-            Transform spawnLocation = GetFreeSpawnLocation();
+            PlayerMainController.Instance.PlayerMovement.IsMoving = false;
+            PlayerMainController.Instance.PlayerMovement.enabled = false;
+
+            PlayerMainController.Instance.Animator.SetBool("isMoving", false);
+        
+          Transform spawnLocation = GetFreeSpawnLocation();
             if (spawnLocation != null)
             {
+              
                 PlayerMainController.Instance.Animator.SetTrigger("InteractTrigger");
                 StartCoroutine(SpawnItemAfterAnimation(spawnLocation));
             }

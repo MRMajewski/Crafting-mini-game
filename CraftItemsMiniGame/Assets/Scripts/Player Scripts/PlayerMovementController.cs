@@ -13,7 +13,12 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private Transform playerModelTransform;
     public Transform PlayerModelTransform { get=>playerModelTransform; }
+
+
     private bool isMoving = false;
+
+    public bool IsMoving { get => isMoving; set => isMoving = value; }  
+
     private const float moveRadius = 9f; 
     private Vector3 centerPosition = new Vector3(0, 0, 0);
 

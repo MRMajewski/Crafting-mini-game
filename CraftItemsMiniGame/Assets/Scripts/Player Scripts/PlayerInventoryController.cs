@@ -13,7 +13,6 @@ public class PlayerInventoryController : MonoBehaviour
     [SerializeField]
     private float detectionRadius = 1.5f; 
 
- //   private bool canPickUpItem = true; // Dodany bool sprawdzaj¹cy, czy trwa animacja podnoszenia
 
     private void Update()
     {
@@ -24,29 +23,22 @@ public class PlayerInventoryController : MonoBehaviour
             UIPanel.ToggleInventoryPanel();
         }
     }
-    //public void PickUpItem()
-    //{
-    //    if (nearbyItem != null)
-    //    {
-    //        canPickUpItem = false;
-    //        RotateTowardsNearbyItem();
-    //        PlayerMainController.Instance.PlayerMovement.enabled = false;
-    //        PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger"); 
-    //        StartCoroutine(AddItemAfterAnimation());
-    //    }
-    //}
 
     public void PickUpItem(PickupItem item)
     {
+     
+        PlayerMainController.Instance.PlayerMovement.IsMoving = false;
         PlayerMainController.Instance.PlayerMovement.enabled = false;
 
-        if(TrytoAddItem(item))
+        PlayerMainController.Instance.Animator.SetBool("isMoving", false);
+        if (TrytoAddItem(item))
         {
             PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger");
             StartCoroutine(AddItemAfterAnimation(item));
         }
         else
         {
+
             PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
             StartCoroutine(EnablePlayerMovementAfterUnsuccesfullPickUp());
         }
@@ -58,10 +50,10 @@ public class PlayerInventoryController : MonoBehaviour
     }
     private IEnumerator AddItemAfterAnimation(PickupItem item)
     {
-        yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+     //   yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
 
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.2f); // Czekamy do koñca animacji
+        yield return new WaitForSeconds(animationLength + 0.5f); // Czekamy do koñca animacji
  
         Destroy(item.gameObject);
         PlayerMainController.Instance.PlayerMovement.enabled = true;
@@ -69,10 +61,10 @@ public class PlayerInventoryController : MonoBehaviour
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
-        yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+   //     yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
 
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.2f);
+        yield return new WaitForSeconds(animationLength + 0.5f);
 
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
