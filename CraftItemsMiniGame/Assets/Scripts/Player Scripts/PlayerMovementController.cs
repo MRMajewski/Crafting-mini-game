@@ -15,7 +15,7 @@ public class PlayerMovementController : MonoBehaviour
     public Transform PlayerModelTransform { get=>playerModelTransform; }
     private bool isMoving = false;
     private const float moveRadius = 9f; 
-    private Vector3 centerPosition = new Vector3(0, 1, 0);
+    private Vector3 centerPosition = new Vector3(0, 0, 0);
 
     void Update()
     {
@@ -37,7 +37,6 @@ public class PlayerMovementController : MonoBehaviour
     private void HandleMovement(float x, float z)
     {
         Vector3 moveDirection = transform.right * x + transform.forward * z;
-        moveDirection.y = 0f;
         Vector3 newPosition = controller.transform.position + moveDirection * movementSpeed * Time.deltaTime;
 
         Vector3 directionFromCenter = newPosition - centerPosition;
@@ -49,7 +48,6 @@ public class PlayerMovementController : MonoBehaviour
         else
         {
             Vector3 clampedPosition = centerPosition + directionFromCenter.normalized * moveRadius;
-            clampedPosition.y = 1f;
             controller.Move(clampedPosition - controller.transform.position);
 
         }

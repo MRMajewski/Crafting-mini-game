@@ -10,20 +10,22 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
     [SerializeField]
     private List<Transform> spawnLocations;
 
-    private Transform lastSpawnLocation; 
+    private Transform lastSpawnLocation;
+    private int layerMask;
 
-
+    private void Start()
+    {
+        layerMask = LayerMask.GetMask("Interactable");
+    }
     public void Interact()
     {
         SpawnItem();
     }
 
-
     private void SpawnItem()
     {
         if (objectToSpawn != null && spawnLocations != null)
         {
-
              PlayerMainController.Instance.PlayerMovement.enabled = false;   
             
             Transform spawnLocation = GetFreeSpawnLocation();
@@ -50,7 +52,11 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
 
     private IEnumerator SpawnItemAfterAnimation(Transform spawnLocation)
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+        yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+
+        float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animationLength + 0.2f); // Czekamy do koñca animacji
+
         Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity);
         lastSpawnLocation = spawnLocation;
         Debug.Log("Zespawnowano nowy obiekt: " + objectToSpawn.name);
@@ -59,7 +65,11 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullSpawn()
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+        yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+
+        float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animationLength + 0.2f); 
+
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
 
@@ -70,46 +80,43 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
 
         foreach (var location in spawnLocations)
         {
-            // Sprawdzenie, czy miejsce jest wolne (brak kolizji z innymi obiektami)
             if (IsSpawnLocationFree(location) && location != lastSpawnLocation)
             {
                 availableLocations.Add(location);
             }
         }
-
-        // Wybieramy losowe wolne miejsce
         if (availableLocations.Count > 0)
         {
             int randomIndex = Random.Range(0, availableLocations.Count);
             return availableLocations[randomIndex];
         }
 
-        return null; // Brak wolnych miejsc
+        return null;
     }
 
     private bool IsSpawnLocationFree(Transform spawnLocation)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(spawnLocation.position, 0.3f); // Promieñ detekcji kolizji
+
+        Collider[] hitColliders = Physics.OverlapSphere(spawnLocation.position, 0.3f, layerMask);
         foreach (var hitCollider in hitColliders)
         {
-            // Sprawdzamy, czy collider nie jest triggerem (nie chcemy kolizji z triggerami)
-            if (!hitCollider.isTrigger)
+            if (hitCollider.isTrigger)
             {
-                return false; // Miejsce jest zajête
+                return false;
             }
         }
-        return true; // Miejsce jest wolne
+        return true; 
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        foreach (var location in spawnLocations)
-        {
-            if (location != null)
-            {
-                Gizmos.DrawWireSphere(location.position, 0.3f); // Rysowanie sfer w miejscach spawnowania
-            }
-        }
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.green;
+    //    foreach (var location in spawnLocations)
+    //    {
+    //        if (location != null)
+    //        {
+    //            Gizmos.DrawWireSphere(location.position, 0.3f); // Rysowanie sfer w miejscach spawnowania
+    //        }
+    //    }
+    //}
 }

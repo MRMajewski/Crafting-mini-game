@@ -13,7 +13,7 @@ public class PlayerInventoryController : MonoBehaviour
     [SerializeField]
     private float detectionRadius = 1.5f; 
 
-    private bool canPickUpItem = true; // Dodany bool sprawdzaj¹cy, czy trwa animacja podnoszenia
+ //   private bool canPickUpItem = true; // Dodany bool sprawdzaj¹cy, czy trwa animacja podnoszenia
 
     private void Update()
     {
@@ -58,14 +58,22 @@ public class PlayerInventoryController : MonoBehaviour
     }
     private IEnumerator AddItemAfterAnimation(PickupItem item)
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length+0.1f); 
+        yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+
+        float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animationLength + 0.2f); // Czekamy do koñca animacji
+ 
         Destroy(item.gameObject);
         PlayerMainController.Instance.PlayerMovement.enabled = true;
 
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+        yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+
+        float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animationLength + 0.2f);
+
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
 

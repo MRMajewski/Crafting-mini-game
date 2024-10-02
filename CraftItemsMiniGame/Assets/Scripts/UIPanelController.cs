@@ -39,7 +39,6 @@ public class UIPanelController : MonoBehaviour
         switch (mode)
         {
             case InventoryMode.Inventory:
-             //   inventoryUI.ClearSelectedSlot();
                 inventoryItemDataGameObject.SetActive(true);
                 craftingPanelGameObject.SetActive(false);
                 break;

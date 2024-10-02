@@ -11,10 +11,8 @@ GameObject:
   - component: {fileID: 1343919215868489817}
   - component: {fileID: 1873065705524922216}
   - component: {fileID: 8411756083627348513}
-  - component: {fileID: 6915364165245370177}
   - component: {fileID: 4567587398188348499}
   - component: {fileID: 2430429619375965968}
-  - component: {fileID: 2652173695291238964}
   m_Layer: 3
   m_Name: Iron_Prefab
   m_TagString: Untagged
@@ -87,28 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6915364165245370177
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2496943205618944403}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: e9089b1db16b58f4282a94e020b9c0e8, type: 3}
 --- !u!135 &4567587398188348499
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -126,9 +102,9 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Radius: 0.57
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2430429619375965968
 MonoBehaviour:
@@ -143,26 +119,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 28dd52eb4e6cef7428e6cd4150828199, type: 2}
---- !u!136 &2652173695291238964
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2496943205618944403}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.65
-  m_Height: 5
-  m_Direction: 1
-  m_Center: {x: -0.01697725, y: 0.028850526, z: 0.004005462}

@@ -17,6 +17,10 @@ public class PlayerMainController : MonoBehaviour
     public PlayerInventoryController PlayerInventory { get=> playerInventory; }
     public Animator Animator { get => animator; }
 
+    [SerializeField]
+    private float rayDistance = 2f;
+
+    private LayerMask layerMask;
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +31,8 @@ public class PlayerMainController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        layerMask = LayerMask.GetMask("Interactable");
     }
     private void Update()
     {
@@ -37,8 +43,6 @@ public class PlayerMainController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             RaycastHit hit;
-            float rayDistance = 2f; 
-            LayerMask layerMask = LayerMask.GetMask("Interactable");
 
             Vector3 rayOrigin = PlayerMovement.PlayerModelTransform.transform.position;
             Vector3 rayDirection =PlayerMovement.PlayerModelTransform.transform.forward;
@@ -53,7 +57,6 @@ public class PlayerMainController : MonoBehaviour
                     Debug.Log("Obiekt raycastowny: " + hit.collider.gameObject.name);
                     interactedItem.Interact();
                 }
-
             }
         }
     }
@@ -65,6 +68,4 @@ public class PlayerMainController : MonoBehaviour
 
         Debug.DrawLine(rayOrigin, rayOrigin+ rayDirection, Color.green);
     }
-
-
 }
