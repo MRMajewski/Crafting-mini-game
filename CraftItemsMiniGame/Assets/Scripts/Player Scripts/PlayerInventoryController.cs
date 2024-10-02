@@ -39,24 +39,36 @@ public class PlayerInventoryController : MonoBehaviour
     public void PickUpItem(PickupItem item)
     {
         PlayerMainController.Instance.PlayerMovement.enabled = false;
-        PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger");
-        StartCoroutine(AddItemAfterAnimation(item));
+
+        if(TrytoAddItem(item))
+        {
+            PlayerMainController.Instance.Animator.SetTrigger("PickUpTrigger");
+            StartCoroutine(AddItemAfterAnimation(item));
+        }
+        else
+        {
+            PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
+            StartCoroutine(EnablePlayerMovementAfterUnsuccesfullPickUp());
+        }
+    }
+    private bool TrytoAddItem(PickupItem item)
+    {
+        bool wasAdded = Inventory.Instance.AddItem(item.ItemData.itemName);
+        return wasAdded;
     }
     private IEnumerator AddItemAfterAnimation(PickupItem item)
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length+0.1f);
-
-        bool wasAdded = Inventory.Instance.AddItem(item.ItemData.itemName);
-        if (wasAdded)
-        {
-            Destroy(item.gameObject);
-           
-          //  nearbyItem = null;
-        }
+        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length+0.1f); 
+        Destroy(item.gameObject);
         PlayerMainController.Instance.PlayerMovement.enabled = true;
-        canPickUpItem = true;
-      //  DetectNearbyItems();
+
     }
+    private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
+    {
+        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+        PlayerMainController.Instance.PlayerMovement.enabled = true;
+    }
+
     //private IEnumerator AddItemAfterAnimation()
     //{
     //    yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);

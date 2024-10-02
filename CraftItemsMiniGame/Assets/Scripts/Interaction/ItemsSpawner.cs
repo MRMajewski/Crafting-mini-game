@@ -10,33 +10,59 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
     [SerializeField]
     private List<Transform> spawnLocations;
 
-    private Transform lastSpawnLocation; // Zapamiêtuje ostatni¹ lokalizacjê, aby nie spawnowaæ w tym samym miejscu dwa razy pod rz¹d.
+    private Transform lastSpawnLocation; 
 
-    // Implementacja interakcji - wywo³ywana, gdy gracz wejdzie w interakcjê
+
     public void Interact()
     {
-        // Sprawdzamy, czy mamy prefab do zespawnowania i spawnLocations
+        SpawnItem();
+    }
+
+
+    private void SpawnItem()
+    {
         if (objectToSpawn != null && spawnLocations != null)
         {
-            // Szukamy wolnego miejsca
+
+             PlayerMainController.Instance.PlayerMovement.enabled = false;   
+            
             Transform spawnLocation = GetFreeSpawnLocation();
             if (spawnLocation != null)
             {
-                // Tworzenie nowego obiektu w podanej lokalizacji
-                Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity);
-                lastSpawnLocation = spawnLocation;
-                Debug.Log("Zespawnowano nowy obiekt: " + objectToSpawn.name);
+                PlayerMainController.Instance.Animator.SetTrigger("InteractTrigger");
+                StartCoroutine(SpawnItemAfterAnimation(spawnLocation));
             }
             else
             {
+                PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
+                StartCoroutine(EnablePlayerMovementAfterUnsuccesfullSpawn());
                 Debug.LogWarning("Brak wolnych miejsc do spawnowania!");
             }
+               
         }
         else
         {
-            Debug.LogWarning("Brak prefabrykatów do spawnowania lub miejsc spawnowania!");
+            PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
+            StartCoroutine(EnablePlayerMovementAfterUnsuccesfullSpawn());
+            Debug.LogWarning("No object to Spawn!");
         }
     }
+
+    private IEnumerator SpawnItemAfterAnimation(Transform spawnLocation)
+    {
+        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+        Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity);
+        lastSpawnLocation = spawnLocation;
+        Debug.Log("Zespawnowano nowy obiekt: " + objectToSpawn.name);
+        PlayerMainController.Instance.PlayerMovement.enabled = true;
+
+    }
+    private IEnumerator EnablePlayerMovementAfterUnsuccesfullSpawn()
+    {
+        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
+        PlayerMainController.Instance.PlayerMovement.enabled = true;
+    }
+
 
     private Transform GetFreeSpawnLocation()
     {
