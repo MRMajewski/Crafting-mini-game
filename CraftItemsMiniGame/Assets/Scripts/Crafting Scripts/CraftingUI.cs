@@ -35,7 +35,6 @@ public class CraftingUI : MonoBehaviour
         }
     }
 
-
     private void AddItemToCrafting(ItemData item)
     {
         InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
@@ -51,6 +50,8 @@ public class CraftingUI : MonoBehaviour
         {
             RemoveItemFromCrafting(craftingSlot.currentItem);
             craftingSlot.ClearSlot();
+            resultInfoText.text = "";
+            resultNameText.text = "";
         }
     }
     private void RemoveItemFromCrafting(ItemData item)
@@ -120,8 +121,7 @@ public class CraftingUI : MonoBehaviour
         ClearCraftingSlots();
 
         OnCraftingSlotClicked(resultSlot);
-        resultInfoText.text = "";
-        resultNameText.text = "";
+
     }
     private void ClearCraftingSlots()
     {

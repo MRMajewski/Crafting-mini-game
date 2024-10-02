@@ -9,6 +9,9 @@ public class InventorySlot : MonoBehaviour
 
     public bool IsFilled => currentItem != null;
 
+    [SerializeField]
+    private Sprite emptySprite;
+
     public void SetItem(ItemData item)
     {
         currentItem = item;
@@ -18,6 +21,6 @@ public class InventorySlot : MonoBehaviour
     public void ClearSlot()
     {
         currentItem = null;
-        iconImage.sprite = null;
+        iconImage.sprite = emptySprite;
     }
 }

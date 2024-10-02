@@ -53,6 +53,7 @@ public class CraftingSystem : MonoBehaviour
                         Debug.LogWarning($"{item.itemName} could not be removed!");
                     }
                 }
+
                 craftingUI.ResultInfoText.text = $"Crafting successful! Created {recipe.resultItem.itemName}";
                 return recipe.resultItem;
             }
