@@ -10,10 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2838288787159351045}
   - component: {fileID: 7005840927211505780}
-  - component: {fileID: -2381889473263881394}
   - component: {fileID: 7919703552583979714}
   - component: {fileID: 8808815711239402699}
-  - component: {fileID: 6516746750073776321}
   m_Layer: 0
   m_Name: Plank_Prefab
   m_TagString: Untagged
@@ -61,28 +59,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 888916654454863692}
   m_Enabled: 1
---- !u!64 &-2381889473263881394
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3181916495347918271}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &7919703552583979714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,31 +91,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.25
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &6516746750073776321
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3181916495347918271}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.75
-  m_Height: 3
-  m_Direction: 1
-  m_Center: {x: 0.05673127, y: 0.049275544, z: -0.00000001862645}
+  m_Radius: 0.89
+  m_Center: {x: 0, y: 0.51, z: 0}
 --- !u!1 &5883155772268528465
 GameObject:
   m_ObjectHideFlags: 0

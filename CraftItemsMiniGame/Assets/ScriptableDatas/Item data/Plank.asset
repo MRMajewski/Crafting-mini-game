@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Plank
   m_EditorClassIdentifier: 
   itemName: Plank
-  itemID: plank
-  itemDescription: 2x4 plank
+  itemDescription: Flat, solid, and ready to walk on.
   itemIcon: {fileID: 21300000, guid: 008efd21727bb8d4eb293e0fb3e9b0f5, type: 3}
   prefab: {fileID: 3181916495347918271, guid: bba8e2fcdb4614e4abc44fb5523b731e, type: 3}

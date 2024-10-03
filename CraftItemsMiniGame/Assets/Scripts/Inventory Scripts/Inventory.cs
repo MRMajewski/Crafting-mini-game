@@ -60,10 +60,6 @@ public class Inventory : MonoBehaviour
                 Debug.LogWarning("Ekwipunek jest pe³ny!");
             }
         }
-        else
-        {
-            Debug.LogWarning($"Nie znaleziono przedmiotu : {itemName}");
-        }
         return false;
     }
 
@@ -75,14 +71,10 @@ public class Inventory : MonoBehaviour
         {
             inventoryItems.Remove(itemToRemove);
             inventoryItems.TrimExcess();
-            Debug.Log($"{itemToRemove.itemName} zosta³ usuniêty z ekwipunku.");
             OnInventoryChange?.Invoke();
             return true;
         }
-        else
-        {
-            Debug.LogWarning($"Przedmiot z ID {itemName} nie znajduje siê w ekwipunku.");
-        }
+
         return false;
     }
 
@@ -96,11 +88,6 @@ public class Inventory : MonoBehaviour
 
             Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity, itemsParent);
             RemoveItem(itemName);
-            Debug.Log($"{itemToDrop.itemName} zosta³ wyrzucony na scenê.");
-        }
-        else
-        {
-            Debug.LogWarning($"Przedmiot z ID {itemName} nie znajduje siê w ekwipunku.");
         }
     }
 
@@ -118,17 +105,15 @@ public class Inventory : MonoBehaviour
     public void InstantlyAddItemToInventory(ItemData itemData)
     {
        InventoryItems.Add(itemData);
+
        inventoryUI.UpdateInventoryUI();
+        OnInventoryChange?.Invoke();
     }
     public void InstantlyRemoveItemFromInventory(ItemData itemData)
     {
         InventoryItems.Remove(itemData);
         inventoryUI.UpdateInventoryUI();
+        OnInventoryChange?.Invoke();
     }
 
-    public void InstantlyRemoveItemFromInventory(InventorySlot inventorySlot)
-    {
-        InventoryItems.Remove(inventorySlot.currentItem);
-        inventoryUI.UpdateInventoryUI();
-    }
 }
