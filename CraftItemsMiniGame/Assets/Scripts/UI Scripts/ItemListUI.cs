@@ -70,12 +70,13 @@ public class ItemListUI : MonoBehaviour
         }
         if (CheckIfAllItemsAreSupplied())
         {
-            SetRequiredItemsTitleTweening();
+            SetRequiredItemsTitleTweening();          
         }
         else
         {
             SetRequiredItemsTitleBasic();
         }
+        EndGameController.Instance.SetEndGamePointActive(CheckIfAllItemsAreSupplied());
     }
 
     public bool CheckIfAllItemsAreSupplied()
