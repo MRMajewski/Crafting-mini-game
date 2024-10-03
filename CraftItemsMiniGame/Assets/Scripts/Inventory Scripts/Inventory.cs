@@ -104,6 +104,17 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public int GetItemCount(ItemData item)
+    {
+        int count = 0;
+        foreach (ItemData inventoryItem in inventoryItems)
+        {
+            if (item.itemName.Equals(inventoryItem.itemName))
+                count++;
+        }
+        return count;
+    }
+
     public void InstantlyAddItemToInventory(ItemData itemData)
     {
        InventoryItems.Add(itemData);

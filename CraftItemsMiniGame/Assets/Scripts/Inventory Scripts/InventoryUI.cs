@@ -85,7 +85,6 @@ public class InventoryUI : MonoBehaviour
         if (currentlySelectedSlot == null || currentlySelectedSlot.currentItem==null) return;
 
         Inventory.Instance.DropItem(currentlySelectedSlot.currentItem.itemName);
-      //  ClearSlot(currentlySelectedSlot);
         ClearSelectedSlot();
 
        UpdateInventoryUI();

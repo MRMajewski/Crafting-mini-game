@@ -22,6 +22,9 @@ public class CraftingUI : MonoBehaviour
     private TextMeshProUGUI resultInfoText;
 
     public TextMeshProUGUI ResultInfoText { get => resultInfoText; set => resultInfoText = value; }
+
+    [SerializeField]
+    private Sprite emptySprite;
     private void Start()
     {
         UpdateCraftButtonState();
@@ -49,6 +52,7 @@ public class CraftingUI : MonoBehaviour
         if (craftingSlot.IsFilled)
         {
             RemoveItemFromCrafting(craftingSlot.currentItem);
+
             craftingSlot.ClearSlot();
             resultInfoText.text = "";
             resultNameText.text = "";
