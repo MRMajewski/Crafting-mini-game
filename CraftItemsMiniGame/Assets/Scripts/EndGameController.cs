@@ -99,8 +99,7 @@ public class EndGameController : MonoBehaviour
         yield return new WaitForSeconds(2.0f); 
 
 
-
-        endMessageText.text = "The End. Thanks for playing!";
+        endMessageText.text = "The End. <br> Thanks for playing!";
 
         MoveScooterToEnd();
         yield return new WaitForSeconds(2.0f);

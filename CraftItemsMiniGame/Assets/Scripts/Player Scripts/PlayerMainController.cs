@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,9 @@ public class PlayerMainController : MonoBehaviour
     
     public float checkRadius = 0.5f; // Promieñ do OverlapSphere
 
+    [SerializeField]
+    private float rotationSpeed = 0.2f;
+
     private LayerMask layerMask;
     private void Awake()
     {
@@ -36,33 +40,6 @@ public class PlayerMainController : MonoBehaviour
 
         layerMask = LayerMask.GetMask("Interactable");
     }
-    //private void Update()
-    //{
-    //    DrawRay();
-    //    if (!Input.anyKey) return;
-
-
-    //    if (Input.GetKeyDown(KeyCode.E))
-    //    {
-    //        RaycastHit hit;
-
-    //        Vector3 rayOrigin = PlayerMovement.PlayerModelTransform.transform.position;
-    //        Vector3 rayDirection =PlayerMovement.PlayerModelTransform.transform.forward;
-
-
-    //        if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance, layerMask))
-    //        {
-    //            IInteractable interactedItem = hit.collider.GetComponent<IInteractable>();
-   
-    //            if (interactedItem != null)
-    //            {
-    //                Debug.Log("Obiekt raycastowny: " + hit.collider.gameObject.name);
-    //                interactedItem.Interact();
-    //            }
-    //        }
-    //    }
-    //}
-
 
     private void Update()
     {
@@ -90,14 +67,29 @@ public class PlayerMainController : MonoBehaviour
             IInteractable interactedItem = hit.collider.GetComponent<IInteractable>();
             if (interactedItem != null)
             {
-                interactedItem.Interact();
+                StartInteraction(hit.collider);
                 Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
-                return true; // Znaleziono interakcjê
+                return true; 
             }
         }
         return false;
     }
 
+    private void StartInteraction(Collider interaction)
+    {
+        Vector3 directionToItem = interaction.transform.position - PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.position;
+        directionToItem.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
+
+        // U¿yj callbacka OnComplete, aby najpierw zakoñczyæ rotacjê, a potem wywo³aæ interakcjê
+        PlayerMainController.Instance.PlayerMovement.PlayerModelTransform
+            .DORotate(targetRotation.eulerAngles, 0.3f)
+            .OnComplete(() =>
+            {
+                IInteractable interactedItem = interaction.GetComponent<IInteractable>();
+                interactedItem.Interact();
+            });
+    }
     private void CheckInteractionAroundPlayer()
     {
         Vector3 playerPosition = PlayerMovement.PlayerModelTransform.position;
@@ -109,7 +101,8 @@ public class PlayerMainController : MonoBehaviour
             IInteractable interactedItem = collider.GetComponent<IInteractable>();
             if (interactedItem != null)
             {
-                interactedItem.Interact();
+                StartInteraction(collider);
+             //   interactedItem.Interact();
                 return;
             }
         }

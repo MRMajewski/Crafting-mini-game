@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using static UnityEditor.Progress;
 
 public class PlayerInventoryController : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class PlayerInventoryController : MonoBehaviour
 
     public void PickUpItem(PickupItem item)
     {
-     
+        
         PlayerMainController.Instance.PlayerMovement.IsMoving = false;
         PlayerMainController.Instance.PlayerMovement.enabled = false;
 
@@ -50,10 +51,8 @@ public class PlayerInventoryController : MonoBehaviour
     }
     private IEnumerator AddItemAfterAnimation(PickupItem item)
     {
-     //   yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
-
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.5f); // Czekamy do koñca animacji
+        yield return new WaitForSeconds(animationLength + 0.5f); 
  
         Destroy(item.gameObject);
         PlayerMainController.Instance.PlayerMovement.enabled = true;
@@ -61,7 +60,6 @@ public class PlayerInventoryController : MonoBehaviour
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
-   //     yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
 
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(animationLength + 0.5f);
@@ -69,36 +67,22 @@ public class PlayerInventoryController : MonoBehaviour
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
 
-    //private IEnumerator AddItemAfterAnimation()
+    //private void RotateTowardsNearbyItem()
     //{
-    //    yield return new WaitForSecondsRealtime(PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length + 0.1f);
-
-    //    if (nearbyItem == null)
-    //    {
-    //        DetectNearbyItems();
-    //        yield return null;
-    //    }
-
-
-    //    bool wasAdded = Inventory.Instance.AddItem(nearbyItem.ItemData.itemName);
-    //    if (wasAdded)
-    //    {
-    //        Destroy(nearbyItem.gameObject);
-
-    //        nearbyItem = null;
-    //    }
-    //    PlayerMainController.Instance.PlayerMovement.enabled = true;
-    //    canPickUpItem = true;
-    //    DetectNearbyItems();
+    //    Vector3 directionToItem = nearbyItem.transform.position - PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position;
+    //    directionToItem.y = 0;
+    //    Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
+    //    PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.DORotate(targetRotation.eulerAngles, 0.3f);
     //}
 
-    private void RotateTowardsNearbyItem()
-    {
-        Vector3 directionToItem = nearbyItem.transform.position - PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position;
-        directionToItem.y = 0;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
-        PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.DORotate(targetRotation.eulerAngles, 0.3f);
-    }
+
+    //private void RotateTowardsInteraction(PickupItem item)
+    //{
+    //    Vector3 directionToItem = item.transform.position - PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position;
+    //    directionToItem.y = 0;
+    //    Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
+    //    PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.DORotate(targetRotation.eulerAngles, 0.3f);
+    //}
 
     private void DetectNearbyItems()
     {

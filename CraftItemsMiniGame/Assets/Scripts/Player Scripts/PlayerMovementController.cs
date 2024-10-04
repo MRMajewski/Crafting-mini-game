@@ -14,7 +14,6 @@ public class PlayerMovementController : MonoBehaviour
     private Transform playerModelTransform;
     public Transform PlayerModelTransform { get=>playerModelTransform; }
 
-
     private bool isMoving = false;
 
     public bool IsMoving { get => isMoving; set => isMoving = value; }  
@@ -81,4 +80,6 @@ public class PlayerMovementController : MonoBehaviour
             playerModelTransform.rotation = Quaternion.RotateTowards(playerModelTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
+
+
 }
