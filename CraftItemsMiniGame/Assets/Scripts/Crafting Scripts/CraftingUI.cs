@@ -86,9 +86,7 @@ public class CraftingUI : MonoBehaviour
             ItemData resultItem = CraftingSystem.Instance.Craft(itemsToCraft);
             itemsToCraft.Clear();
             ClearCraftingPanelAfterCraft();
-           // ClearCraftingPanel();
-
-
+ 
             foreach (var slot in craftingSlots)
             {
                 slot.ClearSlot();
@@ -101,7 +99,6 @@ public class CraftingUI : MonoBehaviour
         else
         {
             ClearCraftingPanelAfterCraft();
-        //    ClearCraftingPanel();
         }
     }
 
@@ -122,9 +119,7 @@ public class CraftingUI : MonoBehaviour
     }
 
     public void ClearCraftingPanel()
-    {
-     
-
+    {   
         OnCraftingSlotClicked(resultSlot);
 
         foreach (var slot in craftingSlots)

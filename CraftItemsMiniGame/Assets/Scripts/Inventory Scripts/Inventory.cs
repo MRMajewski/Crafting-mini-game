@@ -51,13 +51,8 @@ public class Inventory : MonoBehaviour
             {
 
                 inventoryItems.Add(itemToAdd);
-                Debug.Log($"{itemToAdd.itemName} zosta³ dodany do ekwipunku.");
                 OnInventoryChange?.Invoke();
                 return true;
-            }
-            else
-            {
-                Debug.LogWarning("Ekwipunek jest pe³ny!");
             }
         }
         return false;
@@ -74,7 +69,6 @@ public class Inventory : MonoBehaviour
             OnInventoryChange?.Invoke();
             return true;
         }
-
         return false;
     }
 
@@ -115,5 +109,4 @@ public class Inventory : MonoBehaviour
         inventoryUI.UpdateInventoryUI();
         OnInventoryChange?.Invoke();
     }
-
 }

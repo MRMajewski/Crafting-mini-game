@@ -39,7 +39,6 @@ public class PlayerInventoryController : MonoBehaviour
         }
         else
         {
-
             PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
             StartCoroutine(EnablePlayerMovementAfterUnsuccesfullPickUp());
         }
@@ -60,60 +59,10 @@ public class PlayerInventoryController : MonoBehaviour
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
-
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(animationLength + 0.5f);
 
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
 
-    //private void RotateTowardsNearbyItem()
-    //{
-    //    Vector3 directionToItem = nearbyItem.transform.position - PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position;
-    //    directionToItem.y = 0;
-    //    Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
-    //    PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.DORotate(targetRotation.eulerAngles, 0.3f);
-    //}
-
-
-    //private void RotateTowardsInteraction(PickupItem item)
-    //{
-    //    Vector3 directionToItem = item.transform.position - PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position;
-    //    directionToItem.y = 0;
-    //    Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
-    //    PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.DORotate(targetRotation.eulerAngles, 0.3f);
-    //}
-
-    private void DetectNearbyItems()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
-        foreach (var hitCollider in hitColliders)
-        {
-            PickupItem item = hitCollider.GetComponent<PickupItem>();
-            if (item != null && item != nearbyItem)
-            {
-                nearbyItem = item;
-                return;
-            }
-        }
-        nearbyItem = null;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        PickupItem item = other.GetComponent<PickupItem>();
-        if (item != null)
-        {
-            nearbyItem = item;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        PickupItem item = other.GetComponent<PickupItem>();
-        if (item != null && item == nearbyItem)
-        {
-            nearbyItem = null;
-        }
-    }
 }

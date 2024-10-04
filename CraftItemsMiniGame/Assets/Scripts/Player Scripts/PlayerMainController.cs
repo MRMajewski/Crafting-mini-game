@@ -21,7 +21,7 @@ public class PlayerMainController : MonoBehaviour
     [SerializeField]
     private float rayDistance = 2f; 
     
-    public float checkRadius = 0.5f; // Promieñ do OverlapSphere
+    public float checkRadius = 0.5f; 
 
     [SerializeField]
     private float rotationSpeed = 0.2f;
@@ -81,7 +81,6 @@ public class PlayerMainController : MonoBehaviour
         directionToItem.y = 0;
         Quaternion targetRotation = Quaternion.LookRotation(directionToItem);
 
-        // U¿yj callbacka OnComplete, aby najpierw zakoñczyæ rotacjê, a potem wywo³aæ interakcjê
         PlayerMainController.Instance.PlayerMovement.PlayerModelTransform
             .DORotate(targetRotation.eulerAngles, 0.3f)
             .OnComplete(() =>
@@ -102,7 +101,6 @@ public class PlayerMainController : MonoBehaviour
             if (interactedItem != null)
             {
                 StartInteraction(collider);
-             //   interactedItem.Interact();
                 return;
             }
         }

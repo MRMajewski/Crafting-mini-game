@@ -34,7 +34,6 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
           Transform spawnLocation = GetFreeSpawnLocation();
             if (spawnLocation != null)
             {
-              
                 PlayerMainController.Instance.Animator.SetTrigger("InteractTrigger");
                 StartCoroutine(SpawnItemAfterAnimation(spawnLocation));
             }
@@ -43,8 +42,7 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
                 PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
                 StartCoroutine(EnablePlayerMovementAfterUnsuccesfullSpawn());
                 Debug.LogWarning("Brak wolnych miejsc do spawnowania!");
-            }
-               
+            }            
         }
         else
         {
@@ -59,11 +57,11 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
         yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
 
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.2f); // Czekamy do koñca animacji
+        yield return new WaitForSeconds(animationLength + 0.2f); 
 
         Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity);
         lastSpawnLocation = spawnLocation;
-        Debug.Log("Zespawnowano nowy obiekt: " + objectToSpawn.name);
+
         PlayerMainController.Instance.PlayerMovement.enabled = true;
 
     }
@@ -76,7 +74,6 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
 
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
-
 
     private Transform GetFreeSpawnLocation()
     {
@@ -94,13 +91,11 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
             int randomIndex = Random.Range(0, availableLocations.Count);
             return availableLocations[randomIndex];
         }
-
         return null;
     }
 
     private bool IsSpawnLocationFree(Transform spawnLocation)
     {
-
         Collider[] hitColliders = Physics.OverlapSphere(spawnLocation.position, 0.3f, layerMask);
         foreach (var hitCollider in hitColliders)
         {
@@ -111,16 +106,4 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
         }
         return true; 
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.green;
-    //    foreach (var location in spawnLocations)
-    //    {
-    //        if (location != null)
-    //        {
-    //            Gizmos.DrawWireSphere(location.position, 0.3f); // Rysowanie sfer w miejscach spawnowania
-    //        }
-    //    }
-    //}
 }

@@ -119,7 +119,6 @@ public class ItemListUI : MonoBehaviour
 }
 
 
-
 [System.Serializable]
 public class InventoryItem
 {
