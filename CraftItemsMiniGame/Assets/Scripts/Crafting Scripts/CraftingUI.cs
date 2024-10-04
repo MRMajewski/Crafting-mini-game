@@ -54,20 +54,15 @@ public class CraftingUI : MonoBehaviour
             RemoveItemFromCrafting(craftingSlot.currentItem);
 
             craftingSlot.ClearSlot();
-            resultInfoText.text = "";
-            resultNameText.text = "";
+           // resultInfoText.text = "";
+          //  resultNameText.text = "";
         }
     }
     private void RemoveItemFromCrafting(ItemData item)
     {
-        InventorySlot emptyInventorySlot = Inventory.Instance.InventoryUI.FindFirstEmptyInventorySlot();
-        if (emptyInventorySlot != null)
-        {
-            emptyInventorySlot.SetItem(item);
-            itemsToCraft.Remove(item);
-            Inventory.Instance.InstantlyAddItemToInventory(item);
-            UpdateCraftButtonState();
-        }
+        itemsToCraft.Remove(item);
+        Inventory.Instance.InstantlyAddItemToInventory(item);
+        UpdateCraftButtonState();
     }
     private InventorySlot FindFirstEmptyCraftingSlot()
     {
@@ -77,6 +72,7 @@ public class CraftingUI : MonoBehaviour
     private void UpdateCraftButtonState()
     {
         craftButton.interactable = (itemsToCraft.Count == craftingSlots.Count) && !resultSlot.IsFilled;
+     
     }
 
     public void OnCraftButtonClicked()
@@ -84,22 +80,35 @@ public class CraftingUI : MonoBehaviour
         if (itemsToCraft.Count == craftingSlots.Count)
         {
             ItemData resultItem = CraftingSystem.Instance.Craft(itemsToCraft);
-            itemsToCraft.Clear();
-            ClearCraftingPanelAfterCraft();
- 
-            foreach (var slot in craftingSlots)
-            {
-                slot.ClearSlot();
-            }
+        //    itemsToCraft.Clear();
+        //    ClearCraftingPanelAfterCraft();
+
+
             if (resultItem != null)
             {
-                UpdateMainCraftSlot(resultItem);
+                UpdateMainCraftSlot(resultItem);       
+                itemsToCraft.Clear();
+             //   ClearCraftingPanelAfterCraft();
+
+           //     itemsToCraft.Clear();
+                ClearCraftingSlots();
+            }
+            else
+            {
+                foreach (var slot in craftingSlots)
+                {
+
+                    OnCraftingSlotClicked(slot);
+                    //destroy item in slot
+                    // slot.ClearSlot();
+                }
             }
         }
-        else
-        {
-            ClearCraftingPanelAfterCraft();
-        }
+        //else
+        //{
+
+        //    ClearCraftingPanelAfterCraft();
+        //}
     }
 
     public void UpdateCraftingSlots()
@@ -119,7 +128,7 @@ public class CraftingUI : MonoBehaviour
     }
 
     public void ClearCraftingPanel()
-    {   
+    {
         OnCraftingSlotClicked(resultSlot);
 
         foreach (var slot in craftingSlots)
@@ -128,6 +137,11 @@ public class CraftingUI : MonoBehaviour
         }
         itemsToCraft.Clear();
         ClearCraftingSlots();
+
+
+            resultInfoText.text = "";
+            resultNameText.text = "";
+
     }
 
     public void ClearCraftingPanelAfterCraft()
