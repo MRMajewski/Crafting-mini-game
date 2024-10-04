@@ -101,6 +101,7 @@ public class UIPanelController : MonoBehaviour
         else
         {
             OpenUIPanel();
+            UpdateUIForMode(currentMode);
             inventoryUI.UpdateInventoryUI();
         }
     }
