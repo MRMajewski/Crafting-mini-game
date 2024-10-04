@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public enum InventoryMode
@@ -21,6 +23,16 @@ public class UIPanelController : MonoBehaviour
     private InventoryUI inventoryUI;
     [SerializeField]
     private CraftingUI craftingUI;
+    [SerializeField]
+    private CanvasGroup errorTextCanvasGroup;
+    [SerializeField]
+    private TextMeshProUGUI errorText;
+
+    public float appearDuration = 0.2f;
+    public float blinkDuration = 0.1f;
+    public int blinkCount = 3;
+    public float disappearDuration = 0.2f;
+
 
     private void Start()
     {
@@ -91,5 +103,22 @@ public class UIPanelController : MonoBehaviour
             OpenUIPanel();
             inventoryUI.UpdateInventoryUI();
         }
+    }
+
+    public void DisplayErrorInfo(string message)
+    {
+
+        errorText.text = message;
+        errorTextCanvasGroup.alpha = 0;
+        errorTextCanvasGroup.DOKill();
+
+        Sequence blinkSequence = DOTween.Sequence();
+
+        blinkSequence.Append(errorTextCanvasGroup.DOFade(1, appearDuration));
+
+        blinkSequence.Append(errorTextCanvasGroup.DOFade(0, blinkDuration)
+            .SetLoops(blinkCount * 2, LoopType.Yoyo));
+
+        blinkSequence.Append(errorTextCanvasGroup.DOFade(0, disappearDuration));
     }
 }

@@ -23,8 +23,6 @@ public class CraftingSystem : MonoBehaviour
    
     public ItemData Craft(List<ItemData> itemsToCraft)
     {
-        Debug.Log("Starting Crafting...");
-        Debug.Log("Items to Craft:");
         foreach (var item in itemsToCraft)
         {
             Debug.Log(item.itemName);

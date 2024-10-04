@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ItemsSpawner : MonoBehaviour, IInteractable
 {
+    [SerializeField]
+    private UIPanelController UIPanel;
     [SerializeField]
     private GameObject objectToSpawn;
 
@@ -39,6 +42,7 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
             }
             else
             {
+                UIPanel.DisplayErrorInfo("No room for more items around");
                 PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
                 StartCoroutine(EnablePlayerMovementAfterUnsuccesfullSpawn());
                 Debug.LogWarning("Brak wolnych miejsc do spawnowania!");
@@ -46,6 +50,7 @@ public class ItemsSpawner : MonoBehaviour, IInteractable
         }
         else
         {
+            UIPanel.DisplayErrorInfo("LOL, wild error appeared!");
             PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
             StartCoroutine(EnablePlayerMovementAfterUnsuccesfullSpawn());
             Debug.LogWarning("No object to Spawn!");
