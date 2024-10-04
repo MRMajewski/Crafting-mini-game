@@ -14,8 +14,7 @@ GameObject:
   - component: {fileID: 5189123321709830631}
   - component: {fileID: 5288933064538458101}
   - component: {fileID: 8877712947143132411}
-  - component: {fileID: 7302712936076526429}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Axe_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,8 +105,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.25
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.42
+  m_Center: {x: 0, y: 0.09, z: 0}
 --- !u!64 &5288933064538458101
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -125,7 +124,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -143,26 +142,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: d56de98c0f550ef4ab48b273debc0084, type: 2}
---- !u!136 &7302712936076526429
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 18008095503012359}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.05673127, y: 0.049275544, z: -0.00000001862645}

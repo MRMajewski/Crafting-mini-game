@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7005840927211505780}
   - component: {fileID: 7919703552583979714}
   - component: {fileID: 8808815711239402699}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plank_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.89
+  m_Radius: 0.66
   m_Center: {x: 0, y: 0.51, z: 0}
 --- !u!1 &5883155772268528465
 GameObject:

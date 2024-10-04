@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8355202552059046506}
   - component: {fileID: 5952204114527044290}
   - component: {fileID: 4762464564339068152}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Shovel_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,13 +30,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2201658438392225910}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7488939, y: -0, z: -0, w: 0.66269}
-  m_LocalPosition: {x: 0, y: 0.26206827, z: 1.2416705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -96.989, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6055960848904785193
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -104,7 +104,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -128,7 +128,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.5
+  m_Radius: 0.61
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5952204114527044290
 MonoBehaviour:
@@ -160,7 +160,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.75
   m_Height: 3

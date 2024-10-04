@@ -121,11 +121,16 @@ public class CraftingUI : MonoBehaviour
 
     public void ClearCraftingPanel()
     {
-        itemsToCraft.Clear();
-        ClearCraftingSlots();
+      
+     //   ClearCraftingSlots();
 
         OnCraftingSlotClicked(resultSlot);
 
+        foreach (var slot in craftingSlots)
+        {
+            OnCraftingSlotClicked(slot);
+        }
+        itemsToCraft.Clear();
     }
     private void ClearCraftingSlots()
     {

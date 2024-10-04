@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9177655380646056841}
   - component: {fileID: 1361984893697288133}
   - component: {fileID: 7571368709917295551}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pickaxe_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,8 +104,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.56
-  m_Center: {x: 0, y: 0.04, z: 0}
+  m_Radius: 0.44
+  m_Center: {x: 0, y: 0.07, z: 0}
 --- !u!114 &7571368709917295551
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5868404455211952934}
   - component: {fileID: 910164424752800849}
   - component: {fileID: 2559815884295809571}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Nail_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
