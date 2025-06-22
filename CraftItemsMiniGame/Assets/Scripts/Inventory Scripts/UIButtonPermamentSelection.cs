@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class UIButtonPermamentSelection : MonoBehaviour
 {
@@ -34,7 +35,6 @@ public class UIButtonPermamentSelection : MonoBehaviour
     [SerializeField]
     protected Sprite normalSprite;
 
-
     [Header("Image mode")]
     [SerializeField]
     protected Vector2 normalScale;
@@ -42,6 +42,7 @@ public class UIButtonPermamentSelection : MonoBehaviour
     [SerializeField]
     protected Vector2 selectedScale;
 
+    #region Select Methods
     public void ChangeToSelected(Button button)
     {
         DeselectAll();
@@ -49,7 +50,6 @@ public class UIButtonPermamentSelection : MonoBehaviour
         if (mode == Mode.COLOR)
         {
             ChangeToSelectedColor(button);
-
         }
         else if (mode == Mode.IMAGE)
         {
@@ -59,31 +59,32 @@ public class UIButtonPermamentSelection : MonoBehaviour
         {
             ChangeToSelectedScale(button);
         }
-    }
-    #region Select Methods
-    public void ChangeToSelectedColor(Button button)
-    {
-        var color = button.colors;
-        color.normalColor = selectedColor;
-        button.colors = color;
-        changedButtons.Add(button);
-    }
-    public void ChangeToSelectedImage(Button button)
-    {
-        var tempColor = button.image.color;
-        button.image.color = tempColor;
-        button.image.sprite = selectedSprite;
-        changedButtons.Add(button);
-    }
-    public void ChangeToSelectedScale(Button button)
-    {
-        button.transform.localScale = selectedScale;
-        //button.image.color = tempColor;
-        //button.image.sprite = selectedSprite;
-        changedButtons.Add(button);
-    }
 
+ 
+        void ChangeToSelectedColor(Button button)
+        {
+            var color = button.colors;
+            color.normalColor = selectedColor;
+            button.colors = color;
+            changedButtons.Add(button);
+        }
+
+        void ChangeToSelectedImage(Button button)
+        {
+            var tempColor = button.image.color;
+            button.image.color = tempColor;
+            button.image.sprite = selectedSprite;
+            changedButtons.Add(button);
+        }
+
+        void ChangeToSelectedScale(Button button)
+        {
+            button.transform.localScale = selectedScale;
+            changedButtons.Add(button);
+        }
+    }
     #endregion Select Methods
+
     #region Deselect Methods
     public void DeselectAll()
     {
@@ -100,44 +101,46 @@ public class UIButtonPermamentSelection : MonoBehaviour
             DeselectScale();
         }
         changedButtons.Clear();
-    }
 
-    public void DeselectColor()
-    {
-        foreach (var item in changedButtons)
-        {
-            var color = item.colors;
-            color.normalColor = normalColor;
-            item.colors = color;
-        }
-    }
-    public void DeselectImage()
-    {
-        foreach (var item in changedButtons)
-        {
-            var tempColor = item.image.color;
-            item.image.color = tempColor;
-            item.image.sprite = normalSprite;
-        }
-    }
 
-    public void DeselectScale()
-    {
-        foreach (var item in changedButtons)
+        void DeselectColor()
         {
-            item.transform.localScale = normalScale;
+            foreach (var item in changedButtons)
+            {
+                var color = item.colors;
+                color.normalColor = normalColor;
+                item.colors = color;
+            }
+        }
+
+        void DeselectImage()
+        {
+            foreach (var item in changedButtons)
+            {
+                var tempColor = item.image.color;
+                item.image.color = tempColor;
+                item.image.sprite = normalSprite;
+            }
+        }
+
+        void DeselectScale()
+        {
+            foreach (var item in changedButtons)
+            {
+                item.transform.localScale = normalScale;
+            }
         }
     }
 
     #endregion Deselect Methods
     public Selectable GetSelectedButton()
     {
-        return changedButtons[0];
+        return changedButtons.FirstOrDefault<Selectable>();
     }
     public Button GetSelectedButtonObject()
     {
         if (changedButtons.Count > 0)
-            return changedButtons[0];
+            return changedButtons.FirstOrDefault<Button>();
         else
             return null;
     }

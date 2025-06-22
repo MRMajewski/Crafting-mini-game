@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -5,165 +6,83 @@ using UnityEngine.UI;
 
 public class CraftingUI : MonoBehaviour
 {
-    [SerializeField]
-    private List<InventorySlot> craftingSlots = new List<InventorySlot>();
-    [SerializeField]
-    private InventorySlot resultSlot;
-    [SerializeField]
-    private Button craftButton;
+    [Header("UI References")]
+    [SerializeField] private List<InventorySlot> craftingSlots;
+    [SerializeField] private InventorySlot resultSlot;
+    [SerializeField] private Button craftButton;
+    [SerializeField] private TextMeshProUGUI resultNameText;
+    [SerializeField] private TextMeshProUGUI resultInfoText;
 
-    [SerializeField]
-    private List<ItemData> itemsToCraft = new List<ItemData>();
+    public event Action<ItemData> OnInventorySlotClicked;
+    public event Action<int> OnCraftingSlotClicked;
+    public event Action OnCraftButtonPressed;
 
-    [SerializeField]
-    private TextMeshProUGUI resultNameText;
-
-    [SerializeField]
-    private TextMeshProUGUI resultInfoText;
-
-    public TextMeshProUGUI ResultInfoText { get => resultInfoText; set => resultInfoText = value; }
-
-    [SerializeField]
-    private Sprite emptySprite;
-    private void Start()
+    private void Awake()
     {
-        UpdateCraftButtonState();
-    }
-    public void OnInventorySlotClicked(InventorySlot inventorySlot)
-    {
-        if (inventorySlot.IsFilled && itemsToCraft.Count < craftingSlots.Count)
-        {
-            AddItemToCrafting(inventorySlot.currentItem);
-            Inventory.Instance.InventoryUI.UpdateInventoryUI();
-        }
-    }
+        craftButton.onClick.AddListener(() => OnCraftButtonPressed?.Invoke());
 
-    private void AddItemToCrafting(ItemData item)
-    {
-        InventorySlot emptyCraftingSlot = FindFirstEmptyCraftingSlot();
-        itemsToCraft.Add(item);
-        emptyCraftingSlot.SetItem(item);
-        Inventory.Instance.InstantlyRemoveItemFromInventory(item);
-        UpdateCraftButtonState();
-    }
-
-    public void OnCraftingSlotClicked(InventorySlot craftingSlot)
-    {
-        if (craftingSlot.IsFilled)
-        {
-            RemoveItemFromCrafting(craftingSlot.currentItem);
-
-            craftingSlot.ClearSlot();
-           // resultInfoText.text = "";
-          //  resultNameText.text = "";
-        }
-    }
-    private void RemoveItemFromCrafting(ItemData item)
-    {
-        itemsToCraft.Remove(item);
-        Inventory.Instance.InstantlyAddItemToInventory(item);
-        UpdateCraftButtonState();
-    }
-    private InventorySlot FindFirstEmptyCraftingSlot()
-    {
-        return craftingSlots.Find(slot => !slot.IsFilled);
-    }
-
-    private void UpdateCraftButtonState()
-    {
-        craftButton.interactable = (itemsToCraft.Count == craftingSlots.Count) && !resultSlot.IsFilled;
-     
-    }
-
-    public void OnCraftButtonClicked()
-    {
-        if (itemsToCraft.Count == craftingSlots.Count)
-        {
-            ItemData resultItem = CraftingSystem.Instance.Craft(itemsToCraft);
-        //    itemsToCraft.Clear();
-        //    ClearCraftingPanelAfterCraft();
-
-
-            if (resultItem != null)
-            {
-                UpdateMainCraftSlot(resultItem);       
-                itemsToCraft.Clear();
-             //   ClearCraftingPanelAfterCraft();
-
-           //     itemsToCraft.Clear();
-                ClearCraftingSlots();
-            }
-            else
-            {
-                foreach (var slot in craftingSlots)
-                {
-
-                    OnCraftingSlotClicked(slot);
-                    //destroy item in slot
-                    // slot.ClearSlot();
-                }
-            }
-        }
-        //else
-        //{
-
-        //    ClearCraftingPanelAfterCraft();
-        //}
-    }
-
-    public void UpdateCraftingSlots()
-    {
         for (int i = 0; i < craftingSlots.Count; i++)
         {
-            if (i < itemsToCraft.Count)
+            int index = i;
+            craftingSlots[i].SetOnClickListener(() =>
             {
-                craftingSlots[i].SetItem(itemsToCraft[i]);
-            }
-            else
-            {
-                craftingSlots[i].ClearSlot();
-            }
+                if (craftingSlots[index].IsFilled)
+                    OnCraftingSlotClicked?.Invoke(index);
+            });
         }
-        UpdateCraftButtonState();
     }
 
-    public void ClearCraftingPanel()
+    public void TriggerInventoryItemClick(ItemData item)
     {
-        OnCraftingSlotClicked(resultSlot);
+        OnInventorySlotClicked?.Invoke(item);
+    }
 
-        foreach (var slot in craftingSlots)
+    public void ShowResult(ItemData result, string message)
+    {
+        resultInfoText.text = message;
+
+        if (result != null)
         {
-            OnCraftingSlotClicked(slot);
+            resultSlot.SetItem(result);
+            resultNameText.text = result.itemName;
         }
-        itemsToCraft.Clear();
-        ClearCraftingSlots();
-
-
-            resultInfoText.text = "";
+        else
+        {
+            resultSlot.ClearSlot();
             resultNameText.text = "";
-
-    }
-
-    public void ClearCraftingPanelAfterCraft()
-    {
-        itemsToCraft.Clear();
-        ClearCraftingSlots();
-
-        OnCraftingSlotClicked(resultSlot);
-    }
-
-    private void ClearCraftingSlots()
-    {
-        foreach (var slot in craftingSlots)
-        {
-            slot.ClearSlot();
         }
     }
 
-    public void UpdateMainCraftSlot(ItemData results)
+    public void SetCraftingSlot(int index, ItemData item)
     {
-        resultSlot.SetItem(results);
-        resultNameText.text = results.itemName;
-        UpdateCraftButtonState();
+        if (index >= 0 && index < craftingSlots.Count)
+            craftingSlots[index].SetItem(item);
     }
+
+    public void ClearCraftingSlot(int index)
+    {
+        if (index >= 0 && index < craftingSlots.Count)
+            craftingSlots[index].ClearSlot();
+    }
+
+    public void ClearCraftingSlots()
+    {
+        foreach (var slot in craftingSlots)
+            slot.ClearSlot();
+    }
+
+    public void ClearResultSlot()
+    {
+        resultSlot.ClearSlot();
+        resultNameText.text = "";
+        resultInfoText.text = "";
+    }
+
+    public void SetCraftButtonInteractable(bool value)
+    {
+        craftButton.interactable = value;
+    }
+
+    public List<InventorySlot> GetCraftingSlots() => craftingSlots;
+    public InventorySlot GetResultSlot() => resultSlot;
 }

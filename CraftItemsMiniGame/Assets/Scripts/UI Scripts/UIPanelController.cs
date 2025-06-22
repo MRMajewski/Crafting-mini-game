@@ -23,6 +23,8 @@ public class UIPanelController : MonoBehaviour
     private InventoryUI inventoryUI;
     [SerializeField]
     private CraftingUI craftingUI;
+    [SerializeField] 
+    private CraftingController craftingController;
     [SerializeField]
     private CanvasGroup errorTextCanvasGroup;
     [SerializeField]
@@ -36,7 +38,17 @@ public class UIPanelController : MonoBehaviour
 
     private void Start()
     {
+        SetupSlotListeners();
         CloseUIPanel();
+
+    }
+
+    private void SetupSlotListeners()
+    {
+        foreach (var slot in inventoryUI.InventorySlots)
+        {
+            slot.SetOnClickListener(() => OnSlotClicked(slot));
+        }
     }
     public void SetMode(int modeIndex)
     {
@@ -47,21 +59,21 @@ public class UIPanelController : MonoBehaviour
     public void UpdateUIForMode(InventoryMode mode)
     {
         inventoryUI.ClearSelectedSlot();
-        craftingUI.ClearCraftingPanel();
+
         switch (mode)
         {
             case InventoryMode.Inventory:
                 inventoryItemDataGameObject.SetActive(true);
                 craftingPanelGameObject.SetActive(false);
                 break;
+
             case InventoryMode.Crafting:
-              
                 inventoryItemDataGameObject.SetActive(false);
                 craftingPanelGameObject.SetActive(true);
+                craftingController.ClearCrafting(); 
                 break;
         }
     }
-
     public void OnSlotClicked(InventorySlot slot)
     {
         switch (currentMode)
@@ -69,12 +81,13 @@ public class UIPanelController : MonoBehaviour
             case InventoryMode.Inventory:
                 inventoryUI.SetSelectedItemInfo(slot);
                 break;
+
             case InventoryMode.Crafting:
-                craftingUI.OnInventorySlotClicked(slot);
+                craftingController.AddItemToCrafting(slot); 
                 break;
         }
     }
- 
+
     public void OpenCraftingPanel()
     {
         OpenUIPanel();
@@ -84,7 +97,8 @@ public class UIPanelController : MonoBehaviour
 
     public void OpenUIPanel()
     {
-        mainPanel.SetActive(true);
+        mainPanel.SetActive(true); 
+        SetMode((int)InventoryMode.Crafting);
     }
 
     public void CloseUIPanel()
