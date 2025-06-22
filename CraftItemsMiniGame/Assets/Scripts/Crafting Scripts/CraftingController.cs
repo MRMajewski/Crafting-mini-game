@@ -16,12 +16,12 @@ public class CraftingController : MonoBehaviour
         craftingUI.OnCraftingSlotClicked += RemoveItemFromCrafting;
         craftingUI.OnCraftButtonPressed += OnCraftButtonClicked;
 
-        craftingUI.GetResultSlot().SetOnClickListener(CollectCraftingResult);
+        craftingUI.ResultSlot.SetOnClickListener(CollectCraftingResult);
     }
 
     private void AddItemToCrafting(ItemData item)
     {
-        if (itemsToCraft.Count >= craftingUI.GetCraftingSlots().Count) return;
+        if (itemsToCraft.Count >= craftingUI.CraftingSlots.Count) return;
 
         itemsToCraft.Add(item);
         inventory.RemoveItem(item.itemName);
@@ -31,18 +31,12 @@ public class CraftingController : MonoBehaviour
 
     public void AddItemToCrafting(InventorySlot slot)
     {
-        if (!slot.IsFilled || itemsToCraft.Count >= craftingUI.GetCraftingSlots().Count)
-            return;
-
-        itemsToCraft.Add(slot.CurrentItem);
-        inventory.RemoveItem(slot.CurrentItem);
-        UpdateCraftingSlotsUI();
-        UpdateCraftButtonState();
+        if (!slot.IsFilled) return;
+        AddItemToCrafting(slot.CurrentItem);
     }
-
     public void ClearCrafting()
     {
-        foreach (var item in itemsToCraft)
+        foreach (ItemData item in itemsToCraft)
             inventory.AddItem(item);
 
         itemsToCraft.Clear();
@@ -65,7 +59,7 @@ public class CraftingController : MonoBehaviour
 
     private void OnCraftButtonClicked()
     {
-        bool success = craftingSystem.TryCraft(itemsToCraft, out var resultItem, out var resultMessage);
+        bool success = craftingSystem.TryCraft(itemsToCraft, out ItemData resultItem, out var resultMessage);
         craftingUI.ShowResult(resultItem, resultMessage);
 
         if (success)
@@ -74,7 +68,7 @@ public class CraftingController : MonoBehaviour
         }
         else
         {
-            foreach (var item in itemsToCraft)
+            foreach (ItemData item in itemsToCraft)
                 inventory.AddItem(item.itemName);
 
             itemsToCraft.Clear();
@@ -86,7 +80,7 @@ public class CraftingController : MonoBehaviour
 
     private void CollectCraftingResult()
     {
-        var resultItem = craftingUI.GetResultSlot().CurrentItem;
+        ItemData resultItem = craftingUI.ResultSlot.CurrentItem;
         if (resultItem != null)
         {
             inventory.AddItem(resultItem);
@@ -97,7 +91,7 @@ public class CraftingController : MonoBehaviour
 
     private void UpdateCraftingSlotsUI()
     {
-        for (int i = 0; i < craftingUI.GetCraftingSlots().Count; i++)
+        for (int i = 0; i < craftingUI.CraftingSlots.Count; i++)
         {
             if (i < itemsToCraft.Count)
                 craftingUI.SetCraftingSlot(i, itemsToCraft[i]);
@@ -108,7 +102,7 @@ public class CraftingController : MonoBehaviour
 
     private void UpdateCraftButtonState()
     {
-        bool canCraft = itemsToCraft.Count == craftingUI.GetCraftingSlots().Count;
+        bool canCraft = itemsToCraft.Count == craftingUI.CraftingSlots.Count;
         craftingUI.SetCraftButtonInteractable(canCraft);
     }
 }

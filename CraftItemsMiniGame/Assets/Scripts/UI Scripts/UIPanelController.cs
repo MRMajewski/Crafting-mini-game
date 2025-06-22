@@ -11,8 +11,7 @@ public enum InventoryMode
 }
 public class UIPanelController : MonoBehaviour
 {
-    public InventoryMode currentMode=InventoryMode.Inventory;
-
+    private InventoryMode currentMode=InventoryMode.Inventory;
     [SerializeField]
     private GameObject mainPanel;
     [SerializeField]
@@ -35,12 +34,10 @@ public class UIPanelController : MonoBehaviour
     public int blinkCount = 3;
     public float disappearDuration = 0.2f;
 
-
     private void Start()
     {
         SetupSlotListeners();
         CloseUIPanel();
-
     }
 
     private void SetupSlotListeners()
@@ -52,7 +49,7 @@ public class UIPanelController : MonoBehaviour
     }
     public void SetMode(int modeIndex)
     {
-        currentMode = (InventoryMode) modeIndex;
+       currentMode = (InventoryMode) modeIndex;
        UpdateUIForMode(currentMode);
     }
 
@@ -122,7 +119,6 @@ public class UIPanelController : MonoBehaviour
 
     public void DisplayErrorInfo(string message)
     {
-
         errorText.text = message;
         errorTextCanvasGroup.alpha = 0;
         errorTextCanvasGroup.DOKill();

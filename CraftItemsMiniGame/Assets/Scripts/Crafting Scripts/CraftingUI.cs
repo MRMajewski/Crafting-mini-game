@@ -17,6 +17,9 @@ public class CraftingUI : MonoBehaviour
     public event Action<int> OnCraftingSlotClicked;
     public event Action OnCraftButtonPressed;
 
+
+    public List<InventorySlot> CraftingSlots { get => craftingSlots; }
+    public InventorySlot ResultSlot { get => resultSlot; }
     private void Awake()
     {
         craftButton.onClick.AddListener(() => OnCraftButtonPressed?.Invoke());
@@ -30,11 +33,6 @@ public class CraftingUI : MonoBehaviour
                     OnCraftingSlotClicked?.Invoke(index);
             });
         }
-    }
-
-    public void TriggerInventoryItemClick(ItemData item)
-    {
-        OnInventorySlotClicked?.Invoke(item);
     }
 
     public void ShowResult(ItemData result, string message)
@@ -82,7 +80,4 @@ public class CraftingUI : MonoBehaviour
     {
         craftButton.interactable = value;
     }
-
-    public List<InventorySlot> GetCraftingSlots() => craftingSlots;
-    public InventorySlot GetResultSlot() => resultSlot;
 }

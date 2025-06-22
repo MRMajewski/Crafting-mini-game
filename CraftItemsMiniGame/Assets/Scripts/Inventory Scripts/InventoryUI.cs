@@ -39,9 +39,6 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
       inventory.OnInventoryChange += UpdateInventoryUI;
-
-        //foreach (var slot in slots)
-        //    slot.OnSlotClicked += SetSelectedItemInfo;
     }
 
     private void Start()
@@ -55,7 +52,7 @@ public class InventoryUI : MonoBehaviour
     }
     public void UpdateInventoryUI()
     {
-       itemsInInventory = Inventory.Instance.InventoryItems;
+       itemsInInventory = inventory.InventoryItems;
 
         for (int i = 0; i < slots.Count; i++)
         {
@@ -69,7 +66,6 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
-
     public void SetSelectedItemInfo(InventorySlot slot)
     {
         currentlySelectedSlot = slot;
@@ -99,21 +95,8 @@ public class InventoryUI : MonoBehaviour
         dropItemButton.interactable = false;
     }
 
-    public void DropSelectedItem()
-    {
-        if (currentlySelectedSlot == null || currentlySelectedSlot.CurrentItem == null) return;
-
-       inventory.DropItem(currentlySelectedSlot.CurrentItem.itemName);
-       
-       ClearSelectedSlot();
-       UpdateInventoryUI();
-    }
-
     private void OnDisable()
     {
         Inventory.Instance.OnInventoryChange -= UpdateInventoryUI;
-
-        //foreach (var slot in slots)
-        //    slot.OnSlotClicked -= SetSelectedItemInfo;
     }
 }
