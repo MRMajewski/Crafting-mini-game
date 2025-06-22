@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField]
+    private Inventory inventory;
+
+    [SerializeField]
     private List<InventorySlot> slots = new List<InventorySlot>(); 
     public List<InventorySlot> InventorySlots { get => slots; set => slots = value; }
     [SerializeField]
@@ -29,10 +32,27 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     private string selectedItemNameDescDefault;
 
-
     [SerializeField]
     private Button dropItemButton;
 
+
+    private void OnEnable()
+    {
+      inventory.OnInventoryChange += UpdateInventoryUI;
+
+        //foreach (var slot in slots)
+        //    slot.OnSlotClicked += SetSelectedItemInfo;
+    }
+
+    private void Start()
+    {
+        Init();
+    }
+    public void Init()
+    {    
+        UpdateInventoryUI();
+        ClearSelectedSlot();
+    }
     public void UpdateInventoryUI()
     {
        itemsInInventory = Inventory.Instance.InventoryItems;
@@ -54,24 +74,23 @@ public class InventoryUI : MonoBehaviour
     {
         currentlySelectedSlot = slot;
 
-        if (slot.currentItem == null)
+        if (slot.CurrentItem == null)
         {
             ClearSelectedSlot();
         }
         else
         {
-            selectedItemImage.sprite = slot.currentItem.itemIcon;
-            selectedItemNameText.text = slot.currentItem.itemName;
-            selectedItemNameDesc.text = slot.currentItem.itemDescription;
+            SetSelectedSlot(slot);
+        }
+
+        void SetSelectedSlot(InventorySlot slot)
+        {
+            selectedItemImage.sprite = slot.CurrentItem.itemIcon;
+            selectedItemNameText.text = slot.CurrentItem.itemName;
+            selectedItemNameDesc.text = slot.CurrentItem.itemDescription;
             dropItemButton.interactable = true;
-        }            
-    }
-
-    public void ClearSlot(InventorySlot slot)
-    {
-        slot.ClearSlot();
-    }
-
+        }
+        }
     public void ClearSelectedSlot()
     {
         selectedItemImage.sprite = selectedItemImageDefault;
@@ -82,16 +101,19 @@ public class InventoryUI : MonoBehaviour
 
     public void DropSelectedItem()
     {
-        if (currentlySelectedSlot == null || currentlySelectedSlot.currentItem==null) return;
+        if (currentlySelectedSlot == null || currentlySelectedSlot.CurrentItem == null) return;
 
-        Inventory.Instance.DropItem(currentlySelectedSlot.currentItem.itemName);
-        ClearSelectedSlot();
-
+       inventory.DropItem(currentlySelectedSlot.CurrentItem.itemName);
+       
+       ClearSelectedSlot();
        UpdateInventoryUI();
     }
 
-    public InventorySlot FindFirstEmptyInventorySlot()
+    private void OnDisable()
     {
-        return slots.Find(slot => !slot.IsFilled);
+        Inventory.Instance.OnInventoryChange -= UpdateInventoryUI;
+
+        //foreach (var slot in slots)
+        //    slot.OnSlotClicked -= SetSelectedItemInfo;
     }
 }

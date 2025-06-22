@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,28 +7,20 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory Instance { get; private set; }
 
-    public ItemDatabase itemDatabase; 
+    [SerializeField]
+    private ItemDatabase itemDatabase;
 
     [SerializeField]
     private List<ItemData> inventoryItems = new List<ItemData>();
     public List<ItemData> InventoryItems { get => inventoryItems; }
 
-    public int maxInventorySize = 9;
-
     [SerializeField]
-    private float dropDistance;
+    private int maxInventorySize = 9;
 
-    [SerializeField]
-    private Transform playerTransform;
-    [SerializeField]
-    private Transform itemsParent;
 
-    [SerializeField]
-    private InventoryUI inventoryUI;
+    public event Action OnInventoryChange;
 
-    public InventoryUI InventoryUI { get => inventoryUI; }
-
-    public event Action OnInventoryChange; 
+    public event Action<ItemData> OnItemDropped;
 
     private void Awake()
     {
@@ -45,15 +37,11 @@ public class Inventory : MonoBehaviour
     {
         ItemData itemToAdd = itemDatabase.GetItemByID(itemName);
 
-        if (itemToAdd != null)
+        if (itemToAdd != null && inventoryItems.Count < maxInventorySize)
         {
-            if (inventoryItems.Count < maxInventorySize)
-            {
-
-                inventoryItems.Add(itemToAdd);
-                OnInventoryChange?.Invoke();
-                return true;
-            }
+            inventoryItems.Add(itemToAdd);
+            OnInventoryChange?.Invoke();
+            return true;
         }
         return false;
     }
@@ -71,19 +59,28 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
+    //public bool RemoveItem(ItemData itemData)
+    //{
+    //    if (inventoryItems.Remove(itemData))
+    //    {
+    //        inventoryItems.TrimExcess();
+    //        OnInventoryChange?.Invoke();
+    //        return true;
+    //    }
+    //    return false;
+    //}
+    //public void DropItem(string itemName)
+    //{
+    //    ItemData itemToDrop = inventoryItems.Find(item => item.itemName == itemName);
 
-    public void DropItem(string itemName)
-    {
-        ItemData itemToDrop = inventoryItems.Find(item => item.itemName == itemName);
+    //    if (itemToDrop != null)
+    //    {
+    //        Vector3 dropPosition = playerTransform.position + playerTransform.GetChild(0).forward * dropDistance;
 
-        if (itemToDrop != null)
-        {
-            Vector3 dropPosition = playerTransform.position + playerTransform.GetChild(0).forward * dropDistance;
-
-            Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity, itemsParent);
-            RemoveItem(itemName);
-        }
-    }
+    //        Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity, itemsParent);
+    //        RemoveItem(itemName);
+    //    }
+    //}
 
     public int GetItemCount(ItemData item)
     {
@@ -96,17 +93,37 @@ public class Inventory : MonoBehaviour
         return count;
     }
 
-    public void InstantlyAddItemToInventory(ItemData itemData)
+    public bool AddItem(ItemData itemData)
     {
-       InventoryItems.Add(itemData);
-
-       inventoryUI.UpdateInventoryUI();
-        OnInventoryChange?.Invoke();
+        if (inventoryItems.Count < maxInventorySize)
+        {
+            inventoryItems.Add(itemData);
+            OnInventoryChange?.Invoke();
+            return true;
+        }
+        return false;
     }
-    public void InstantlyRemoveItemFromInventory(ItemData itemData)
+    public bool RemoveItem(ItemData itemData)
     {
-        InventoryItems.Remove(itemData);
-        inventoryUI.UpdateInventoryUI();
-        OnInventoryChange?.Invoke();
+        if (inventoryItems.Remove(itemData))
+        {
+            inventoryItems.TrimExcess();
+            OnInventoryChange?.Invoke();
+            return true;
+        }
+        return false;
+    }
+
+    public void DropItem(string itemName)
+    {
+        ItemData itemToDrop = inventoryItems.Find(item => item.itemName == itemName);
+        if (itemToDrop != null)
+        {
+            inventoryItems.Remove(itemToDrop);
+            inventoryItems.TrimExcess();
+
+            OnInventoryChange?.Invoke();
+            OnItemDropped?.Invoke(itemToDrop);
+        }
     }
 }
