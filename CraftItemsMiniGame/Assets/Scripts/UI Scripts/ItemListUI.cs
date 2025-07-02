@@ -8,7 +8,8 @@ public class ItemListUI : MonoBehaviour
     [SerializeField] 
     private GameObject textPrefab; 
     [SerializeField] 
-    private Transform listParent;  
+    private Transform listParent;
+    [SerializeField]
     private Inventory playerInventory; 
 
     private List<TextMeshProUGUI> itemTextList = new List<TextMeshProUGUI>(); 
@@ -25,7 +26,7 @@ public class ItemListUI : MonoBehaviour
 
     private void Start()
     {   
-        playerInventory =Inventory.Instance;
+      //  playerInventory =Inventory.Instance;
         playerInventory.OnInventoryChange += UpdateItemUI;
 
         baseColor= requiredItemTitleText.faceColor;

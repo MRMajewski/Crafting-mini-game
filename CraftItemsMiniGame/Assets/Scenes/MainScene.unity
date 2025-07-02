@@ -3726,6 +3726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textPrefab: {fileID: 1874947546}
   listParent: {fileID: 1454293030}
+  playerInventory: {fileID: 189538760}
   requiredItems:
   - itemData: {fileID: 11400000, guid: 134b6fa7a34cbc743b3dcd523cea37ad, type: 2}
     requiredAmount: 2
@@ -3991,7 +3992,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cc26357035175348963b29db89aeaed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMode: 0
   mainPanel: {fileID: 1058283417}
   inventoryItemDataGameObject: {fileID: 1877896778}
   craftingPanelGameObject: {fileID: 1506931274}
