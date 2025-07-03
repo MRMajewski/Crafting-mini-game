@@ -1,0 +1,44 @@
+name: Build Unity Project
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  buildWindows:
+    name: Build for Windows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('**/*.cs') }}
+          restore-keys: |
+            Library-
+
+      - name: Setup Unity
+        uses: game-ci/unity-actions/setup@v3
+        with:
+          unityVersion: 2022.3.46f1
+
+      - name: Activate License
+        uses: game-ci/unity-actions/activate@v3
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+      - name: Build project
+        uses: game-ci/unity-actions/build@v3
+        with:
+          targetPlatform: StandaloneWindows64
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build-Windows
+          path: build/StandaloneWindows64
