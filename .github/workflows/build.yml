@@ -2,7 +2,7 @@ name: Build Unity Project
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   buildWindows:
