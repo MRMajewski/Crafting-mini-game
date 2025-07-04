@@ -21,24 +21,24 @@ jobs:
             Library-
 
       - name: Setup Unity
-        uses: game-ci/unity-actions/setup@v3
+        uses: game-ci/setup-unity@v3
         with:
           unityVersion: 2022.3.46f1
 
       - name: Activate License
-        uses: game-ci/unity-actions/activate@v3
+        uses: game-ci/activate-license@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
       - name: Build project
-        uses: game-ci/unity-actions/build@v3
+        uses: game-ci/build@v2
         with:
           targetPlatform: StandaloneWindows64
 
       - name: Upload Build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Build-Windows
           path: build/StandaloneWindows64
