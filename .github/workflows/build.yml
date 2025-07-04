@@ -5,37 +5,29 @@ on:
     branches: [ main ]
 
 jobs:
-  buildWindows:
+  build:
     name: Build for Windows
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Cache Library
-        uses: actions/cache@v3
+      - name: Run Unity - Activate License
+        uses: game-ci/unity-actions@v4
         with:
-          path: Library
-          key: Library-${{ runner.os }}-${{ hashFiles('**/*.cs') }}
-          restore-keys: |
-            Library-
-
-      - name: Setup Unity
-        uses: game-ci/setup-unity@v3
-        with:
-          unityVersion: 2022.3.46f1
-
-      - name: Activate License
-        uses: game-ci/activate-license@v2
+          action: activate
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
-      - name: Build project
-        uses: game-ci/build@v2
+      - name: Run Unity - Build Windows
+        uses: game-ci/unity-actions@v4
         with:
+          action: build
           targetPlatform: StandaloneWindows64
+          unityVersion: 2022.3.46f1
 
       - name: Upload Build
         uses: actions/upload-artifact@v4
