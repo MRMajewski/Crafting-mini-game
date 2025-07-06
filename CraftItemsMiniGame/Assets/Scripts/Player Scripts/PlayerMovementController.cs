@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerMovementController : MonoBehaviour
 {
@@ -12,61 +14,109 @@ public class PlayerMovementController : MonoBehaviour
     private float rotationSpeed = 180f;
     [SerializeField]
     private Transform playerModelTransform;
-    public Transform PlayerModelTransform { get=>playerModelTransform; }
+    public Transform PlayerModelTransform { get => playerModelTransform; }
 
     private bool isMoving = false;
 
-    public bool IsMoving { get => isMoving; set => isMoving = value; }  
+    public bool IsMoving { get => isMoving; set => isMoving = value; }
 
-    private const float moveRadius = 9f; 
+    private const float moveRadius = 9f;
     private Vector3 centerPosition = new Vector3(0, 0, 0);
+
+    private Vector3? targetPosition = null;
+    private Vector3 lastPosition;
+    private float stuckTimer = 0f;
+    private Collider targetInteractionCollider = null;
+
+    [SerializeField]
+    private  float interactionDistance = 1.5f;
+    [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private Animator animator;
+
 
     void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        HandleInput();
 
-        bool isCurrentlyMoving = Mathf.Abs(x) > 0.01f || Mathf.Abs(z) > 0.01f;
+        // Animator: isMoving
+        bool isMoving = agent.velocity.magnitude > 0.1f;
+        animator.SetBool("isMoving", isMoving);
 
-        if (isCurrentlyMoving != isMoving)
+        if (targetInteractionCollider != null)
         {
-            isMoving = isCurrentlyMoving;
-            PlayerMainController.Instance.Animator.SetBool("isMoving", isMoving);
+            float distance = Vector3.Distance(transform.position, targetInteractionCollider.transform.position);
+            if (distance <= interactionDistance)
+            {
+                agent.ResetPath();
+                RotatePlayerModel(targetInteractionCollider.transform.position);
+              //  PlayerMainController.Instance.TryStartInteraction(targetInteractionCollider);
+                targetInteractionCollider = null;
+            }
         }
-        if (isMoving)
-        {
-            HandleMovement(x,z);
-        }    
     }
-    private void HandleMovement(float x, float z)
+    private void HandleInput()
     {
-        Vector3 moveDirection = transform.right * x + transform.forward * z;
-        Vector3 newPosition = controller.transform.position + moveDirection * movementSpeed * Time.deltaTime;
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonDown(0))
+        {
+            ProcessInput(Input.mousePosition);
+        }
+#elif UNITY_ANDROID || UNITY_IOS
+    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+    {
+        ProcessInput(Input.GetTouch(0).position);
+    }
+#endif
+    }
+
+    private void MoveTowards(Vector3 direction)
+    {
+        Vector3 newPosition = controller.transform.position + direction * movementSpeed * Time.deltaTime;
 
         Vector3 directionFromCenter = newPosition - centerPosition;
 
         if (newPosition.magnitude <= moveRadius)
         {
-            controller.Move(moveDirection * movementSpeed * Time.deltaTime);
+            controller.Move(direction * movementSpeed * Time.deltaTime);
         }
         else
         {
             Vector3 clampedPosition = centerPosition + directionFromCenter.normalized * moveRadius;
             controller.Move(clampedPosition - controller.transform.position);
-
         }
+        RotatePlayerModel(direction);
+    }
+    private void StopMovement()
+    {
+        targetPosition = null;
+        targetInteractionCollider = null;
+        IsMoving = false;
+        PlayerMainController.Instance.Animator.SetBool("isMoving", false);
+    }
 
-        bool isCurrentlyMoving = Mathf.Abs(x) > 0.01f || Mathf.Abs(z) > 0.01f;
-
-        if (isCurrentlyMoving != isMoving)
+    private void StartInteraction(Collider interaction)
+    {
+        //  PlayerMainController.Instance.TryStartInteraction(interaction);
+    }
+    private void ProcessInput(Vector2 screenPosition)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            isMoving = isCurrentlyMoving;
-            PlayerMainController.Instance.Animator.SetBool("isMoving", isMoving);
-        }
+            var interactable = hit.collider.GetComponent<IInteractable>();
+            if (interactable != null)
+            {
+                targetInteractionCollider = hit.collider;
 
-        if (isMoving)
-        {
-            RotatePlayerModel(moveDirection);
+                Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
+                Vector3 target = hit.collider.transform.position - dir * interactionDistance;
+                agent.SetDestination(target);
+            }
+            else if (hit.collider.CompareTag("Ground"))
+            {
+                targetInteractionCollider = null;
+                agent.SetDestination(hit.point);
+            }
         }
     }
 
