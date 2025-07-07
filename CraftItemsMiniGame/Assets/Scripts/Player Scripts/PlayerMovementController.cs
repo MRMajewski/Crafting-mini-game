@@ -6,10 +6,7 @@ using UnityEngine.AI;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    [SerializeField]
-    private CharacterController controller;
-    [SerializeField]
-    private float movementSpeed = 6f;
+
     [SerializeField]
     private float rotationSpeed = 180f;
     [SerializeField]
@@ -20,12 +17,6 @@ public class PlayerMovementController : MonoBehaviour
 
     public bool IsMoving { get => isMoving; set => isMoving = value; }
 
-    private const float moveRadius = 9f;
-    private Vector3 centerPosition = new Vector3(0, 0, 0);
-
-    private Vector3? targetPosition = null;
-    private Vector3 lastPosition;
-    private float stuckTimer = 0f;
     private Collider targetInteractionCollider = null;
 
     [SerializeField]
@@ -38,7 +29,6 @@ public class PlayerMovementController : MonoBehaviour
     {
         HandleInput();
 
-        // Animator: isMoving
         bool isMoving = agent.velocity.magnitude > 0.1f;
         animator.SetBool("isMoving", isMoving);
 
@@ -69,31 +59,6 @@ public class PlayerMovementController : MonoBehaviour
 #endif
     }
 
-    private void MoveTowards(Vector3 direction)
-    {
-        Vector3 newPosition = controller.transform.position + direction * movementSpeed * Time.deltaTime;
-
-        Vector3 directionFromCenter = newPosition - centerPosition;
-
-        if (newPosition.magnitude <= moveRadius)
-        {
-            controller.Move(direction * movementSpeed * Time.deltaTime);
-        }
-        else
-        {
-            Vector3 clampedPosition = centerPosition + directionFromCenter.normalized * moveRadius;
-            controller.Move(clampedPosition - controller.transform.position);
-        }
-        RotatePlayerModel(direction);
-    }
-    private void StopMovement()
-    {
-        targetPosition = null;
-        targetInteractionCollider = null;
-        IsMoving = false;
-        PlayerMainController.Instance.Animator.SetBool("isMoving", false);
-    }
-
     private void StartInteraction(Collider interaction)
     {
         //  PlayerMainController.Instance.TryStartInteraction(interaction);
@@ -115,7 +80,15 @@ public class PlayerMovementController : MonoBehaviour
             else if (hit.collider.CompareTag("Ground"))
             {
                 targetInteractionCollider = null;
-                agent.SetDestination(hit.point);
+
+                if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(navHit.position);
+                }
+                else
+                {
+                    Debug.LogWarning("Clicked outside navigable area");
+                }
             }
         }
     }
