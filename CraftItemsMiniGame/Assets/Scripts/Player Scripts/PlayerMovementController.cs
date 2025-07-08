@@ -20,7 +20,7 @@ public class PlayerMovementController : MonoBehaviour
     private Collider targetInteractionCollider = null;
 
     [SerializeField]
-    private  float interactionDistance = 1.5f;
+    private  float interactionDistance = .75f;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Animator animator;
 
@@ -38,11 +38,27 @@ public class PlayerMovementController : MonoBehaviour
             if (distance <= interactionDistance)
             {
                 agent.ResetPath();
-                RotatePlayerModel(targetInteractionCollider.transform.position);
-              //  PlayerMainController.Instance.TryStartInteraction(targetInteractionCollider);
+
+                if (targetInteractionCollider.TryGetComponent<IInteractable>(out var interactable))
+                {
+                    RotatePlayerModel(targetInteractionCollider.transform.position);
+                    interactable.Interact();
+                }
+
                 targetInteractionCollider = null;
             }
         }
+        //if (targetInteractionCollider != null)
+        //{
+        //    float distance = Vector3.Distance(transform.position, targetInteractionCollider.transform.position);
+        //    if (distance <= interactionDistance)
+        //    {
+        //        agent.ResetPath();
+        //        RotatePlayerModel(targetInteractionCollider.transform.position);
+        //      //  PlayerMainController.Instance.TryStartInteraction(targetInteractionCollider);
+        //        targetInteractionCollider = null;
+        //    }
+        //}
     }
     private void HandleInput()
     {
@@ -68,26 +84,24 @@ public class PlayerMovementController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            var interactable = hit.collider.GetComponent<IInteractable>();
-            if (interactable != null)
+            if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 targetInteractionCollider = hit.collider;
-
-                Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
-                Vector3 target = hit.collider.transform.position - dir * interactionDistance;
-                agent.SetDestination(target);
+                Vector3 approach = interactable.GetApproachPosition();
+                if (NavMesh.SamplePosition(approach, out NavMeshHit navHit, interactionDistance, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(navHit.position);
+                }
+                //Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
+                //Vector3 target = hit.collider.transform.position - dir * interactionDistance;
+                //agent.SetDestination(target);
             }
             else if (hit.collider.CompareTag("Ground"))
             {
                 targetInteractionCollider = null;
-
-                if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, interactionDistance, NavMesh.AllAreas))
                 {
                     agent.SetDestination(navHit.position);
-                }
-                else
-                {
-                    Debug.LogWarning("Clicked outside navigable area");
                 }
             }
         }

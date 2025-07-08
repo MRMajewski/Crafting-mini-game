@@ -41,20 +41,20 @@ public class PlayerMainController : MonoBehaviour
         layerMask = LayerMask.GetMask("Interactable");
     }
 
-    private void Update()
-    {
-        DrawRay();
-        if (!Input.anyKey) return;
+    //private void Update()
+    //{
+    //    DrawRay();
+    //    if (!Input.anyKey) return;
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (RaycastInteraction())
-            {
-                return;
-            }
-            CheckInteractionAroundPlayer();
-        }
-    }
+    //    if (Input.GetKeyDown(KeyCode.E))
+    //    {
+    //        if (RaycastInteraction())
+    //        {
+    //            return;
+    //        }
+    //        CheckInteractionAroundPlayer();
+    //    }
+    //}
 
     private bool RaycastInteraction()
     {

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1873065705524922216}
   - component: {fileID: 8411756083627348513}
   - component: {fileID: 4567587398188348499}
-  - component: {fileID: 2430429619375965968}
+  - component: {fileID: 2885169347474058232}
   m_Layer: 3
   m_Name: Iron_Prefab
   m_TagString: Untagged
@@ -106,7 +106,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.65
   m_Center: {x: 0, y: 0.09, z: 0}
---- !u!114 &2430429619375965968
+--- !u!114 &2885169347474058232
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2496943205618944403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f6a4c99fc7aba4f951bab0d584118d, type: 3}
+  m_Script: {fileID: 11500000, guid: 1aff9eb1ceaa6404a8f25b19308dcb2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 28dd52eb4e6cef7428e6cd4150828199, type: 2}

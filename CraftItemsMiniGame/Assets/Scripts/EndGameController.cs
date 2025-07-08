@@ -12,7 +12,7 @@ public class EndGameController : MonoBehaviour
     public TextMeshProUGUI endMessageText;
 
     [SerializeField]
-    private EndGamePoint endGamePoint;
+    private EndGamePointInteractable endGamePoint;
 
 
     [SerializeField]

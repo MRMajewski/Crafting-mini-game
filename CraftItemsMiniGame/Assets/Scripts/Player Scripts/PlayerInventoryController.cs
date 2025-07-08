@@ -8,23 +8,23 @@ public class PlayerInventoryController : MonoBehaviour
     [SerializeField]
     private UIPanelController UIPanel;
     [SerializeField]
-    private PickupItem nearbyItem;
+    private PickupItemInteractable nearbyItem;
 
     [SerializeField]
     private float detectionRadius = 1.5f; 
 
 
-    private void Update()
-    {
-        if (!Input.anyKey) return;
+    //private void Update()
+    //{
+    //    if (!Input.anyKey) return;
           
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            UIPanel.ToggleInventoryPanel();
-        }
-    }
+    //    if (Input.GetKeyDown(KeyCode.I))
+    //    {
+    //        UIPanel.ToggleInventoryPanel();
+    //    }
+    //}
 
-    public void PickUpItem(PickupItem item)
+    public void PickUpItem(PickupItemInteractable item)
     {
         
         PlayerMainController.Instance.PlayerMovement.IsMoving = false;
@@ -43,12 +43,12 @@ public class PlayerInventoryController : MonoBehaviour
             StartCoroutine(EnablePlayerMovementAfterUnsuccesfullPickUp());
         }
     }
-    private bool TrytoAddItem(PickupItem item)
+    private bool TrytoAddItem(PickupItemInteractable item)
     {
         bool wasAdded = Inventory.Instance.AddItem(item.ItemData.itemName);
         return wasAdded;
     }
-    private IEnumerator AddItemAfterAnimation(PickupItem item)
+    private IEnumerator AddItemAfterAnimation(PickupItemInteractable item)
     {
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(animationLength + 0.5f); 

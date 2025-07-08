@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2838288787159351045}
   - component: {fileID: 7005840927211505780}
-  - component: {fileID: 7919703552583979714}
   - component: {fileID: 8808815711239402699}
+  - component: {fileID: 292717660681473723}
   m_Layer: 3
   m_Name: Plank_Prefab
   m_TagString: Untagged
@@ -59,19 +59,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 888916654454863692}
   m_Enabled: 1
---- !u!114 &7919703552583979714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3181916495347918271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f6a4c99fc7aba4f951bab0d584118d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 134b6fa7a34cbc743b3dcd523cea37ad, type: 2}
 --- !u!135 &8808815711239402699
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -93,6 +80,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.66
   m_Center: {x: 0, y: 0.51, z: 0}
+--- !u!114 &292717660681473723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3181916495347918271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aff9eb1ceaa6404a8f25b19308dcb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 134b6fa7a34cbc743b3dcd523cea37ad, type: 2}
 --- !u!1 &5883155772268528465
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6080628595840227317}
   - component: {fileID: 4614399729366215421}
   - component: {fileID: 5868404455211952934}
-  - component: {fileID: 910164424752800849}
   - component: {fileID: 2559815884295809571}
+  - component: {fileID: 2716563874851700119}
   m_Layer: 3
   m_Name: Nail_Prefab
   m_TagString: Untagged
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &910164424752800849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2482902454399190816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f6a4c99fc7aba4f951bab0d584118d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 5c33784ef3ccbf84d9fa6614aa86f8c9, type: 2}
 --- !u!135 &2559815884295809571
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -119,3 +106,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.35, z: -0.000000008381903}
+--- !u!114 &2716563874851700119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2482902454399190816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aff9eb1ceaa6404a8f25b19308dcb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 5c33784ef3ccbf84d9fa6614aa86f8c9, type: 2}

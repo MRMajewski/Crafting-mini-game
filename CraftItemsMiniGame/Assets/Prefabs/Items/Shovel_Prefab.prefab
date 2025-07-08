@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 4517292870098444039}
   - component: {fileID: 638084746711656261}
   - component: {fileID: 8355202552059046506}
-  - component: {fileID: 5952204114527044290}
   - component: {fileID: 4762464564339068152}
+  - component: {fileID: 1607792115833003778}
   m_Layer: 3
   m_Name: Shovel_Prefab
   m_TagString: Untagged
@@ -130,19 +130,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.61
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5952204114527044290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2201658438392225910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f6a4c99fc7aba4f951bab0d584118d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 28dd52eb4e6cef7428e6cd4150828199, type: 2}
 --- !u!136 &4762464564339068152
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -166,3 +153,16 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0.05673127, y: 0.049275544, z: -0.00000001862645}
+--- !u!114 &1607792115833003778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2201658438392225910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aff9eb1ceaa6404a8f25b19308dcb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 2988a62c32b943244b7c16245c009c66, type: 2}

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum InventoryMode
 {
@@ -29,6 +30,11 @@ public class UIPanelController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI errorText;
 
+
+    [Header("Button references")]
+    [SerializeField]
+    private Button inventoryButton;
+
     public float appearDuration = 0.2f;
     public float blinkDuration = 0.1f;
     public int blinkCount = 3;
@@ -38,6 +44,7 @@ public class UIPanelController : MonoBehaviour
     {
         SetupSlotListeners();
         CloseUIPanel();
+        inventoryButton.onClick.AddListener(ToggleInventoryPanel);
     }
 
     private void SetupSlotListeners()
