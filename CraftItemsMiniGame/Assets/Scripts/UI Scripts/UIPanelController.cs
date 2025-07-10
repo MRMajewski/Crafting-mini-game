@@ -114,13 +114,15 @@ public class UIPanelController : MonoBehaviour
     {
         if (mainPanel.activeSelf)
         {
-            CloseUIPanel();
+            CloseUIPanel(); 
+            PlayerMainController.Instance.PlayerMovement.UnblockMovement();
         }
         else
         {
             OpenUIPanel();
             UpdateUIForMode(currentMode);
             inventoryUI.UpdateInventoryUI();
+            PlayerMainController.Instance.PlayerMovement.BlockMovement();
         }
     }
 

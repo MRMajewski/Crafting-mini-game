@@ -1,65 +1,56 @@
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class PlayerMovementController : MonoBehaviour
 {
-
-    [SerializeField]
-    private float rotationSpeed = 180f;
+    [Header("Player references")]
     [SerializeField]
     private Transform playerModelTransform;
     public Transform PlayerModelTransform { get => playerModelTransform; }
+    [SerializeField]
+    private NavMeshAgent agent;
+    [SerializeField]
+    private Animator animator;
+    [SerializeField]
+    private float rotationSpeed = 360f;
 
-    private bool isMoving = false;
-
-    public bool IsMoving { get => isMoving; set => isMoving = value; }
-
+    [Header("Interaction references")]
     private Collider targetInteractionCollider = null;
+    private bool isRotatingToInteract = false;
+    private Vector3 interactionTargetDirection;
+    private bool hasInteracted = false;
 
     [SerializeField]
-    private  float interactionDistance = .75f;
-    [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Animator animator;
+    private float interactionDistance = 1f;
 
+
+    [Header("Stan Ruchu")]
+    private bool isMoving = false;
+    public bool IsMoving { get => isMoving; set => isMoving = value; }
+
+    private bool isMovementBlocked = false;
 
     void Update()
     {
+        if (isMovementBlocked)
+            return;
+
         HandleInput();
 
-        bool isMoving = agent.velocity.magnitude > 0.1f;
-        animator.SetBool("isMoving", isMoving);
+        UpdateMovementAnimation();
 
-        if (targetInteractionCollider != null)
+        if (targetInteractionCollider == null)
         {
-            float distance = Vector3.Distance(transform.position, targetInteractionCollider.transform.position);
-            if (distance <= interactionDistance)
-            {
-                agent.ResetPath();
-
-                if (targetInteractionCollider.TryGetComponent<IInteractable>(out var interactable))
-                {
-                    RotatePlayerModel(targetInteractionCollider.transform.position);
-                    interactable.Interact();
-                }
-
-                targetInteractionCollider = null;
-            }
+            RotateInMovementDirection();
         }
-        //if (targetInteractionCollider != null)
-        //{
-        //    float distance = Vector3.Distance(transform.position, targetInteractionCollider.transform.position);
-        //    if (distance <= interactionDistance)
-        //    {
-        //        agent.ResetPath();
-        //        RotatePlayerModel(targetInteractionCollider.transform.position);
-        //      //  PlayerMainController.Instance.TryStartInteraction(targetInteractionCollider);
-        //        targetInteractionCollider = null;
-        //    }
-        //}
+        else
+        {
+            HandleInteraction();
+        }
     }
+
     private void HandleInput()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -68,17 +59,68 @@ public class PlayerMovementController : MonoBehaviour
             ProcessInput(Input.mousePosition);
         }
 #elif UNITY_ANDROID || UNITY_IOS
-    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-    {
-        ProcessInput(Input.GetTouch(0).position);
-    }
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            ProcessInput(Input.GetTouch(0).position);
+        }
 #endif
     }
 
-    private void StartInteraction(Collider interaction)
+    private void UpdateMovementAnimation()
     {
-        //  PlayerMainController.Instance.TryStartInteraction(interaction);
+        isMoving = agent.velocity.magnitude > 0.1f;
+        animator.SetBool("isMoving", isMoving);
     }
+
+    private void RotateInMovementDirection()
+    {
+        if (agent.desiredVelocity.sqrMagnitude > 0.01f)
+        {
+            RotatePlayerModel(transform.position + agent.desiredVelocity);
+        }
+    }
+
+    private void HandleInteraction()
+    {
+        if (agent.pathPending || agent.remainingDistance > interactionDistance)
+            return;
+
+        agent.ResetPath();
+
+        if (!isRotatingToInteract)
+        {
+            interactionTargetDirection = targetInteractionCollider.transform.position - playerModelTransform.position;
+            interactionTargetDirection.y = 0;
+            interactionTargetDirection.Normalize();
+
+            isRotatingToInteract = true;
+            return;
+        }
+
+        RotatePlayerModel(playerModelTransform.position + interactionTargetDirection);
+
+        float angle = Vector3.Angle(playerModelTransform.forward, interactionTargetDirection);
+        if (angle < 5f && !hasInteracted)
+        {
+            if (targetInteractionCollider.TryGetComponent<IInteractable>(out var interactable))
+            {
+                Debug.Log("Interakcja!");
+                interactable.Interact();
+            }
+            hasInteracted = true;
+            StartCoroutine(ClearInteractionAfterFrame());
+        }
+    }
+
+    private IEnumerator ClearInteractionAfterFrame()
+    {
+        yield return null;
+        targetInteractionCollider = null;
+        interactionTargetDirection = Vector3.zero;
+        isRotatingToInteract = false;
+        hasInteracted = false;
+    }
+
     private void ProcessInput(Vector2 screenPosition)
     {
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
@@ -86,19 +128,27 @@ public class PlayerMovementController : MonoBehaviour
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                targetInteractionCollider = hit.collider;
                 Vector3 approach = interactable.GetApproachPosition();
-                if (NavMesh.SamplePosition(approach, out NavMeshHit navHit, interactionDistance, NavMesh.AllAreas))
+                float distance = Vector3.Distance(transform.position, approach);
+
+                targetInteractionCollider = hit.collider;
+
+                if (distance <= interactionDistance)
                 {
-                    agent.SetDestination(navHit.position);
+                    agent.ResetPath();
                 }
-                //Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
-                //Vector3 target = hit.collider.transform.position - dir * interactionDistance;
-                //agent.SetDestination(target);
+                else
+                {
+                    if (NavMesh.SamplePosition(approach, out NavMeshHit navHit, interactionDistance, NavMesh.AllAreas))
+                    {
+                        agent.SetDestination(navHit.position);
+                    }
+                }
             }
             else if (hit.collider.CompareTag("Ground"))
             {
                 targetInteractionCollider = null;
+
                 if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, interactionDistance, NavMesh.AllAreas))
                 {
                     agent.SetDestination(navHit.position);
@@ -109,14 +159,28 @@ public class PlayerMovementController : MonoBehaviour
 
     private void RotatePlayerModel(Vector3 moveDirection)
     {
-        Vector3 direction = new Vector3(moveDirection.x, 0f, moveDirection.z);
+        Vector3 direction = moveDirection - playerModelTransform.position;
+        direction.y = 0;
 
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            playerModelTransform.rotation = Quaternion.RotateTowards(playerModelTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            playerModelTransform.rotation = Quaternion.RotateTowards(
+                playerModelTransform.rotation,
+                targetRotation,
+                rotationSpeed * Time.deltaTime
+            );
         }
     }
+    public void BlockMovement()
+    {
+        isMovementBlocked = true;
+        agent.ResetPath();
+        animator.SetBool("isMoving", false);
+    }
 
-
+    public void UnblockMovement()
+    {
+        isMovementBlocked = false;
+    }
 }

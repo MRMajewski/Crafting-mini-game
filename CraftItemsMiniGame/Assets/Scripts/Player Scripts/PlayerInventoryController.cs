@@ -13,17 +13,6 @@ public class PlayerInventoryController : MonoBehaviour
     [SerializeField]
     private float detectionRadius = 1.5f; 
 
-
-    //private void Update()
-    //{
-    //    if (!Input.anyKey) return;
-          
-    //    if (Input.GetKeyDown(KeyCode.I))
-    //    {
-    //        UIPanel.ToggleInventoryPanel();
-    //    }
-    //}
-
     public void PickUpItem(PickupItemInteractable item)
     {
         
