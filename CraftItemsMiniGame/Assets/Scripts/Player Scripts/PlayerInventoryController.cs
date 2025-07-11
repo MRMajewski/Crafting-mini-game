@@ -6,12 +6,7 @@ using DG.Tweening;
 public class PlayerInventoryController : MonoBehaviour
 {
     [SerializeField]
-    private UIPanelController UIPanel;
-    [SerializeField]
-    private PickupItemInteractable nearbyItem;
-
-    [SerializeField]
-    private float detectionRadius = 1.5f; 
+    private float pickUpItemDelay = 0.2f;
 
     public void PickUpItem(PickupItemInteractable item)
     {
@@ -27,7 +22,7 @@ public class PlayerInventoryController : MonoBehaviour
         }
         else
         {
-            UIPanel.DisplayErrorInfo("No free slots in inventory");
+           // UIPanel.DisplayErrorInfo("No free slots in inventory");
             PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
             StartCoroutine(EnablePlayerMovementAfterUnsuccesfullPickUp());
         }
@@ -40,7 +35,7 @@ public class PlayerInventoryController : MonoBehaviour
     private IEnumerator AddItemAfterAnimation(PickupItemInteractable item)
     {
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.5f); 
+        yield return new WaitForSeconds(animationLength + pickUpItemDelay); 
  
         Destroy(item.gameObject);
         PlayerMainController.Instance.PlayerMovement.enabled = true;
@@ -49,7 +44,7 @@ public class PlayerInventoryController : MonoBehaviour
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.5f);
+        yield return new WaitForSeconds(animationLength + pickUpItemDelay);
 
         PlayerMainController.Instance.PlayerMovement.enabled = true;
     }
