@@ -6,13 +6,12 @@ using DG.Tweening;
 public class PlayerInventoryController : MonoBehaviour
 {
     [SerializeField]
-    private float pickUpItemDelay = 0.2f;
+    private float pickUpItemDelay =1f;
 
     public void PickUpItem(PickupItemInteractable item)
-    {
-        
+    {   
         PlayerMainController.Instance.PlayerMovement.IsMoving = false;
-        PlayerMainController.Instance.PlayerMovement.enabled = false;
+        PlayerMainController.Instance.PlayerMovement.BlockMovement();
 
         PlayerMainController.Instance.Animator.SetBool("isMoving", false);
         if (TrytoAddItem(item))
@@ -38,15 +37,14 @@ public class PlayerInventoryController : MonoBehaviour
         yield return new WaitForSeconds(animationLength + pickUpItemDelay); 
  
         Destroy(item.gameObject);
-        PlayerMainController.Instance.PlayerMovement.enabled = true;
-
+        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(animationLength + pickUpItemDelay);
 
-        PlayerMainController.Instance.PlayerMovement.enabled = true;
+        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
     }
 
 }

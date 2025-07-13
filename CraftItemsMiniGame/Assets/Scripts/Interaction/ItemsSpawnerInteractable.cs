@@ -16,6 +16,9 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     private Transform lastSpawnLocation;
     private int layerMask;
 
+    [SerializeField]
+    private float afterAnimationDelay = 1f;
+
     private void Start()
     {
         layerMask = LayerMask.GetMask("Interactable");
@@ -30,7 +33,8 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         if (objectToSpawn != null && spawnLocations != null)
         {
             PlayerMainController.Instance.PlayerMovement.IsMoving = false;
-            PlayerMainController.Instance.PlayerMovement.enabled = false;
+            PlayerMainController.Instance.PlayerMovement.BlockMovement();
+
 
             PlayerMainController.Instance.Animator.SetBool("isMoving", false);
         
@@ -62,12 +66,12 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
 
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.2f); 
+        yield return new WaitForSeconds(animationLength + afterAnimationDelay); 
 
         Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity);
         lastSpawnLocation = spawnLocation;
 
-        PlayerMainController.Instance.PlayerMovement.enabled = true;
+        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
 
     }
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullSpawn()
@@ -75,9 +79,9 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         yield return new WaitUntil(() => PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
 
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + 0.2f); 
+        yield return new WaitForSeconds(animationLength + afterAnimationDelay);
 
-        PlayerMainController.Instance.PlayerMovement.enabled = true;
+        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
     }
 
     private Transform GetFreeSpawnLocation()
