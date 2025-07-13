@@ -32,6 +32,10 @@ public class CraftingController : MonoBehaviour
     public void AddItemToCrafting(InventorySlot slot)
     {
         if (!slot.IsFilled) return;
+
+        if (craftingUI.ResultSlot.IsFilled)
+            CollectCraftingResult();
+
         AddItemToCrafting(slot.CurrentItem);
     }
     public void ClearCrafting()
