@@ -39,6 +39,7 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
       inventory.OnInventoryChange += UpdateInventoryUI;
+        dropItemButton.onClick.AddListener(DropItemUI);
     }
 
     private void Start()
@@ -98,5 +99,13 @@ public class InventoryUI : MonoBehaviour
     private void OnDisable()
     {
         Inventory.Instance.OnInventoryChange -= UpdateInventoryUI;
+        dropItemButton.onClick.RemoveAllListeners();
+    }
+
+
+    private void DropItemUI()
+    {
+        inventory.DropItem(selectedItemNameText.text);
+     
     }
 }

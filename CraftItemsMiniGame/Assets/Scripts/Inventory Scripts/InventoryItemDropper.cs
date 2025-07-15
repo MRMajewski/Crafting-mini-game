@@ -8,7 +8,8 @@ public class InventoryItemDropper : MonoBehaviour
     private Inventory inventory;
     [SerializeField]
     private float dropDistance;
-
+    [SerializeField]
+    private float dropHeightOffset = 0f; 
     [SerializeField]
     private Transform playerTransform;
 
@@ -30,6 +31,8 @@ public class InventoryItemDropper : MonoBehaviour
         if (itemData == null || itemData.prefab == null) return;
 
         Vector3 dropPosition = playerTransform.position + playerTransform.forward * dropDistance;
+        dropPosition.y += dropHeightOffset; // dodajemy offset wysokoœci
+
         Instantiate(itemData.prefab, dropPosition, Quaternion.identity, itemsParent);
     }
 }
