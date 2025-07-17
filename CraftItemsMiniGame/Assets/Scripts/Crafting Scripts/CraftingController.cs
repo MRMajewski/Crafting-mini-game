@@ -43,6 +43,8 @@ public class CraftingController : MonoBehaviour
         foreach (ItemData item in itemsToCraft)
             inventory.AddItem(item);
 
+        CollectCraftingResult();
+
         itemsToCraft.Clear();
         craftingUI.ClearCraftingSlots();
         craftingUI.ClearResultSlot();

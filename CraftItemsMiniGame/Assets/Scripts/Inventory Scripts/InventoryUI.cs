@@ -106,6 +106,7 @@ public class InventoryUI : MonoBehaviour
     private void DropItemUI()
     {
         inventory.DropItem(selectedItemNameText.text);
-     
+        ClearSelectedSlot();
+
     }
 }

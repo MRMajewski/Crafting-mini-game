@@ -74,9 +74,10 @@ public class UIPanelController : MonoBehaviour
             case InventoryMode.Crafting:
                 inventoryItemDataGameObject.SetActive(false);
                 craftingPanelGameObject.SetActive(true);
-                craftingController.ClearCrafting(); 
                 break;
         }
+
+        craftingController.ClearCrafting();
     }
     public void OnSlotClicked(InventorySlot slot)
     {
@@ -102,7 +103,7 @@ public class UIPanelController : MonoBehaviour
     public void OpenUIPanel()
     {
         mainPanel.SetActive(true); 
-        SetMode((int)InventoryMode.Crafting);
+        SetMode((int)InventoryMode.Inventory);
     }
 
     public void CloseUIPanel()
