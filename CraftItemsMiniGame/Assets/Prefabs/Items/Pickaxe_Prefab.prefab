@@ -119,3 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 39004e15e31c8fb45a14cb83c9f8dae7, type: 2}
+  tweenDuration: 0.75
+  punchScale: {x: 0.05, y: 0.05, z: 0.05}
+  punchVibrato: 75
+  punchElasticity: 0.75
+  delayRange: {x: 3, y: 6}
+  spawnerModelTransform: {fileID: 6293624882074291367}
