@@ -5,6 +5,8 @@ using UnityEngine;
     public interface IInteractable
     {
         void Interact();
+
+        void StartAnimationInLoop();
         Vector3 GetApproachPosition(); 
     }
 

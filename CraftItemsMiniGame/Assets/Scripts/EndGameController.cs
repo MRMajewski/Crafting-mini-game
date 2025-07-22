@@ -69,9 +69,11 @@ public class EndGameController : MonoBehaviour
 
     private IEnumerator EndGameSequence()
     {
+        //  PlayerMainController.Instance.PlayerMovement.enabled = false;
 
-        PlayerMainController.Instance.PlayerMovement.enabled = false;
-        PlayerMainController.Instance.PlayerInventory.enabled = false;
+        PlayerMainController.Instance.PlayerMovement.BlockMovement();
+
+      //  PlayerMainController.Instance.PlayerInventory.enabled = false;
 
         yield return FadeIn(2.0f);  
 
@@ -89,9 +91,8 @@ public class EndGameController : MonoBehaviour
         cameraObject.transform.rotation = cameraEndGameTransform.transform.rotation;
         Camera.main.fieldOfView = 15f; 
         
-
-        PlayerMainController.Instance.PlayerMovement.transform.position = playerEndGameTransform.transform.position;
-        PlayerMainController.Instance.PlayerMovement.transform.rotation = playerEndGameTransform.transform.rotation;
+        PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
+        PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
 
         PlayerMainController.Instance.Animator.SetBool("isSurfing", true); 
 

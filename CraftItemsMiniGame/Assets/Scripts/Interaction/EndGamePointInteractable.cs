@@ -51,4 +51,9 @@ public class EndGamePointInteractable : MonoBehaviour, IInteractable
     {
         return transform.position;
     }
+
+    public void StartAnimationInLoop()
+    {
+        throw new System.NotImplementedException();
+    }
 }

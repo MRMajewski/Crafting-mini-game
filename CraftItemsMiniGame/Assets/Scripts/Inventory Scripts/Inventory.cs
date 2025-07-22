@@ -59,29 +59,6 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
-    //public bool RemoveItem(ItemData itemData)
-    //{
-    //    if (inventoryItems.Remove(itemData))
-    //    {
-    //        inventoryItems.TrimExcess();
-    //        OnInventoryChange?.Invoke();
-    //        return true;
-    //    }
-    //    return false;
-    //}
-    //public void DropItem(string itemName)
-    //{
-    //    ItemData itemToDrop = inventoryItems.Find(item => item.itemName == itemName);
-
-    //    if (itemToDrop != null)
-    //    {
-    //        Vector3 dropPosition = playerTransform.position + playerTransform.GetChild(0).forward * dropDistance;
-
-    //        Instantiate(itemToDrop.prefab, dropPosition, Quaternion.identity, itemsParent);
-    //        RemoveItem(itemName);
-    //    }
-    //}
-
     public int GetItemCount(ItemData item)
     {
         int count = 0;

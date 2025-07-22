@@ -24,9 +24,10 @@ public class ItemListUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI requiredItemTitleText;
 
+    private Tween pulsingTween;
+
     private void Start()
     {   
-      //  playerInventory =Inventory.Instance;
         playerInventory.OnInventoryChange += UpdateItemUI;
 
         baseColor= requiredItemTitleText.faceColor;
@@ -46,7 +47,6 @@ public class ItemListUI : MonoBehaviour
 
             itemTextList.Add(newItemText); 
         }
-
         textPrefab.gameObject.SetActive(false);
     }
 
@@ -98,17 +98,17 @@ public class ItemListUI : MonoBehaviour
 
     private void PulseOutline()
     {
-        float targetOutlineWidth = 0.05f; 
+        float targetOutlineWidth = 0.05f;
 
-        DOTween.To(() => textMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth),
+        pulsingTween=DOTween.To(() => textMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth),
                   x => textMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, x),
                   targetOutlineWidth, 0.5f)
             .SetEase(Ease.InOutSine)
             .SetLoops(-1, LoopType.Yoyo); 
     }
     public void SetRequiredItemsTitleBasic()
-    {  
-        DOTween.KillAll(); 
+    {
+        pulsingTween?.Kill();
         requiredItemTitleText.color = baseColor;
         textMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, baseOutlineValue);
     }
