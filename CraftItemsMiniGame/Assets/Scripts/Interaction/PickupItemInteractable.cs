@@ -12,14 +12,15 @@ public class PickupItemInteractable : MonoBehaviour, IInteractable
 
     [Header("Tweens parameters")]
     [SerializeField]
-    private float tweenDuration = .5f;
-    [SerializeField] private Vector3 punchScale = Vector3.one * 0.05f;
-    [SerializeField] private int punchVibrato = 1;
-    [SerializeField, Range(0f, 1f)] private float punchElasticity = 0.5f;
-    [SerializeField] private Vector2 delayRange = new Vector2(3f, 6f);
-    [SerializeField] private Transform spawnerModelTransform;
+    protected float tweenDuration = .5f;
+    [SerializeField] protected Vector3 punchScale = Vector3.one * 0.05f;
+    [SerializeField] protected int punchVibrato = 1;
+    [SerializeField, Range(0f, 1f)] protected float punchElasticity = 0.5f;
+    [SerializeField] protected Vector2 delayRange = new Vector2(3f, 6f);
+    [SerializeField] protected Transform spawnerModelTransform;
 
-    private Sequence punchTween;
+    protected Sequence punchTween;
+    protected Vector3 baseScale;
 
     private void Start()
     {
@@ -40,19 +41,24 @@ public class PickupItemInteractable : MonoBehaviour, IInteractable
         PlayerMainController.Instance.PlayerInventory.PickUpItem(this);
     }
 
-    public void StartAnimationInLoop()
+    public virtual void StartAnimationInLoop()
     {
+
         if (spawnerModelTransform==null) return;
+        baseScale = spawnerModelTransform.localScale;
+
+        Vector3 scaledPunch = Vector3.Scale(baseScale, punchScale);
 
         punchTween = DOTween.Sequence()
             .Append(spawnerModelTransform.DOPunchScale(
-                punchScale,
+                scaledPunch,
                 tweenDuration,
                 punchVibrato,
                 punchElasticity
             ))
             .AppendInterval(Random.Range(delayRange.x, delayRange.y))
             .SetLoops(-1, LoopType.Restart);
+
 
     }
 }

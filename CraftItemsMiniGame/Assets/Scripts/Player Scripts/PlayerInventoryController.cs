@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class PlayerInventoryController : MonoBehaviour
 {
@@ -38,7 +37,9 @@ public class PlayerInventoryController : MonoBehaviour
     private IEnumerator AddItemAfterAnimation(PickupItemInteractable item)
     {
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + pickUpItemDelay);
+
+       Debug.Log(animationLength + pickUpItemDelay);
+        yield return new WaitForSecondsRealtime(animationLength + pickUpItemDelay);
 
         AddToInventoryAnimation(item);
 
@@ -48,8 +49,8 @@ public class PlayerInventoryController : MonoBehaviour
     private void AddToInventoryAnimation(PickupItemInteractable item)
     {
         Transform itemTransform = item.transform;
-
-        spawnSequence.Append(itemTransform.DOPunchPosition(Vector3.up * 0.2f, 0.3f, 1, 0.5f))
+        spawnSequence = DOTween.Sequence().
+                      Append(itemTransform.DOPunchPosition(Vector3.up * 0.2f, 0.3f, 1, 0.5f))
                      .Append(itemTransform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.OutBack))
                      .OnComplete(() =>
                           {

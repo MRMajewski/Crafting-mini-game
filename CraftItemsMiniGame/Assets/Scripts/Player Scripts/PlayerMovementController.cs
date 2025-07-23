@@ -30,6 +30,7 @@ public class PlayerMovementController : MonoBehaviour
     private bool isMoving = false;
     public bool IsMoving { get => isMoving; set => isMoving = value; }
 
+    [SerializeField]
     private bool isMovementBlocked = false;
 
     void Update()
