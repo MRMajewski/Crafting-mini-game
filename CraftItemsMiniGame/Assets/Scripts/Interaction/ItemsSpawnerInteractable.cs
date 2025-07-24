@@ -63,21 +63,21 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
     private IEnumerator SpawnItemAfterAnimation(Transform spawnLocation)
     {
-        var animator = PlayerMainController.Instance.Animator;
+        //var animator = PlayerMainController.Instance.Animator;
 
-        // Czekaj a¿ animacja siê odpali (czyli nie jesteœmy w Idle)
-        yield return new WaitUntil(() =>
-        {
-            var state = animator.GetCurrentAnimatorStateInfo(0);
-            return state.normalizedTime > 0f || animator.IsInTransition(0);
-        });
+        //// Czekaj a¿ animacja siê odpali (czyli nie jesteœmy w Idle)
+        //yield return new WaitUntil(() =>
+        //{
+        //    var state = animator.GetCurrentAnimatorStateInfo(0);
+        //    return state.normalizedTime > 0f || animator.IsInTransition(0);
+        //});
 
-        // Czekaj a¿ przestanie byæ w transition i animacja siê zakoñczy
-        yield return new WaitUntil(() =>
-        {
-            var state = animator.GetCurrentAnimatorStateInfo(0);
-            return !animator.IsInTransition(0) && state.normalizedTime >= 1f;
-        });
+        //// Czekaj a¿ przestanie byæ w transition i animacja siê zakoñczy
+        //yield return new WaitUntil(() =>
+        //{
+        //    var state = animator.GetCurrentAnimatorStateInfo(0);
+        //    return !animator.IsInTransition(0) && state.normalizedTime >= 1f;
+        //});
 
         yield return new WaitForSecondsRealtime(afterAnimationDelay);
 
@@ -86,7 +86,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         lastSpawnLocation = spawnLocation;
         availableSpawnLocations.Remove(spawnLocation);
 
-        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
+     //   PlayerMainController.Instance.PlayerMovement.UnblockMovement();
     }
 
     private void SpawningNewItem(Transform spawnLocation)
@@ -111,7 +111,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     {
         // uiPanel.DisplayErrorInfo(message);
         PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
-        StartCoroutine(ReenableMovementWithDelay());
+      //  StartCoroutine(ReenableMovementWithDelay());
     }
     //private IEnumerator ReenableMovementWithDelay()
     //{

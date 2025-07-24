@@ -38,8 +38,26 @@ public class PlayerInventoryController : MonoBehaviour
     {
         float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
 
-       Debug.Log(animationLength + pickUpItemDelay);
-        yield return new WaitForSecondsRealtime(animationLength + pickUpItemDelay);
+        var animator = PlayerMainController.Instance.Animator;
+
+        // Czekaj a¿ animacja siê odpali (czyli nie jesteœmy w Idle)
+        yield return new WaitUntil(() =>
+        {
+            var state = animator.GetCurrentAnimatorStateInfo(0);
+            return state.normalizedTime > 0f || animator.IsInTransition(0);
+        });
+
+        // Czekaj a¿ przestanie byæ w transition i animacja siê zakoñczy
+        yield return new WaitUntil(() =>
+        {
+            var state = animator.GetCurrentAnimatorStateInfo(0);
+            return !animator.IsInTransition(0) && state.normalizedTime >= 1f;
+        });
+
+        yield return new WaitForSecondsRealtime(pickUpItemDelay);
+
+        //Debug.Log(animationLength + pickUpItemDelay);
+        //yield return new WaitForSecondsRealtime(animationLength + pickUpItemDelay);
 
         AddToInventoryAnimation(item);
 
@@ -61,8 +79,8 @@ public class PlayerInventoryController : MonoBehaviour
 
     private IEnumerator EnablePlayerMovementAfterUnsuccesfullPickUp()
     {
-        float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animationLength + pickUpItemDelay);
+       // float animationLength = PlayerMainController.Instance.Animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSecondsRealtime(pickUpItemDelay*4f);
 
         PlayerMainController.Instance.PlayerMovement.UnblockMovement();
     }

@@ -33,6 +33,10 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private bool isMovementBlocked = false;
 
+    [SerializeField]
+    private float interactionDelay = 1f;
+
+
     void Update()
     {
         if (isMovementBlocked)
@@ -183,5 +187,20 @@ public class PlayerMovementController : MonoBehaviour
     public void UnblockMovement()
     {
         isMovementBlocked = false;
+        Debug.Log("TEST");
+    }
+
+    public void UnblockMovementWithDelay()
+    {
+        Debug.Log("TEST delay");
+        StartCoroutine(UnblockMovementAfterDelay());
+
+        IEnumerator UnblockMovementAfterDelay()
+        {
+            yield return new WaitForSeconds(interactionDelay);
+
+            isMovementBlocked = false;
+            Debug.Log("TEST");
+        }
     }
 }
