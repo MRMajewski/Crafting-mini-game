@@ -34,7 +34,9 @@ public class PlayerMovementController : MonoBehaviour
     private bool isMovementBlocked = false;
 
     [SerializeField]
-    private float interactionDelay = 1f;
+    private float interactionDelay = .1f;
+
+   public float InteractionDelay { get =>interactionDelay; }
 
 
     void Update()
@@ -199,8 +201,7 @@ public class PlayerMovementController : MonoBehaviour
         {
             yield return new WaitForSeconds(interactionDelay);
 
-            isMovementBlocked = false;
-            Debug.Log("TEST");
+            UnblockMovement();
         }
     }
 }

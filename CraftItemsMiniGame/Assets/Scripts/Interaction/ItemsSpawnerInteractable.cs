@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +8,11 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     [SerializeField] private UIPanelController uiPanel;
     [SerializeField] private GameObject objectToSpawn;
     [SerializeField] private List<Transform> spawnLocations;
-    [SerializeField] private float afterAnimationDelay = 1f;
     [SerializeField] private Transform spawnerModelTransform;
+    [SerializeField] private Transform pickablesParentTransform;
 
     private List<Transform> availableSpawnLocations;
-    private Transform lastSpawnLocation;
+//    private Transform lastSpawnLocation;
 
     [Header("Tweens parameters")]
     private Sequence spawnSequence;
@@ -25,6 +25,8 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     [SerializeField, Range(0f, 1f)] private float punchElasticity = 0.5f;
     [SerializeField] private Vector2 delayRange = new Vector2(1f, 3f);
 
+    private bool isBusy = false;
+
     private void Start()
     {
         availableSpawnLocations = new List<Transform>(spawnLocations);
@@ -33,6 +35,8 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        if (isBusy) return;
+        isBusy = true;
         SpawnItem();
     }
 
@@ -47,51 +51,40 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         if (objectToSpawn == null)
         {
             DisplayError("LOL, wild error appeared!");
+            isBusy = false;
             return;
         }
 
         if (availableSpawnLocations.Count == 0)
         {
             DisplayError("No room for more items around");
+            isBusy = false;
             return;
         }
 
         Transform spawnLocation = GetFreeSpawnLocation();
-        player.Animator.SetTrigger("InteractTrigger");
+
+
+        player.Animator.CrossFade("Interacting", .1f); 
+
         StartCoroutine(SpawnItemAfterAnimation(spawnLocation));
     }
 
     private IEnumerator SpawnItemAfterAnimation(Transform spawnLocation)
     {
-        //var animator = PlayerMainController.Instance.Animator;
-
-        //// Czekaj a¿ animacja siê odpali (czyli nie jesteœmy w Idle)
-        //yield return new WaitUntil(() =>
-        //{
-        //    var state = animator.GetCurrentAnimatorStateInfo(0);
-        //    return state.normalizedTime > 0f || animator.IsInTransition(0);
-        //});
-
-        //// Czekaj a¿ przestanie byæ w transition i animacja siê zakoñczy
-        //yield return new WaitUntil(() =>
-        //{
-        //    var state = animator.GetCurrentAnimatorStateInfo(0);
-        //    return !animator.IsInTransition(0) && state.normalizedTime >= 1f;
-        //});
-
-        yield return new WaitForSecondsRealtime(afterAnimationDelay);
+        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.PlayerMovement.InteractionDelay * 4);
 
         SpawningNewItem(spawnLocation);
 
-        lastSpawnLocation = spawnLocation;
+      //  lastSpawnLocation = spawnLocation;
         availableSpawnLocations.Remove(spawnLocation);
 
-     //   PlayerMainController.Instance.PlayerMovement.UnblockMovement();
+        isBusy = false;
     }
 
     private void SpawningNewItem(Transform spawnLocation)
     {
-        GameObject spawnedItem = Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity);
+        GameObject spawnedItem = Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity, pickablesParentTransform);
         spawnedItem.GetComponent<PickupItemSpawnedInteractable>().InitSpawnedPickupItem(this, spawnLocation);
 
         Transform itemTransform = spawnedItem.transform;
@@ -101,114 +94,16 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         spawnSequence = DOTween.Sequence()
             .Append(itemTransform.DOScale(itemBaseScale, 0.4f).SetEase(Ease.OutBack))
             .Append(itemTransform.DOPunchPosition(Vector3.up * 0.2f, 0.3f, 1, 0.5f))
-            .OnComplete(() =>
-            {
-                spawnSequence.Kill();
-            });
+            .OnComplete(() => spawnSequence.Kill());
     }
 
     private void DisplayError(string message)
     {
-        // uiPanel.DisplayErrorInfo(message);
-        PlayerMainController.Instance.Animator.SetTrigger("ShakeNoTrigger");
-      //  StartCoroutine(ReenableMovementWithDelay());
+        uiPanel.DisplayErrorInfo(message);
+
+        PlayerMainController.Instance.Animator.CrossFade("ShakingNo", 0.1f); 
+
     }
-    //private IEnumerator ReenableMovementWithDelay()
-    //{
-    //    var animator = PlayerMainController.Instance.Animator;
-    //    var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-    //    // Pomiñ, jeœli to Idle (zmieñ nazwê na tak¹, jak¹ masz w Animatorze)
-    //    if (stateInfo.IsName("Idle"))
-    //    {
-    //        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    //        yield break;
-    //    }
-
-    //    // Czekaj a¿ animacja siê skoñczy i nie bêdzie ju¿ w trakcie przejœcia
-    //    yield return new WaitUntil(() =>
-    //    {
-    //        var state = animator.GetCurrentAnimatorStateInfo(0);
-    //        return state.normalizedTime >= 1f && !animator.IsInTransition(0);
-    //    });
-
-    //    yield return new WaitForSeconds(afterAnimationDelay);
-    //    PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    //}
-    //private IEnumerator ReenableMovementWithDelay()
-    //{
-    //    var animator = PlayerMainController.Instance.Animator;
-    //    var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-    //    // Pomiñ, jeœli to Idle (zmieñ nazwê na tak¹, jak¹ masz w Animatorze)
-    //    if (stateInfo.IsName("Idle"))
-    //    {
-    //        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    //        yield break;
-    //    }
-    //    // Poczekaj a¿ przejœcie siê zacznie
-    //    yield return new WaitUntil(() => animator.IsInTransition(0));
-
-    //    // Poczekaj a¿ siê zakoñczy
-    //    yield return new WaitUntil(() => !animator.IsInTransition(0));
-    //    if (stateInfo.IsName("Idle"))
-    //    {
-    //        yield return new WaitForSeconds(afterAnimationDelay * 2f);
-    //        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    //    }
-    //    // Poczekaj a¿ klip zakoñczy siê ca³kowicie
-    //    yield return new WaitUntil(() =>
-    //    {
-    //        var state = animator.GetCurrentAnimatorStateInfo(0);
-    //        return state.normalizedTime >= 1.5f;
-    //    });
-
-    //    yield return new WaitForSeconds(afterAnimationDelay*2f);
-    //    PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    //}
-
-    private IEnumerator ReenableMovementWithDelay()
-    {
-        var animator = PlayerMainController.Instance.Animator;
-        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        //yield return new WaitForSeconds(afterAnimationDelay);
-        //yield return new WaitUntil(() => !animator.IsInTransition(0));
- 
-        //// Poczekaj a¿ klip zakoñczy siê ca³kowicie
-        //yield return new WaitUntil(() =>
-        //{
-        //    var state = animator.GetCurrentAnimatorStateInfo(0);
-        //    return state.normalizedTime >= 1.5f;
-        //});
-
-        yield return new WaitForSecondsRealtime(afterAnimationDelay*4f );
-        PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    }
-
-    //private IEnumerator ReenableMovementWithDelay()
-    //{
-    //    Animator animator = PlayerMainController.Instance.Animator;
-    //    int idleHash = Animator.StringToHash("Idle");
-
-    //    // Sprawdzaj do skutku
-    //    yield return new WaitUntil(() =>
-    //    {
-    //        var state = animator.GetCurrentAnimatorStateInfo(0);
-
-    //        // Jeœli stan to Idle, natychmiast odblokuj
-    //        if (state.shortNameHash == idleHash)
-    //        {
-    //            return true;
-    //        }
-
-    //        // Jeœli animacja dobieg³a koñca i nie jesteœmy w trakcie przejœcia
-    //        return state.normalizedTime >= 1f && !animator.IsInTransition(0);
-    //    });
-
-    //    yield return new WaitForSeconds(afterAnimationDelay*2f);
-    //    PlayerMainController.Instance.PlayerMovement.UnblockMovement();
-    //}
 
     private Transform GetFreeSpawnLocation()
     {
@@ -247,4 +142,10 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         punchTween?.Kill();
         spawnSequence?.Kill();
     }
+
+    //private IEnumerator ResetTriggerNextFrame(string triggerName)
+    //{
+    //    yield return new WaitForEndOfFrame();
+    //    PlayerMainController.Instance.Animator.ResetTrigger(triggerName);
+    //}
 }
