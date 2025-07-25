@@ -12,7 +12,6 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     [SerializeField] private Transform pickablesParentTransform;
 
     private List<Transform> availableSpawnLocations;
-//    private Transform lastSpawnLocation;
 
     [Header("Tweens parameters")]
     private Sequence spawnSequence;
@@ -65,7 +64,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         Transform spawnLocation = GetFreeSpawnLocation();
 
 
-        player.Animator.CrossFade("Interacting", .1f); 
+        player.Animator.CrossFade(AnimatorStates.Interact, .1f); 
 
         StartCoroutine(SpawnItemAfterAnimation(spawnLocation));
     }
@@ -76,7 +75,6 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
         SpawningNewItem(spawnLocation);
 
-      //  lastSpawnLocation = spawnLocation;
         availableSpawnLocations.Remove(spawnLocation);
 
         isBusy = false;
@@ -101,7 +99,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     {
         uiPanel.DisplayErrorInfo(message);
 
-        PlayerMainController.Instance.Animator.CrossFade("ShakingNo", 0.1f); 
+        PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.ShakeNo, 0.1f); 
 
     }
 
@@ -143,9 +141,4 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         spawnSequence?.Kill();
     }
 
-    //private IEnumerator ResetTriggerNextFrame(string triggerName)
-    //{
-    //    yield return new WaitForEndOfFrame();
-    //    PlayerMainController.Instance.Animator.ResetTrigger(triggerName);
-    //}
 }

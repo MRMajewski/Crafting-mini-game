@@ -41,6 +41,5 @@ public class PickupItemSpawnedInteractable : PickupItemInteractable, IInteractab
             .AppendInterval(Random.Range(delayRange.x, delayRange.y))
             .SetLoops(-1, LoopType.Restart);
 
-
     }
 }

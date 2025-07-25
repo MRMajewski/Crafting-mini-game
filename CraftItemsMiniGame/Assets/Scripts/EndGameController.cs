@@ -69,16 +69,12 @@ public class EndGameController : MonoBehaviour
 
     private IEnumerator EndGameSequence()
     {
-        //  PlayerMainController.Instance.PlayerMovement.enabled = false;
 
         PlayerMainController.Instance.PlayerMovement.BlockMovement();
-
-      //  PlayerMainController.Instance.PlayerInventory.enabled = false;
 
         yield return FadeIn(2.0f);  
 
         endMessageText.text = "After a while...";
-
 
         PlayerMainController.Instance.Animator.StopPlayback();
         PlayerMainController.Instance.Animator.transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -94,18 +90,17 @@ public class EndGameController : MonoBehaviour
         PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
         PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
 
-        PlayerMainController.Instance.Animator.SetBool("isSurfing", true); 
 
-        yield return FadeOut(2.0f); 
-        yield return new WaitForSeconds(2.0f); 
+        PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.Surfing, .1f);
 
+        yield return FadeOut(3.0f); 
 
         endMessageText.text = "The End. <br> Thanks for playing!";
 
         MoveScooterToEnd();
         yield return new WaitForSeconds(2.0f);
 
-        yield return FadeIn(1.0f); 
+        yield return FadeIn(3.0f);
 
 
         EndGameSequenceComplete();
@@ -129,8 +124,6 @@ public class EndGameController : MonoBehaviour
 
     private void EndGameSequenceComplete()
     {
-
         Application.Quit();
-
     }
 }
