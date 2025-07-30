@@ -35,6 +35,7 @@ public class MusicManager : MonoBehaviour
 
         UpdateButtonIcon();
 
+        SetVolume(.3f);
         volumeSlider.value = musicSource.volume;
 
         void AddSoundsToDictionary(List<SoundEntry> soundEntries)
@@ -52,12 +53,13 @@ public class MusicManager : MonoBehaviour
             }
         }
 
-        SetVolume(.3f);
+
     }
 
     public void SetVolume(float value)
     {
         musicSource.volume = value;
+        sfxSource.volume = value;
 
         if (value == 0f)
             ToggleMusic(false);
@@ -115,13 +117,14 @@ public class MusicManager : MonoBehaviour
 public static class SoundNames
 {
     public const string Theme = "theme";
-    public const string Click = "click";
+    public const string Click = "UIClick";
     public const string Error = "error";
     public const string Fanfair = "fanfair";
     public const string Rideoff = "rideoff";
     public const string Woosh = "woosh";
     public const string Kick = "kick";
     public const string Pick = "pick";
+    public const string ConfirmUI = "confirmUI";
 }
 
 
