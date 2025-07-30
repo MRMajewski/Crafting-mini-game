@@ -48,13 +48,17 @@ public class EndGameController : MonoBehaviour
 
     public void SetEndGamePointActive(bool setActive)
     {
+        if (endGamePoint.EndGamePointPointer.gameObject.activeSelf == setActive) return;
+
         endGamePoint.EndGamePointPointer.gameObject.SetActive(setActive);
 
         endGamePoint.CanInteract = setActive;
 
         if(setActive )
         {
-            endGamePoint.StartRotating(); 
+            endGamePoint.StartRotating();
+            Debug.Log("TEST CZY POINTER SIE POJAWIA ELO");
+            MusicManager.Instance.PlaySound(SoundNames.Fanfair);
         }
         else
         {
@@ -69,7 +73,7 @@ public class EndGameController : MonoBehaviour
 
     private IEnumerator EndGameSequence()
     {
-
+        cameraObject.enabled = false;
         PlayerMainController.Instance.PlayerMovement.BlockMovement();
 
         yield return FadeIn(2.0f);  
@@ -82,9 +86,13 @@ public class EndGameController : MonoBehaviour
         endGamePoint.gameObject.SetActive(false);
 
         scooterTransform.gameObject.SetActive(true);
-        cameraObject.enabled = false;
-        cameraObject.transform.position = cameraEndGameTransform.transform.position;
-        cameraObject.transform.rotation = cameraEndGameTransform.transform.rotation;
+
+        cameraObject.transform.position = cameraEndGameTransform.position;
+        cameraObject.transform.rotation = cameraEndGameTransform.rotation;
+
+        Debug.Log("Camera Final Pos: " + cameraObject.transform.position);
+        Debug.Log("Target Pos: " + cameraEndGameTransform.position);
+
         Camera.main.fieldOfView = 15f; 
         
         PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
@@ -92,9 +100,10 @@ public class EndGameController : MonoBehaviour
 
 
         PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.Surfing, .1f);
+      //  MusicManager.Instance.PlaySound(SoundNames.Rideoff);
 
-        yield return FadeOut(3.0f); 
-
+        yield return FadeOut(3.0f);
+        MusicManager.Instance.PlaySound(SoundNames.Rideoff);
         endMessageText.text = "The End. <br> Thanks for playing!";
 
         MoveScooterToEnd();

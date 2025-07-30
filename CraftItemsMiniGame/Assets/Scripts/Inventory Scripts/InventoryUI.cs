@@ -39,7 +39,7 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
       inventory.OnInventoryChange += UpdateInventoryUI;
-        dropItemButton.onClick.AddListener(DropItemUI);
+      dropItemButton.onClick.AddListener(DropItemUI);
     }
 
     private void Start()
@@ -107,6 +107,6 @@ public class InventoryUI : MonoBehaviour
     {
         inventory.DropItem(selectedItemNameText.text);
         ClearSelectedSlot();
-
+        MusicManager.Instance.PlaySound(SoundNames.Kick);
     }
 }

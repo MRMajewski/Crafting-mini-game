@@ -27,6 +27,7 @@ public class CraftingController : MonoBehaviour
         inventory.RemoveItem(item.itemName);
         UpdateCraftingSlotsUI();
         UpdateCraftButtonState();
+        MusicManager.Instance.PlaySound(SoundNames.Click);
     }
 
     public void AddItemToCrafting(InventorySlot slot)
@@ -71,6 +72,8 @@ public class CraftingController : MonoBehaviour
         if (success)
         {
             itemsToCraft.Clear();
+
+            MusicManager.Instance.PlaySound(SoundNames.ConfirmUI);
         }
         else
         {
@@ -78,6 +81,7 @@ public class CraftingController : MonoBehaviour
                 inventory.AddItem(item.itemName);
 
             itemsToCraft.Clear();
+            MusicManager.Instance.PlaySound(SoundNames.Error);
         }
 
         UpdateCraftingSlotsUI();

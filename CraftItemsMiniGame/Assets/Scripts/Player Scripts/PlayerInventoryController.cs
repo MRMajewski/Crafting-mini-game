@@ -20,10 +20,13 @@ public class PlayerInventoryController : MonoBehaviour
         {
             player.Animator.CrossFade(AnimatorStates.PickUp, .1f);
             StartCoroutine(AddItemAfterAnimation(item));
+
+            MusicManager.Instance.PlaySound(SoundNames.Pick);
         }
         else
         {
             player.Animator.CrossFade(AnimatorStates.ShakeNo, .1f);
+            MusicManager.Instance.PlaySound(SoundNames.Error);
             item.SetBusyState(false);
         }
     }

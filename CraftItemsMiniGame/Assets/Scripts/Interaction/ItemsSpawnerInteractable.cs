@@ -62,16 +62,18 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
         }
 
         Transform spawnLocation = GetFreeSpawnLocation();
-
+        MusicManager.Instance.PlaySound("kick");
 
         player.Animator.CrossFade(AnimatorStates.Interact, .1f); 
 
         StartCoroutine(SpawnItemAfterAnimation(spawnLocation));
+
     }
 
     private IEnumerator SpawnItemAfterAnimation(Transform spawnLocation)
     {
         yield return new WaitForSecondsRealtime(PlayerMainController.Instance.PlayerMovement.InteractionDelay * 4);
+
 
         SpawningNewItem(spawnLocation);
 
@@ -99,7 +101,9 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     {
         uiPanel.DisplayErrorInfo(message);
 
-        PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.ShakeNo, 0.1f); 
+        PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.ShakeNo, 0.1f);
+
+        MusicManager.Instance.PlaySound("error");
 
     }
 

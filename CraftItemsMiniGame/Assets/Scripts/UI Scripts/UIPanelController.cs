@@ -91,6 +91,8 @@ public class UIPanelController : MonoBehaviour
                 craftingController.AddItemToCrafting(slot); 
                 break;
         }
+
+        MusicManager.Instance.PlaySound(SoundNames.Click);
     }
 
     public void OpenCraftingPanel()

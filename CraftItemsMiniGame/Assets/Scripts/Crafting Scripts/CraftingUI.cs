@@ -30,7 +30,11 @@ public class CraftingUI : MonoBehaviour
             craftingSlots[i].SetOnClickListener(() =>
             {
                 if (craftingSlots[index].IsFilled)
+                {
                     OnCraftingSlotClicked?.Invoke(index);
+                    MusicManager.Instance.PlaySound(SoundNames.Click);
+                }
+                  
             });
         }
     }
