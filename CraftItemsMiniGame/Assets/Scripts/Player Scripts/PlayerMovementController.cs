@@ -181,9 +181,11 @@ public class PlayerMovementController : MonoBehaviour
     }
     public void BlockMovement()
     {
-        isMovementBlocked = true;
+     
         agent.ResetPath();
         animator.SetBool("isMoving", false);
+        animator.CrossFade(AnimatorStates.Idle, 0f);
+        isMovementBlocked = true;
     }
 
     public void UnblockMovement()

@@ -71,7 +71,8 @@ public class ItemListUI : MonoBehaviour
         }
         if (CheckIfAllItemsAreSupplied())
         {
-            SetRequiredItemsTitleTweening();          
+            SetRequiredItemsTitleTweening();
+         
         }
         else
         {
