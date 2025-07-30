@@ -7865,20 +7865,24 @@ MonoBehaviour:
   soundEntries:
   - name: theme
     clip: {fileID: 8300000, guid: 850cf7b7b62126440a089e3c427667e8, type: 3}
-  - name: click
-    clip: {fileID: 8300000, guid: 2df961975076c0b4293fe5b6811752bb, type: 3}
   - name: error
     clip: {fileID: 8300000, guid: ed8511eeb4c9cae41822ed5ac57b0658, type: 3}
   - name: fanfair
     clip: {fileID: 8300000, guid: 5b9028fb094f4c941be9eeb614ce783c, type: 3}
   - name: pick
-    clip: {fileID: 8300000, guid: 822fefb48705e3f4780f4256ef878ba8, type: 3}
+    clip: {fileID: 8300000, guid: 88b1cbe3caa3fee4b8b103b5edd7aba9, type: 3}
   - name: rideoff
     clip: {fileID: 8300000, guid: 784ea14c8b3af1340995efe0848b8880, type: 3}
   - name: woosh
     clip: {fileID: 8300000, guid: 52a935f41f0d8cd4f908b5a6cf081701, type: 3}
   - name: kick
-    clip: {fileID: 8300000, guid: 3768e3c69867f8b4ab58e539b9c81be5, type: 3}
+    clip: {fileID: 8300000, guid: 7c47b20bb9874304a809dc5580d403ba, type: 3}
+  - name: confirmUI
+    clip: {fileID: 8300000, guid: c5cb2ac29e89dbf43a9b644caaad45e6, type: 3}
+  - name: UIConfirm
+    clip: {fileID: 8300000, guid: 1ed8fb76fc64e4e46847348138782234, type: 3}
+  - name: UIClick
+    clip: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
   volumeSlider: {fileID: 1942945454}
 --- !u!82 &1456183405
 AudioSource:
@@ -7892,13 +7896,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.824
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 80
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
