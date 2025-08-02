@@ -41,7 +41,7 @@ public class PickupItemInteractable : MonoBehaviour, IInteractable
         if (isBusy) return;
         isBusy = true;
         punchTween?.Kill(); 
-        PlayerMainController.Instance.PlayerInventory.PickUpItem(this);
+        GameController.Instance.PlayerInventory.PickUpItem(this);
     }
 
     public virtual void StartAnimationInLoop()

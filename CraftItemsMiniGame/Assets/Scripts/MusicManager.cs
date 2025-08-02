@@ -8,6 +8,7 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private Button musicToggleButton;
+    [SerializeField] private Image musicToggleImage;
     [SerializeField] private Sprite musicOnSprite;
     [SerializeField] private Sprite musicOffSprite;
     [SerializeField] private List<SoundEntry> soundEntries;
@@ -92,13 +93,7 @@ public class MusicManager : MonoBehaviour
 
     private void UpdateButtonIcon()
     {
-        if (musicToggleButton == null) return;
-
-        Image buttonImage = musicToggleButton.GetComponent<Image>();
-        if (buttonImage != null)
-        {
-            buttonImage.sprite = isPlaying ? musicOnSprite : musicOffSprite;
-        }
+       musicToggleImage.sprite = isPlaying ? musicOnSprite : musicOffSprite;
     }
 
     public void PlayPanelTransitionSFX()

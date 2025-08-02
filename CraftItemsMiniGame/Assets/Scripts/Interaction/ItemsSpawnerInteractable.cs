@@ -41,7 +41,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
     private void SpawnItem()
     {
-        var player = PlayerMainController.Instance;
+        var player = GameController.Instance;
 
         player.PlayerMovement.IsMoving = false;
         player.PlayerMovement.BlockMovement();
@@ -72,7 +72,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
     private IEnumerator SpawnItemAfterAnimation(Transform spawnLocation)
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.PlayerMovement.InteractionDelay * 4);
+        yield return new WaitForSecondsRealtime(GameController.Instance.PlayerMovement.InteractionDelay * 4);
 
 
         SpawningNewItem(spawnLocation);
@@ -101,7 +101,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     {
         uiPanel.DisplayErrorInfo(message);
 
-        PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.ShakeNo, 0.1f);
+        GameController.Instance.Animator.CrossFade(AnimatorStates.ShakeNo, 0.1f);
 
         MusicManager.Instance.PlaySound("error");
 

@@ -11,7 +11,7 @@ public class PlayerInventoryController : MonoBehaviour
 
     public void PickUpItem(PickupItemInteractable item)
     {
-        var player = PlayerMainController.Instance;
+        var player = GameController.Instance;
         player.PlayerMovement.IsMoving = false;
         player.PlayerMovement.BlockMovement();
         player.Animator.SetBool("isMoving", false);
@@ -38,7 +38,7 @@ public class PlayerInventoryController : MonoBehaviour
 
     private IEnumerator AddItemAfterAnimation(PickupItemInteractable item)
     {
-        yield return new WaitForSecondsRealtime(PlayerMainController.Instance.PlayerMovement.InteractionDelay * 3f);
+        yield return new WaitForSecondsRealtime(GameController.Instance.PlayerMovement.InteractionDelay * 3f);
 
         AddToInventoryAnimation(item);
     }
@@ -52,7 +52,7 @@ public class PlayerInventoryController : MonoBehaviour
             .Append(itemTransform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.OutBack))
             .OnComplete(() =>
             {
-                PlayerMainController.Instance.PlayerMovement.UnblockMovement();
+                GameController.Instance.PlayerMovement.UnblockMovement();
                 item.SetBusyState(false); 
                 spawnSequence.Kill();
                 Destroy(item.gameObject);

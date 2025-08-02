@@ -74,14 +74,14 @@ public class EndGameController : MonoBehaviour
     private IEnumerator EndGameSequence()
     {
         cameraObject.enabled = false;
-        PlayerMainController.Instance.PlayerMovement.BlockMovement();
+        GameController.Instance.PlayerMovement.BlockMovement();
 
         yield return FadeIn(2.0f);  
 
         endMessageText.text = "After a while...";
 
-        PlayerMainController.Instance.Animator.StopPlayback();
-        PlayerMainController.Instance.Animator.transform.rotation = Quaternion.Euler(Vector3.zero);
+        GameController.Instance.Animator.StopPlayback();
+        GameController.Instance.Animator.transform.rotation = Quaternion.Euler(Vector3.zero);
     
         endGamePoint.gameObject.SetActive(false);
 
@@ -95,11 +95,11 @@ public class EndGameController : MonoBehaviour
 
         Camera.main.fieldOfView = 15f; 
         
-        PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
-        PlayerMainController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
+        GameController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
+        GameController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
 
 
-        PlayerMainController.Instance.Animator.CrossFade(AnimatorStates.Surfing, .1f);
+        GameController.Instance.Animator.CrossFade(AnimatorStates.Surfing, .1f);
       //  MusicManager.Instance.PlaySound(SoundNames.Rideoff);
 
         yield return FadeOut(3.0f);
@@ -116,7 +116,7 @@ public class EndGameController : MonoBehaviour
     }
     public void MoveScooterToEnd()
     {
-        PlayerMainController.Instance.Animator.transform.parent = scooterTransform.transform;
+        GameController.Instance.Animator.transform.parent = scooterTransform.transform;
         scooterTransform.transform.DOMove(scooterEndGameTransform.position, moveDuration).SetEase(Ease.InOutQuad);
     }
     private IEnumerator FadeIn(float duration)

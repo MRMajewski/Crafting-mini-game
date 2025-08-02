@@ -14,7 +14,9 @@ public class UIPanelController : MonoBehaviour
 {
     private InventoryMode currentMode=InventoryMode.Inventory;
     [SerializeField]
-    private GameObject mainPanel;
+    private GameObject inventoryPanel;
+    [SerializeField]
+    private GameObject pausePanel;
     [SerializeField]
     private GameObject inventoryItemDataGameObject;
     [SerializeField]
@@ -34,6 +36,9 @@ public class UIPanelController : MonoBehaviour
     [Header("Button references")]
     [SerializeField]
     private Button inventoryButton;
+    [Header("Button references")]
+    [SerializeField]
+    private Button pauseButton;
 
     public float appearDuration = 0.2f;
     public float blinkDuration = 0.1f;
@@ -104,28 +109,48 @@ public class UIPanelController : MonoBehaviour
 
     public void OpenUIPanel()
     {
-        mainPanel.SetActive(true); 
+        inventoryPanel.SetActive(true); 
         SetMode((int)InventoryMode.Inventory);
+     
     }
 
     public void CloseUIPanel()
     {
-        mainPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+       
     }
 
     public void ToggleInventoryPanel()
     {
-        if (mainPanel.activeSelf)
+        if (inventoryPanel.activeSelf)
         {
             CloseUIPanel(); 
-            PlayerMainController.Instance.PlayerMovement.UnblockMovement();
+            GameController.Instance.PlayerMovement.UnblockMovement();
+            GameController.Instance.PauseGame(false);
         }
         else
         {
             OpenUIPanel();
             UpdateUIForMode(currentMode);
             inventoryUI.UpdateInventoryUI();
-            PlayerMainController.Instance.PlayerMovement.BlockMovement();
+            GameController.Instance.PlayerMovement.BlockMovement();
+            GameController.Instance.PauseGame(true);
+        }
+    }
+
+    public void TogglePausePanel()
+    {
+        if (inventoryPanel.activeSelf)
+        {
+            CloseUIPanel();
+            GameController.Instance.PlayerMovement.UnblockMovement();
+        }
+        else
+        {
+            OpenUIPanel();
+            UpdateUIForMode(currentMode);
+            inventoryUI.UpdateInventoryUI();
+            GameController.Instance.PlayerMovement.BlockMovement();
         }
     }
 
