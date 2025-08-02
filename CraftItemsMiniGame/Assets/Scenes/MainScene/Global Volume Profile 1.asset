@@ -18,21 +18,21 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 1.1
+    m_Value: 0.52
   intensity:
     m_OverrideState: 1
-    m_Value: 2.7
+    m_Value: 1.01
   scatter:
     m_OverrideState: 1
-    m_Value: 0.184
+    m_Value: 0.346
   clamp:
     m_OverrideState: 0
     m_Value: 65467.02
   tint:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 0.8237885, b: 0, a: 1}
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 0.9375694, b: 0.6462264, a: 1}
   highQualityFiltering:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   downscale:
     m_OverrideState: 0
@@ -41,11 +41,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 6
   dirtTexture:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {fileID: 0}
     dimension: 1
   dirtIntensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -75,10 +75,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81180773991d8724ab7f2d216912b564, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.405
 --- !u!114 &7571090231515180795
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -91,19 +91,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.14
+    m_Value: 0.32
   contrast:
-    m_OverrideState: 1
-    m_Value: 0
+    m_OverrideState: 0
+    m_Value: -5.8
   colorFilter:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 0.9761251, b: 0.8915094, a: 1}
+    m_OverrideState: 0
+    m_Value: {r: 0.91914606, g: 1, b: 0.0990566, a: 1}
   hueShift:
     m_OverrideState: 1
-    m_Value: 16
+    m_Value: -7.7
   saturation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -17.6
