@@ -10,6 +10,11 @@ public class GameController : MonoBehaviour
     private PlayerMovementController playerMovement;
     [SerializeField]
     private PlayerInventoryController playerInventory;
+    [SerializeField]
+    private CameraController cameraController;
+    [SerializeField]
+    private UIPanelController uIPanelController;
+    
 
     [SerializeField]
     private Animator animator;
@@ -20,6 +25,8 @@ public class GameController : MonoBehaviour
     public PlayerMovementController PlayerMovement { get=> playerMovement; }
     public PlayerInventoryController PlayerInventory { get=> playerInventory; }
     public Animator Animator { get => animator; }
+
+    public CameraController CameraController { get => cameraController; }  
 
     [SerializeField]
     private bool isPause = true;
@@ -41,10 +48,12 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         InitMainMenu();
+        uIPanelController.InitUI();
     }
     private void InitMainMenu()
     {
         OpeningSequence();
+        CameraController.SetMainMenuCameraPosition();
     }
 
 
@@ -61,10 +70,11 @@ public class GameController : MonoBehaviour
 
     public void StartGame()
     {
+     //   CameraController.SetCameraFollowing(true);
+        CameraController.SetCameraFollowingFromMainMenu();
+        PauseGame(false);
+       
         mainMenu.gameObject.SetActive(false);
+        uIPanelController.OpenHUDPanelTween(true);
     }
-
-
-
-
 }

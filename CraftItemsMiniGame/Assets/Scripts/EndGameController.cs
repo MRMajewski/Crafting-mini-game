@@ -29,7 +29,7 @@ public class EndGameController : MonoBehaviour
     private Transform scooterEndGameTransform;
 
     [SerializeField]
-    private CameraFollow cameraObject;
+    private CameraController cameraObject;
 
     [SerializeField]
     private float moveDuration = 2f; 
@@ -87,14 +87,15 @@ public class EndGameController : MonoBehaviour
 
         scooterTransform.gameObject.SetActive(true);
 
-        cameraObject.transform.position = cameraEndGameTransform.position;
-        cameraObject.transform.rotation = cameraEndGameTransform.rotation;
+        GameController.Instance.CameraController.SetEndGameCameraPosition();
+        //cameraObject.transform.position = cameraEndGameTransform.position;
+        //cameraObject.transform.rotation = cameraEndGameTransform.rotation;
 
-        Debug.Log("Camera Final Pos: " + cameraObject.transform.position);
-        Debug.Log("Target Pos: " + cameraEndGameTransform.position);
+        //Debug.Log("Camera Final Pos: " + cameraObject.transform.position);
+        //Debug.Log("Target Pos: " + cameraEndGameTransform.position);
 
-        Camera.main.fieldOfView = 15f; 
-        
+        //Camera.main.fieldOfView = 15f; 
+
         GameController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
         GameController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
 
