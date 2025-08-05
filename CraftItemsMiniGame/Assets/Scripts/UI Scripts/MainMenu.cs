@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private CanvasGroup mainMenuPanel;
-    [SerializeField] private CanvasGroup fadePanel;
-    [SerializeField] private CanvasGroup exitPanel;
+    private CanvasGroup fadePanel;
+   private CanvasGroup exitPanel;
     [SerializeField] private float fadeDuration = 1f;
 
     private Sequence activeSequence=null;
@@ -15,6 +15,8 @@ public class MainMenu : MonoBehaviour
     [ContextMenu("INIT")]
     public void OpeningSequence()
     {
+        fadePanel = GameController.Instance.UIPanelController.FadePanel;
+
         if (!fadePanel.gameObject.activeSelf)
         {
             fadePanel.gameObject.SetActive(true);
@@ -28,23 +30,16 @@ public class MainMenu : MonoBehaviour
 
     public void InitMainMenu()
     {
-      //  activeSequence = DOTween.Sequence();
         OpeningSequence();
     }
 
     public void StartGame()
     {
-        Debug.Log("StartGame");
-        StartGameSequence();
-
+        StartGameSequence();    
     }
-
 
     private void StartGameSequence()
     {
-
-     
-
         if (activeSequence != null && activeSequence.IsActive())
         {
             activeSequence.Kill();
@@ -63,42 +58,37 @@ public class MainMenu : MonoBehaviour
             {
                 fadePanel.alpha = 0f;
                 fadePanel.gameObject.SetActive(false);
-              
-                GameController.Instance.PauseGame(false );
-                this.gameObject.SetActive(false);
-            });
-
-    }
-
-    public void OpenExitPanel()
-    {
-        exitPanel.gameObject.SetActive(true);
-        exitPanel.alpha = 0f;
-        exitPanel.DOFade(1f, fadeDuration / 2f);
-    }
-
-    public void ReturnFromExitPanel()
-    {
-        if (activeSequence != null && activeSequence.IsActive())
-        {
-            activeSequence.Kill();
-        }
-
-        // Stwórz nową sekwencję
-
-        activeSequence = DOTween.Sequence();
-        activeSequence
-            .Append(exitPanel.DOFade(0f, fadeDuration / 2f))
-            .OnComplete(() =>
-            {
-                exitPanel.alpha = 0f;
-                exitPanel.gameObject.SetActive(false);
+                GameController.Instance.StartGame();
             });
     }
 
-    public void ExitGame()
-    {
-        Debug.Log("ExitGame");
-        Application.Quit();
-    }
+    //public void OpenExitPanel()
+    //{
+    //    exitPanel.gameObject.SetActive(true);
+    //    exitPanel.alpha = 0f;
+    //    exitPanel.DOFade(1f, fadeDuration / 2f);
+    //}
+
+    //public void ReturnFromExitPanel()
+    //{
+    //    if (activeSequence != null && activeSequence.IsActive())
+    //    {
+    //        activeSequence.Kill();
+    //    }
+
+    //    activeSequence = DOTween.Sequence();
+    //    activeSequence
+    //        .Append(exitPanel.DOFade(0f, fadeDuration / 2f))
+    //        .OnComplete(() =>
+    //        {
+    //            exitPanel.alpha = 0f;
+    //            exitPanel.gameObject.SetActive(false);
+    //        });
+    //}
+
+    //public void ExitGame()
+    //{
+    //    Debug.Log("ExitGame");
+    //    Application.Quit();
+    //}
 }

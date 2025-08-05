@@ -22,6 +22,10 @@ public class UIPanelController : MonoBehaviour
     [SerializeField]
     private GameObject craftingPanelGameObject;
     [SerializeField]
+    private GameObject topPanelHUDGameObject;
+    [SerializeField]
+    private CanvasGroup topPanelHUDCanvasGroup;
+    [SerializeField]
     private InventoryUI inventoryUI;
     [SerializeField]
     private CraftingUI craftingUI;
@@ -31,6 +35,15 @@ public class UIPanelController : MonoBehaviour
     private CanvasGroup errorTextCanvasGroup;
     [SerializeField]
     private TextMeshProUGUI errorText;
+
+    [SerializeField] private CanvasGroup fadePanel;
+    public CanvasGroup FadePanel => fadePanel;
+    [SerializeField] private CanvasGroup exitPanel;
+    public CanvasGroup ExitPanel => exitPanel;
+
+    [SerializeField] private UIButtonPermamentSelection modeButtonSelector;
+    [SerializeField] private Button inventoryModeButton;
+    [SerializeField] private Button craftingModeButton;
 
 
     [Header("Button references")]
@@ -45,11 +58,21 @@ public class UIPanelController : MonoBehaviour
     public int blinkCount = 3;
     public float disappearDuration = 0.2f;
 
-    private void Start()
+    [SerializeField] private float fadeDuration = 1f;
+
+    private Sequence activeSequence = null;
+
+    [SerializeField]
+    private ItemListUI itemListUI;
+
+    public void InitUI()
     {
         SetupSlotListeners();
         CloseUIPanel();
         inventoryButton.onClick.AddListener(ToggleInventoryPanel);
+        pauseButton.onClick.AddListener(TogglePausePanel);
+        OpenHUDPanel(false);
+        itemListUI.InitItemListUI();
     }
 
     private void SetupSlotListeners()
@@ -59,10 +82,21 @@ public class UIPanelController : MonoBehaviour
             slot.SetOnClickListener(() => OnSlotClicked(slot));
         }
     }
+
     public void SetMode(int modeIndex)
     {
-       currentMode = (InventoryMode) modeIndex;
-       UpdateUIForMode(currentMode);
+        currentMode = (InventoryMode)modeIndex;
+        UpdateUIForMode(currentMode);
+
+        switch (currentMode)
+        {
+            case InventoryMode.Inventory:
+                modeButtonSelector.ChangeToSelected(inventoryModeButton);
+                break;
+            case InventoryMode.Crafting:
+                modeButtonSelector.ChangeToSelected(craftingModeButton);
+                break;
+        }
     }
 
     public void UpdateUIForMode(InventoryMode mode)
@@ -110,21 +144,45 @@ public class UIPanelController : MonoBehaviour
     public void OpenUIPanel()
     {
         inventoryPanel.SetActive(true); 
-        SetMode((int)InventoryMode.Inventory);
-     
+        SetMode((int)InventoryMode.Inventory);    
     }
 
     public void CloseUIPanel()
     {
-        inventoryPanel.SetActive(false);
+        inventoryPanel.SetActive(false);     
+    }
+
+    public void OpenHUDPanel(bool shouldActive)
+    {
+        topPanelHUDGameObject.SetActive(shouldActive);
+    }
+    public void OpenHUDPanelTween(bool shouldActive)
+    {
        
+        if (topPanelHUDCanvasGroup == null)
+        {
+            return;
+        }
+
+        if (shouldActive)
+        {
+            topPanelHUDGameObject.SetActive(true);
+            topPanelHUDCanvasGroup.alpha = 0f;
+            topPanelHUDCanvasGroup.DOFade(1f, 0.5f).SetEase(Ease.OutQuad);
+        }
+        else
+        {
+            topPanelHUDCanvasGroup.DOFade(0f, 0.5f)
+                .SetEase(Ease.InQuad)
+                .OnComplete(() => topPanelHUDGameObject.SetActive(false));
+        }
     }
 
     public void ToggleInventoryPanel()
     {
         if (inventoryPanel.activeSelf)
         {
-            CloseUIPanel(); 
+            inventoryPanel.SetActive(false);
             GameController.Instance.PlayerMovement.UnblockMovement();
             GameController.Instance.PauseGame(false);
         }
@@ -136,21 +194,31 @@ public class UIPanelController : MonoBehaviour
             GameController.Instance.PlayerMovement.BlockMovement();
             GameController.Instance.PauseGame(true);
         }
+
+        if (pausePanel.activeSelf)
+        {
+            pausePanel.gameObject.SetActive(false);
+        }
     }
 
     public void TogglePausePanel()
     {
-        if (inventoryPanel.activeSelf)
+        if (pausePanel.activeSelf)
         {
-            CloseUIPanel();
+            pausePanel.gameObject.SetActive(false);
             GameController.Instance.PlayerMovement.UnblockMovement();
+            GameController.Instance.PauseGame(false);
         }
         else
         {
-            OpenUIPanel();
-            UpdateUIForMode(currentMode);
-            inventoryUI.UpdateInventoryUI();
+            pausePanel.gameObject.SetActive(true);
             GameController.Instance.PlayerMovement.BlockMovement();
+            GameController.Instance.PauseGame(true);
+        }
+
+        if (inventoryPanel.activeSelf)
+        {
+            inventoryPanel.SetActive(false);
         }
     }
 
@@ -168,5 +236,35 @@ public class UIPanelController : MonoBehaviour
             .SetLoops(blinkCount * 2, LoopType.Yoyo));
 
         blinkSequence.Append(errorTextCanvasGroup.DOFade(0, disappearDuration));
+    }
+
+    public void OpenExitPanel()
+    {
+        exitPanel.alpha = 0f;
+        exitPanel.gameObject.SetActive(true);   
+        exitPanel.DOFade(1f, fadeDuration / 2f);
+    }
+
+    public void ReturnFromExitPanel()
+    {
+        if (activeSequence != null && activeSequence.IsActive())
+        {
+            activeSequence.Kill();
+        }
+
+        activeSequence = DOTween.Sequence();
+        activeSequence
+            .Append(exitPanel.DOFade(0f, fadeDuration / 2f))
+            .OnComplete(() =>
+            {
+                exitPanel.alpha = 0f;
+                exitPanel.gameObject.SetActive(false);
+            });
+    }
+
+    public void ExitGame()
+    {
+        Debug.Log("ExitGame");
+        Application.Quit();
     }
 }

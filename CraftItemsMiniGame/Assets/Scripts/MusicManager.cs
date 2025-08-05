@@ -30,7 +30,32 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    //private void Start()
+    //{
+    //    AddSoundsToDictionary(soundEntries);
+
+    //    UpdateButtonIcon();
+
+    //    SetVolume(.3f);
+    //    volumeSlider.value = musicSource.volume;
+
+    //    void AddSoundsToDictionary(List<SoundEntry> soundEntries)
+    //    {
+    //        foreach (var entry in soundEntries)
+    //        {
+    //            if (!soundEffects.ContainsKey(entry.name))
+    //            {
+    //                soundEffects.Add(entry.name, entry.clip);
+    //            }
+    //            else
+    //            {
+    //                Debug.LogWarning($"Duplikat nazwy dŸwiêku: {entry.name}");
+    //            }
+    //        }
+    //    }
+    //}
+
+    public void InitMusicManager()
     {
         AddSoundsToDictionary(soundEntries);
 
@@ -53,8 +78,6 @@ public class MusicManager : MonoBehaviour
                 }
             }
         }
-
-
     }
 
     public void SetVolume(float value)

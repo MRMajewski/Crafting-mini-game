@@ -17,8 +17,6 @@ public class CameraController : MonoBehaviour
 
     private Tween moveTween;
 
-
-
     private bool isFollowingPlayer = false;
 
     [Header("Camera Positions references")]
@@ -46,14 +44,10 @@ public class CameraController : MonoBehaviour
                              .SetUpdate(UpdateType.Late);
     }
 
-
     public void SetMainMenuCameraPosition()
     {
         transform.position = cameraMainMenuTransform.position;
         transform.rotation = cameraMainMenuTransform.rotation;
-
-        Debug.Log("Camera Final Pos: " + transform.position);
-        Debug.Log("Target Pos: " + cameraEndGameTransform.position);
 
         Camera.main.fieldOfView = 45f;
     }
@@ -62,9 +56,6 @@ public class CameraController : MonoBehaviour
     {
        transform.position = cameraEndGameTransform.position;
        transform.rotation = cameraEndGameTransform.rotation;
-
-        Debug.Log("Camera Final Pos: " + transform.position);
-        Debug.Log("Target Pos: " + cameraEndGameTransform.position);
 
         Camera.main.fieldOfView = 15f;
     }
@@ -78,14 +69,17 @@ public class CameraController : MonoBehaviour
             transform.rotation = cameraFollowTransform.rotation;
         }
     }
-    public void SetCameraFollowingFromMainMenu()
+    public void SetCameraFollowingFromMainMenu(System.Action onComplete = null)
     {
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(transform.DOMove(cameraOnPlayerZoomTransform.position, 0.4f).SetEase(Ease.InOutSine))         
+        seq.Append(transform.DOMove(cameraOnPlayerZoomTransform.position, 0.4f).SetEase(Ease.InOutSine))
             .Append(transform.DORotateQuaternion(cameraFollowTransform.rotation, 0.4f).SetEase(Ease.InOutElastic))
             .Append(Camera.main.DOFieldOfView(40f, 0.75f).SetEase(Ease.InOutBounce))
-            .OnComplete(() => isFollowingPlayer = true);
-
+            .OnComplete(() =>
+            {
+                isFollowingPlayer = true;
+                onComplete?.Invoke();
+            });
     }
 }

@@ -9,7 +9,7 @@ public class CraftingController : MonoBehaviour
 
     private readonly List<ItemData> itemsToCraft = new();
 
-    private void Start()
+    public void InitCrafting()
     {
         craftingUI.SetCraftButtonInteractable(false);
         craftingUI.OnInventorySlotClicked += AddItemToCrafting;
@@ -18,7 +18,6 @@ public class CraftingController : MonoBehaviour
 
         craftingUI.ResultSlot.SetOnClickListener(CollectCraftingResult);
     }
-
     private void AddItemToCrafting(ItemData item)
     {
         if (itemsToCraft.Count >= craftingUI.CraftingSlots.Count) return;

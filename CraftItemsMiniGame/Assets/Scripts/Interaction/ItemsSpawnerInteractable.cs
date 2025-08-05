@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 {
-    [SerializeField] private UIPanelController uiPanel;
     [SerializeField] private GameObject objectToSpawn;
     [SerializeField] private List<Transform> spawnLocations;
     [SerializeField] private Transform spawnerModelTransform;
@@ -74,7 +73,6 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
     {
         yield return new WaitForSecondsRealtime(GameController.Instance.PlayerMovement.InteractionDelay * 4);
 
-
         SpawningNewItem(spawnLocation);
 
         availableSpawnLocations.Remove(spawnLocation);
@@ -99,8 +97,8 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
     private void DisplayError(string message)
     {
-        uiPanel.DisplayErrorInfo(message);
-
+        GameController.Instance.UIPanelController.DisplayErrorInfo(message);
+     
         GameController.Instance.Animator.CrossFade(AnimatorStates.ShakeNo, 0.1f);
 
         MusicManager.Instance.PlaySound("error");

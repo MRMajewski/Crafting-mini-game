@@ -14,7 +14,10 @@ public class GameController : MonoBehaviour
     private CameraController cameraController;
     [SerializeField]
     private UIPanelController uIPanelController;
-    
+    [SerializeField]
+    private MusicManager musicManager;
+    [SerializeField]
+    private CraftingController craftingController;
 
     [SerializeField]
     private Animator animator;
@@ -25,8 +28,8 @@ public class GameController : MonoBehaviour
     public PlayerMovementController PlayerMovement { get=> playerMovement; }
     public PlayerInventoryController PlayerInventory { get=> playerInventory; }
     public Animator Animator { get => animator; }
-
-    public CameraController CameraController { get => cameraController; }  
+    public CameraController CameraController { get => cameraController; }
+    public UIPanelController UIPanelController { get => uIPanelController; }
 
     [SerializeField]
     private bool isPause = true;
@@ -49,6 +52,9 @@ public class GameController : MonoBehaviour
     {
         InitMainMenu();
         uIPanelController.InitUI();
+        musicManager.InitMusicManager();
+        craftingController.InitCrafting();
+
     }
     private void InitMainMenu()
     {
@@ -70,11 +76,14 @@ public class GameController : MonoBehaviour
 
     public void StartGame()
     {
-     //   CameraController.SetCameraFollowing(true);
-        CameraController.SetCameraFollowingFromMainMenu();
-        PauseGame(false);
-       
-        mainMenu.gameObject.SetActive(false);
-        uIPanelController.OpenHUDPanelTween(true);
+        void StartGameAfterAnimCompleted()
+        {
+            PauseGame(false);
+            mainMenu.gameObject.SetActive(false);
+            uIPanelController.OpenHUDPanelTween(true);
+        }
+
+        CameraController.SetCameraFollowingFromMainMenu(StartGameAfterAnimCompleted);
     }
+
 }

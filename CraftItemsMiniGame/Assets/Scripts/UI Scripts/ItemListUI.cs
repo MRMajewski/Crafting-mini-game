@@ -26,12 +26,18 @@ public class ItemListUI : MonoBehaviour
 
     private Tween pulsingTween;
 
-    private void Start()
-    {   
+    [SerializeField]
+    private RequiredItemsChecker requiredItemsChecker;
+
+    [SerializeField]
+    float targetOutlineWidth = 0.05f;
+
+    public void InitItemListUI()
+    {
         playerInventory.OnInventoryChange += UpdateItemUI;
 
-        baseColor= requiredItemTitleText.faceColor;
-        textMaterial = requiredItemTitleText.fontSharedMaterial;
+        textMaterial = new Material(requiredItemTitleText.fontMaterial);
+        baseColor = requiredItemTitleText.faceColor;   
         baseOutlineValue = textMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth);
         CreateItemUI();
         UpdateItemUI();
@@ -39,68 +45,48 @@ public class ItemListUI : MonoBehaviour
 
     private void CreateItemUI()
     {
-        foreach (InventoryItem item in requiredItems)
+        for (int i = 0; i < requiredItemsChecker.Count; i++)
         {
+            var item = requiredItemsChecker.GetItemAt(i);
             GameObject newTextObj = Instantiate(textPrefab, listParent);
             TextMeshProUGUI newItemText = newTextObj.GetComponent<TextMeshProUGUI>();
             newItemText.text = $"{item.itemData.itemName} 0/{item.requiredAmount}";
-
-            itemTextList.Add(newItemText); 
+            itemTextList.Add(newItemText);
         }
+
         textPrefab.gameObject.SetActive(false);
     }
 
     public void UpdateItemUI()
     {
-        for (int i = 0; i < requiredItems.Count; i++)
+        for (int i = 0; i < requiredItemsChecker.Count; i++)
         {
-            InventoryItem item = requiredItems[i];
+            var item = requiredItemsChecker.GetItemAt(i);
             int itemCount = playerInventory.GetItemCount(item.itemData);
             itemTextList[i].text = $"{item.itemData.itemName} {itemCount}/{item.requiredAmount}";
 
-            if (itemCount >= item.requiredAmount)
-            {
-                itemTextList[i].color = Color.green;
-                item.isSupplied = true;
-            }
-            else
-            {
-                itemTextList[i].color = baseColor;
-                item.isSupplied = false;
-            }
+            itemTextList[i].color = itemCount >= item.requiredAmount ? Color.green : baseColor;
         }
-        if (CheckIfAllItemsAreSupplied())
-        {
-            SetRequiredItemsTitleTweening();
-         
-        }
-        else
-        {
-            SetRequiredItemsTitleBasic();
-        }
-        EndGameController.Instance.SetEndGamePointActive(CheckIfAllItemsAreSupplied());
-    }
 
-    public bool CheckIfAllItemsAreSupplied()
-    {
-        foreach (InventoryItem item in requiredItems)
-        {
-            if (!item.isSupplied)
-                return false;
-        }
-        return true;
+        bool allSupplied = requiredItemsChecker.AreAllItemsSupplied();
+        if (allSupplied)
+            SetRequiredItemsTitleTweening();
+        else
+            SetRequiredItemsTitleBasic();
+
+        EndGameController.Instance.SetEndGamePointActive(allSupplied);
     }
 
     public void SetRequiredItemsTitleTweening()
     {
+       
         requiredItemTitleText.color = Color.green;
+        requiredItemTitleText.fontMaterial = textMaterial;
         PulseOutline();
     }
 
     private void PulseOutline()
     {
-        float targetOutlineWidth = 0.05f;
-
         pulsingTween=DOTween.To(() => textMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth),
                   x => textMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, x),
                   targetOutlineWidth, 0.5f)
@@ -116,6 +102,7 @@ public class ItemListUI : MonoBehaviour
 
     private void OnDestroy()
     {
+        pulsingTween?.Kill();
         playerInventory.OnInventoryChange -= UpdateItemUI;
     }
 }

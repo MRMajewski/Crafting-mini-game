@@ -34,6 +34,8 @@ public class EndGameController : MonoBehaviour
     [SerializeField]
     private float moveDuration = 2f; 
 
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -73,10 +75,18 @@ public class EndGameController : MonoBehaviour
 
     private IEnumerator EndGameSequence()
     {
-        cameraObject.enabled = false;
+        fadeCanvas = GameController.Instance.UIPanelController.FadePanel;
+
+        fadeCanvas.gameObject.SetActive(true);
+
         GameController.Instance.PlayerMovement.BlockMovement();
 
-        yield return FadeIn(2.0f);  
+        GameController.Instance.CameraController.SetCameraFollowing(false);
+     
+
+        yield return FadeIn(2.0f);
+
+        GameController.Instance.UIPanelController.OpenHUDPanel(false);
 
         endMessageText.text = "After a while...";
 
@@ -88,20 +98,12 @@ public class EndGameController : MonoBehaviour
         scooterTransform.gameObject.SetActive(true);
 
         GameController.Instance.CameraController.SetEndGameCameraPosition();
-        //cameraObject.transform.position = cameraEndGameTransform.position;
-        //cameraObject.transform.rotation = cameraEndGameTransform.rotation;
-
-        //Debug.Log("Camera Final Pos: " + cameraObject.transform.position);
-        //Debug.Log("Target Pos: " + cameraEndGameTransform.position);
-
-        //Camera.main.fieldOfView = 15f; 
 
         GameController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
         GameController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
 
 
         GameController.Instance.Animator.CrossFade(AnimatorStates.Surfing, .1f);
-      //  MusicManager.Instance.PlaySound(SoundNames.Rideoff);
 
         yield return FadeOut(3.0f);
         MusicManager.Instance.PlaySound(SoundNames.Rideoff);
@@ -111,7 +113,6 @@ public class EndGameController : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         yield return FadeIn(3.0f);
-
 
         EndGameSequenceComplete();
     }
