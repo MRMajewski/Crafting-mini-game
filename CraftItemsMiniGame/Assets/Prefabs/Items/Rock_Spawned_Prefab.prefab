@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7029523610040634915}
   - component: {fileID: 2968860347795630824}
   - component: {fileID: -5970245447049185528}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Rock_Spawned_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

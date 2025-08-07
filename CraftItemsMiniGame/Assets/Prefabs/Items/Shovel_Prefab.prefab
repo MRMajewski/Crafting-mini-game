@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8355202552059046506}
   - component: {fileID: 4762464564339068152}
   - component: {fileID: 1607792115833003778}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Shovel_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
