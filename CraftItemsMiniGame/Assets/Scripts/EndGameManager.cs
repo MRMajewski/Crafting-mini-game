@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class EndGameController : MonoBehaviour
+public class EndGameManager : MonoBehaviour
 {
-    public static EndGameController Instance { get; private set; }
+    public static EndGameManager Instance { get; private set; }
     public Animator playerAnimator; 
-    public CanvasGroup fadeCanvas;  
+    public CanvasGroup fadeCanvas;
+    public CanvasGroup endGamePanel;
     public TextMeshProUGUI endMessageText;
 
     [SerializeField]
@@ -77,18 +78,21 @@ public class EndGameController : MonoBehaviour
     {
         fadeCanvas = GameController.Instance.UIPanelController.FadePanel;
 
+        endGamePanel.gameObject.SetActive(true);
+        endGamePanel.alpha = 0;
+
         fadeCanvas.gameObject.SetActive(true);
 
         GameController.Instance.PlayerMovement.BlockMovement();
 
         GameController.Instance.CameraController.SetCameraFollowing(false);
-     
-
-        yield return FadeIn(2.0f);
-
-        GameController.Instance.UIPanelController.OpenHUDPanel(false);
 
         endMessageText.text = "After a while...";
+        yield return FadeIn(2.0f);
+        yield return new WaitForSeconds(1.0f);
+        GameController.Instance.UIPanelController.OpenHUDPanel(false);
+
+
 
         GameController.Instance.Animator.StopPlayback();
         GameController.Instance.Animator.transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -112,9 +116,16 @@ public class EndGameController : MonoBehaviour
         MoveScooterToEnd();
         yield return new WaitForSeconds(2.0f);
 
-        yield return FadeIn(3.0f);
 
-        EndGameSequenceComplete();
+
+        yield return FadeIn(2.0f);
+        yield return new WaitForSeconds(2.0f);
+        endGamePanel.DOFade(1, 1).OnComplete(() => {
+            endGamePanel.interactable = true;
+            endGamePanel.blocksRaycasts = true;
+        });
+
+        //   EndGameSequenceComplete();
     }
     public void MoveScooterToEnd()
     {
@@ -133,8 +144,4 @@ public class EndGameController : MonoBehaviour
         yield return new WaitForSeconds(duration);
     }
 
-    private void EndGameSequenceComplete()
-    {
-        Application.Quit();
-    }
 }

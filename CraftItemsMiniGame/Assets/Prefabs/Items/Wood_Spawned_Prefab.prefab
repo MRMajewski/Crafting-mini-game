@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1493958779014389460}
   - component: {fileID: 803335243101366664}
   - component: {fileID: 4571203641183460766}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Wood_Spawned_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

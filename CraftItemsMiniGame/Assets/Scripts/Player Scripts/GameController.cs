@@ -1,7 +1,9 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class GameController : MonoBehaviour
     private MusicManager musicManager;
     [SerializeField]
     private CraftingController craftingController;
+    [SerializeField]
+    private QualityManager qualityManager;
 
     [SerializeField]
     private Animator animator;
@@ -35,6 +39,7 @@ public class GameController : MonoBehaviour
     private bool isPause = true;
 
     public bool IsPause { get=>isPause; set => isPause = value; }
+
 
     private void Awake()
     {
@@ -55,7 +60,13 @@ public class GameController : MonoBehaviour
         musicManager.InitMusicManager();
         craftingController.InitCrafting();
 
+        qualityManager.SetQuality();
     }
+
+
+
+
+    
     private void InitMainMenu()
     {
         OpeningSequence();
@@ -86,4 +97,14 @@ public class GameController : MonoBehaviour
         CameraController.SetCameraFollowingFromMainMenu(StartGameAfterAnimCompleted);
     }
 
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ExitGame()
+    {
+        Debug.Log("ExitGame");
+        Application.Quit();
+    }
 }

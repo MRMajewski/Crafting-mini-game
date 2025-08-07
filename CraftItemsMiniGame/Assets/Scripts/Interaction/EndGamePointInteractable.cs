@@ -26,7 +26,7 @@ public class EndGamePointInteractable : MonoBehaviour, IInteractable
     public void Interact()
     {
         if(canInteract)
-            EndGameController.Instance.TriggerEndGame();
+            EndGameManager.Instance.TriggerEndGame();
     }
 
     public void StartRotating()

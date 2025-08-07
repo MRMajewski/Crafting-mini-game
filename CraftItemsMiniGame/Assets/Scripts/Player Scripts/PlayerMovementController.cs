@@ -36,7 +36,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float interactionDelay = .1f;
 
-   public float InteractionDelay { get =>interactionDelay; }
+    public float InteractionDelay { get => interactionDelay; }
 
 
     void Update()
@@ -60,12 +60,21 @@ public class PlayerMovementController : MonoBehaviour
 
     private void HandleInput()
     {
-#if UNITY_EDITOR || UNITY_STANDALONE
-        if (Input.GetMouseButtonDown(0))
+    #if UNITY_EDITOR || UNITY_STANDALONE
+            if (Input.GetMouseButtonDown(0))
+            {
+                ProcessInput(Input.mousePosition);
+            }
+    #elif UNITY_WEBGL
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            ProcessInput(Input.GetTouch(0).position);
+        }
+        else if (Input.GetMouseButtonDown(0))
         {
             ProcessInput(Input.mousePosition);
         }
-#elif UNITY_ANDROID || UNITY_IOS
+    #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             ProcessInput(Input.GetTouch(0).position);
@@ -181,7 +190,7 @@ public class PlayerMovementController : MonoBehaviour
     }
     public void BlockMovement()
     {
-     
+
         agent.ResetPath();
         animator.SetBool("isMoving", false);
         animator.CrossFade(AnimatorStates.Idle, 0f);

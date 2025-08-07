@@ -74,7 +74,7 @@ public class ItemListUI : MonoBehaviour
         else
             SetRequiredItemsTitleBasic();
 
-        EndGameController.Instance.SetEndGamePointActive(allSupplied);
+        EndGameManager.Instance.SetEndGamePointActive(allSupplied);
     }
 
     public void SetRequiredItemsTitleTweening()
