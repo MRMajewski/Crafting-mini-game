@@ -7,18 +7,27 @@ using UnityEngine.Rendering;
 public class QualityManager : MonoBehaviour
 {
     [SerializeField] private Volume postProcessingVolume;
+    [SerializeField] private Material lowQualityWaterMaterial;
+    [SerializeField] private Material highQualityWaterMaterial;
+    [SerializeField] private Renderer waterRenderer;
+
     public void SetQuality()
     {
 #if UNITY_WEBGL
-        if (IsMobile())
+        if (IsPCBuild())
         {
-            QualitySettings.SetQualityLevel(0, true);
-            Debug.Log("WebGL na telefonie – ustawiono nisk¹ jakoœæ");
+            QualitySettings.SetQualityLevel(3, true);
+            Debug.Log("WebGL na komputerze – ustawiono œredni¹ jakoœæ");
+
+            if (waterRenderer != null)
+            {
+                waterRenderer.material = lowQualityWaterMaterial; 
+            }
         }
         else
         {
-            QualitySettings.SetQualityLevel(3, true);
-
+            QualitySettings.SetQualityLevel(0, true);
+            Debug.Log("WebGL na telefonie – ustawiono nisk¹ jakoœæ");
         }
 #else
         if (Application.isMobilePlatform)
@@ -26,25 +35,24 @@ public class QualityManager : MonoBehaviour
             // Mobilny build (np. Android/iOS natywnie)
             QualitySettings.SetQualityLevel(5, true);
             Debug.Log("Natywny mobilny build – ustawiono nisk¹ jakoœæ");
+
+            if (waterRenderer != null)
+            {
+                waterRenderer.material = lowQualityWaterMaterial; 
+            }
         }
         else
         {
             // Natywny build PC
             QualitySettings.SetQualityLevel(5, true);
             Debug.Log("Natywny build PC – ustawiono wysok¹ jakoœæ");
+
+            if (waterRenderer != null)
+            {
+                waterRenderer.material = highQualityWaterMaterial; 
+            }
         }
 #endif
-
-        if (QualitySettings.GetQualityLevel() <= 1)
-        {
-            postProcessingVolume.enabled = false;
-        }
-
-        bool IsMobile()
-        {
-            string ua = Application.absoluteURL;
-            return Application.isMobilePlatform ||
-                   (ua.Contains("Android") || ua.Contains("iPhone") || ua.Contains("iPad"));
-        }
     }
 }
+   

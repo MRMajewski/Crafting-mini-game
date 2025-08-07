@@ -82,7 +82,9 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
     private void SpawningNewItem(Transform spawnLocation)
     {
-        GameObject spawnedItem = Instantiate(objectToSpawn, spawnLocation.position, Quaternion.identity, pickablesParentTransform);
+        float randomYRotation = Random.Range(0f, 360f);
+        Quaternion randomRotation = Quaternion.Euler(0f, randomYRotation, 0f);
+        GameObject spawnedItem = Instantiate(objectToSpawn, spawnLocation.position, randomRotation, pickablesParentTransform);
         spawnedItem.GetComponent<PickupItemSpawnedInteractable>().InitSpawnedPickupItem(this, spawnLocation);
 
         Transform itemTransform = spawnedItem.transform;

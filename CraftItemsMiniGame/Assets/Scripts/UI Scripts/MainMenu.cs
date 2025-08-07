@@ -7,7 +7,6 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private CanvasGroup mainMenuPanel;
     private CanvasGroup fadePanel;
-   private CanvasGroup exitPanel;
     [SerializeField] private float fadeDuration = 1f;
 
     private Sequence activeSequence=null;
