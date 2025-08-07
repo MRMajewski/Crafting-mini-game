@@ -8,38 +8,28 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
-    [SerializeField]
-    private PlayerMovementController playerMovement;
-    [SerializeField]
-    private PlayerInventoryController playerInventory;
-    [SerializeField]
-    private CameraController cameraController;
-    [SerializeField]
-    private UIPanelController uIPanelController;
-    [SerializeField]
-    private MusicManager musicManager;
-    [SerializeField]
-    private CraftingController craftingController;
-    [SerializeField]
-    private QualityManager qualityManager;
 
-    [SerializeField]
-    private Animator animator;
+    [Header("Managers")]
+    [SerializeField] private PlayerMovementController playerMovement;
+    [SerializeField] private PlayerInventoryController playerInventory;
+    [SerializeField] private CameraController cameraController;
+    [SerializeField] private UIPanelController uIPanelController;
+    [SerializeField] private MusicManager musicManager;
+    [SerializeField] private CraftingController craftingController;
+    [SerializeField] private QualityManager qualityManager;
 
-    [SerializeField]
-    private MainMenu mainMenu;
+    [Header("UI")]
+    [SerializeField] private MainMenu mainMenu;
+    [SerializeField] private Animator animator;
 
-    public PlayerMovementController PlayerMovement { get=> playerMovement; }
-    public PlayerInventoryController PlayerInventory { get=> playerInventory; }
-    public Animator Animator { get => animator; }
-    public CameraController CameraController { get => cameraController; }
-    public UIPanelController UIPanelController { get => uIPanelController; }
+    public PlayerMovementController PlayerMovement => playerMovement;
+    public PlayerInventoryController PlayerInventory => playerInventory;
+    public Animator Animator => animator;
+    public CameraController CameraController => cameraController;
+    public UIPanelController UIPanelController => uIPanelController;
 
-    [SerializeField]
-    private bool isPause = true;
-
-    public bool IsPause { get=>isPause; set => isPause = value; }
-
+    private bool isPaused;
+    public bool IsPaused => isPaused;
 
     private void Awake()
     {
@@ -53,20 +43,33 @@ public class GameController : MonoBehaviour
         }
 
     }
+   
     private void Start()
     {
-        InitMainMenu();
-        uIPanelController.InitUI();
-        musicManager.InitMusicManager();
-        craftingController.InitCrafting();
-
-        qualityManager.SetQuality();
+        InitializeSystems();
+        InitializeUI();
+        InitializeGameplay();
     }
 
+    private void InitializeSystems()
+    {
+#if UNITY_WEBGL
+        qualityManager.SetQuality();
+#endif
+        musicManager.InitMusicManager();
+        craftingController.InitCrafting();
+    }
 
+    private void InitializeUI()
+    {
+        uIPanelController.InitUI();
+        InitMainMenu();
+    }
 
-
-    
+    private void InitializeGameplay()
+    {
+        PauseGame(true);
+    }
     private void InitMainMenu()
     {
         OpeningSequence();
@@ -82,7 +85,7 @@ public class GameController : MonoBehaviour
 
     public void PauseGame(bool isPaused)
     {
-        isPause = isPaused;
+        this.isPaused = isPaused;
     }
 
     public void StartGame()

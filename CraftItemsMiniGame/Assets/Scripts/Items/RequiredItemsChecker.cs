@@ -27,3 +27,11 @@ public class RequiredItemsChecker : MonoBehaviour
 
     public int Count => requiredItems.Count;
 }
+
+[System.Serializable]
+public class InventoryItem
+{
+    public ItemData itemData;
+    public int requiredAmount;
+    public bool isSupplied = false;
+}

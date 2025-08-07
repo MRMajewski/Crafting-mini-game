@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,48 +9,55 @@ public class QualityManager : MonoBehaviour
     [SerializeField] private Material highQualityWaterMaterial;
     [SerializeField] private Renderer waterRenderer;
 
-    public void SetQuality()
-    {
-#if UNITY_WEBGL
-        if (IsPCBuild())
-        {
-            QualitySettings.SetQualityLevel(3, true);
-            Debug.Log("WebGL na komputerze – ustawiono œredni¹ jakoœæ");
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern int IsMobileDevice();
+#endif
 
-            if (waterRenderer != null)
-            {
-                waterRenderer.material = lowQualityWaterMaterial; 
-            }
-        }
-        else
+    public static bool IsRunningOnMobile()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        try
         {
-            QualitySettings.SetQualityLevel(0, true);
-            Debug.Log("WebGL na telefonie – ustawiono nisk¹ jakoœæ");
+            return IsMobileDevice() == 1;
+        }
+        catch
+        {
+            Debug.LogWarning("IsMobileDevice() call failed.");
+            return false;
         }
 #else
-        if (Application.isMobilePlatform)
-        {
-            // Mobilny build (np. Android/iOS natywnie)
-            QualitySettings.SetQualityLevel(5, true);
-            Debug.Log("Natywny mobilny build – ustawiono nisk¹ jakoœæ");
+        return false; 
+#endif
+    }
 
+    public void SetQuality()
+    {
+        bool isMobile;
+
+#if UNITY_WEBGL
+        isMobile = IsRunningOnMobile();
+#else
+        isMobile = Application.isMobilePlatform;
+#endif
+
+        if (isMobile)
+        {
+            QualitySettings.SetQualityLevel(2, true);
+            postProcessingVolume.enabled = false;
             if (waterRenderer != null)
-            {
-                waterRenderer.material = lowQualityWaterMaterial; 
-            }
+                waterRenderer.material = lowQualityWaterMaterial;
+
+            Debug.Log("Mobilne urz¹dzenie – ustawiono nisk¹ jakoœæ");
         }
         else
         {
-            // Natywny build PC
             QualitySettings.SetQualityLevel(5, true);
-            Debug.Log("Natywny build PC – ustawiono wysok¹ jakoœæ");
-
+            postProcessingVolume.enabled = true;
             if (waterRenderer != null)
-            {
-                waterRenderer.material = highQualityWaterMaterial; 
-            }
+                waterRenderer.material = highQualityWaterMaterial;
+
+            Debug.Log("Desktop lub WebGL na PC – ustawiono wysok¹ jakoœæ");
         }
-#endif
     }
 }
-   

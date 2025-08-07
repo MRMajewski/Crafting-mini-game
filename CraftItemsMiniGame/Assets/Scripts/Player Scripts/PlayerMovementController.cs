@@ -41,7 +41,7 @@ public class PlayerMovementController : MonoBehaviour
 
     void Update()
     {
-        if (isMovementBlocked || GameController.Instance.IsPause)
+        if (isMovementBlocked || GameController.Instance.IsPaused)
             return;
 
         HandleInput();

@@ -14,8 +14,7 @@ public class ItemListUI : MonoBehaviour
 
     private List<TextMeshProUGUI> itemTextList = new List<TextMeshProUGUI>(); 
 
-    public List<InventoryItem> requiredItems;
- 
+    [SerializeField]
     private Color baseColor;
     private Material textMaterial;
 
@@ -30,14 +29,14 @@ public class ItemListUI : MonoBehaviour
     private RequiredItemsChecker requiredItemsChecker;
 
     [SerializeField]
-    float targetOutlineWidth = 0.05f;
+    float targetOutlineWidth = 0.125f;
 
     public void InitItemListUI()
     {
         playerInventory.OnInventoryChange += UpdateItemUI;
 
         textMaterial = new Material(requiredItemTitleText.fontMaterial);
-        baseColor = requiredItemTitleText.faceColor;   
+      //  baseColor = requiredItemTitleText.faceColor;   
         baseOutlineValue = textMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth);
         CreateItemUI();
         UpdateItemUI();
@@ -107,11 +106,3 @@ public class ItemListUI : MonoBehaviour
     }
 }
 
-
-[System.Serializable]
-public class InventoryItem
-{
-    public ItemData itemData;
-    public int requiredAmount; 
-    public bool isSupplied=false;
-}
