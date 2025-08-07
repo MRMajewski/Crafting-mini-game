@@ -262,9 +262,12 @@ public class UIPanelController : MonoBehaviour
             });
     }
 
-    public void ExitGame()
+    public void ExitGameByButton()
     {
-        Debug.Log("ExitGame");
-        Application.Quit();
+        GameController.Instance.ExitGame();
+    }
+    public void RestartGameByButton()
+    {
+        GameController.Instance.RestartGame();
     }
 }

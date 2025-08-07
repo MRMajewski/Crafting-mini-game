@@ -62,33 +62,4 @@ public class MainMenu : MonoBehaviour
             });
     }
 
-    //public void OpenExitPanel()
-    //{
-    //    exitPanel.gameObject.SetActive(true);
-    //    exitPanel.alpha = 0f;
-    //    exitPanel.DOFade(1f, fadeDuration / 2f);
-    //}
-
-    //public void ReturnFromExitPanel()
-    //{
-    //    if (activeSequence != null && activeSequence.IsActive())
-    //    {
-    //        activeSequence.Kill();
-    //    }
-
-    //    activeSequence = DOTween.Sequence();
-    //    activeSequence
-    //        .Append(exitPanel.DOFade(0f, fadeDuration / 2f))
-    //        .OnComplete(() =>
-    //        {
-    //            exitPanel.alpha = 0f;
-    //            exitPanel.gameObject.SetActive(false);
-    //        });
-    //}
-
-    //public void ExitGame()
-    //{
-    //    Debug.Log("ExitGame");
-    //    Application.Quit();
-    //}
 }
