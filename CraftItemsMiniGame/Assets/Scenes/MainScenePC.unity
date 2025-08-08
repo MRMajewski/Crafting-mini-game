@@ -1269,9 +1269,8 @@ MonoBehaviour:
   musicManager: {fileID: 1456183404}
   craftingController: {fileID: 427261864}
   qualityManager: {fileID: 189538768}
-  animator: {fileID: 5778863679022423448}
   mainMenu: {fileID: 1298003069}
-  isPause: 1
+  animator: {fileID: 5778863679022423448}
 --- !u!114 &189538767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1327,16 +1326,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnimator: {fileID: 5778863679022423448}
-  fadeCanvas: {fileID: 562334046}
-  endGamePanel: {fileID: 1391573512}
-  endMessageText: {fileID: 2011237942}
-  endGamePoint: {fileID: 1056840089}
+  cameraObject: {fileID: 963194229}
   playerInventoryController: {fileID: 387454290}
+  endGamePoint: {fileID: 1056840089}
   scooterTransform: {fileID: 1741507043}
   playerEndGameTransform: {fileID: 750199455}
   cameraEndGameTransform: {fileID: 666088545}
   scooterEndGameTransform: {fileID: 274306302}
-  cameraObject: {fileID: 963194229}
+  fadeCanvas: {fileID: 562334046}
+  endGamePanel: {fileID: 1391573512}
+  endMessageText: {fileID: 2011237942}
   moveDuration: 2
 --- !u!4 &221605683 stripped
 Transform:
@@ -2784,6 +2783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickUpItemDelay: 1.5
+  interactionAnimParameterValue: 3
 --- !u!195 &387454291
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10491,24 +10491,23 @@ MonoBehaviour:
   craftingPanelGameObject: {fileID: 1506931274}
   topPanelHUDGameObject: {fileID: 1507601663}
   topPanelHUDCanvasGroup: {fileID: 1507601667}
-  inventoryUI: {fileID: 435090884}
-  craftingUI: {fileID: 1506931277}
-  craftingController: {fileID: 427261864}
   errorTextCanvasGroup: {fileID: 893380440}
-  errorText: {fileID: 893380437}
   fadePanel: {fileID: 562334046}
   exitPanel: {fileID: 272966545}
+  errorText: {fileID: 893380437}
+  inventoryUI: {fileID: 435090884}
+  craftingUI: {fileID: 1506931277}
+  itemListUI: {fileID: 1054649049}
+  inventoryButton: {fileID: 1286274947}
+  pauseButton: {fileID: 175659183}
   modeButtonSelector: {fileID: 275975031}
   inventoryModeButton: {fileID: 526273602}
   craftingModeButton: {fileID: 1895037635}
-  inventoryButton: {fileID: 1286274947}
-  pauseButton: {fileID: 175659183}
   appearDuration: 0.2
   blinkDuration: 0.1
   blinkCount: 3
   disappearDuration: 0.2
   fadeDuration: 1
-  itemListUI: {fileID: 1054649049}
 --- !u!1 &1454293029
 GameObject:
   m_ObjectHideFlags: 0
@@ -18189,10 +18188,11 @@ MonoBehaviour:
   playerModelTransform: {fileID: 5243567607056308626}
   agent: {fileID: 387454291}
   animator: {fileID: 5778863679022423448}
-  rotationSpeed: 420
+  interactionToleranceValue: 5
   interactionDistance: 1
+  interactionDelay: 0.5
   isMovementBlocked: 0
-  interactionDelay: 0.3
+  rotationSpeed: 420
 --- !u!137 &5807011438805233665
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0

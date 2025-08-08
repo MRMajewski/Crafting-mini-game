@@ -24,7 +24,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float interactionDistance = 1f;
     [SerializeField]
-    private float interactionDelay = .1f;
+    private float interactionDelay = .5f;
     public float InteractionDelay => interactionDelay;
 
     [Header("Movement references")]
@@ -198,6 +198,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public void UnblockMovement()
     {
+        Debug.Log("UNBLOCK MOVEMENT ");
         isMovementBlocked = false;
     }
 
@@ -207,7 +208,7 @@ public class PlayerMovementController : MonoBehaviour
 
         IEnumerator UnblockMovementAfterDelay()
         {
-            yield return new WaitForSeconds(interactionDelay);
+            yield return new WaitForSecondsRealtime(interactionDelay);
 
             UnblockMovement();
         }
