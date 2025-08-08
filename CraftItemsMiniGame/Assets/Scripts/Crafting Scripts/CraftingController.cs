@@ -24,11 +24,15 @@ public class CraftingController : MonoBehaviour
 
         itemsToCraft.Add(item);
         inventory.RemoveItem(item.itemName);
-        UpdateCraftingSlotsUI();
-        UpdateCraftButtonState();
+        RefreshCraftingUI();
         MusicManager.Instance.PlaySound(SoundNames.Click);
     }
 
+    private void RefreshCraftingUI()
+    {
+        UpdateCraftingSlotsUI();
+        UpdateCraftButtonState();
+    }
     public void AddItemToCrafting(InventorySlot slot)
     {
         if (!slot.IsFilled) return;
@@ -59,8 +63,7 @@ public class CraftingController : MonoBehaviour
         itemsToCraft.RemoveAt(index);
         inventory.AddItem(item.itemName);
 
-        UpdateCraftingSlotsUI();
-        UpdateCraftButtonState();
+        RefreshCraftingUI();    
     }
 
     private void OnCraftButtonClicked()
@@ -69,22 +72,18 @@ public class CraftingController : MonoBehaviour
         craftingUI.ShowResult(resultItem, resultMessage);
 
         if (success)
-        {
-            itemsToCraft.Clear();
-
+        {         
             MusicManager.Instance.PlaySound(SoundNames.ConfirmUI);
         }
         else
         {
             foreach (ItemData item in itemsToCraft)
                 inventory.AddItem(item.itemName);
-
-            itemsToCraft.Clear();
+       
             MusicManager.Instance.PlaySound(SoundNames.Error);
         }
-
-        UpdateCraftingSlotsUI();
-        UpdateCraftButtonState();
+        itemsToCraft.Clear();
+        RefreshCraftingUI();
     }
 
     private void CollectCraftingResult()

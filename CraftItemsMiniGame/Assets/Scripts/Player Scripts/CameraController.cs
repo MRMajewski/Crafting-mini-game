@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     private float moveDuration = 0.3f;
+    private Vector3 velocity = Vector3.zero;
 
     [SerializeField]
     private Ease easing = Ease.InOutSine;
@@ -30,18 +31,12 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private Transform cameraFollowTransform;
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        if (!isFollowingPlayer) return;
+        if (!isFollowingPlayer || player == null) return;
 
-        Vector3 targetPosition = player.position + offset;
-
-        if (moveTween != null && moveTween.IsActive())
-            moveTween.Kill();
-
-        moveTween = transform.DOMove(targetPosition, moveDuration)
-                             .SetEase(easing)
-                             .SetUpdate(UpdateType.Late);
+        Vector3 targetPos = player.position + offset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, moveDuration);
     }
 
     public void SetMainMenuCameraPosition()

@@ -11,7 +11,6 @@ public class MainMenu : MonoBehaviour
 
     private Sequence activeSequence=null;
 
-    [ContextMenu("INIT")]
     public void OpeningSequence()
     {
         fadePanel = GameController.Instance.UIPanelController.FadePanel;

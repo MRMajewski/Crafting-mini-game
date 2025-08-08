@@ -7,35 +7,26 @@ using UnityEngine;
 public class EndGameManager : MonoBehaviour
 {
     public static EndGameManager Instance { get; private set; }
-    public Animator playerAnimator; 
-    public CanvasGroup fadeCanvas;
-    public CanvasGroup endGamePanel;
-    public TextMeshProUGUI endMessageText;
 
-    [SerializeField]
-    private EndGamePointInteractable endGamePoint;
+    [Header(" References")]
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private CameraController cameraObject;
+    [SerializeField] private PlayerInventoryController playerInventoryController;
+    [SerializeField] private EndGamePointInteractable endGamePoint;
 
+    [Header("Transforms & Positions")]
+    [SerializeField] private GameObject scooterTransform;
+    [SerializeField] private Transform playerEndGameTransform;
+    [SerializeField] private Transform cameraEndGameTransform;
+    [SerializeField] private Transform scooterEndGameTransform;
 
-    [SerializeField]
-    private PlayerInventoryController playerInventoryController;
+    [Header("UI Elements")]
+    [SerializeField] private CanvasGroup fadeCanvas;
+    [SerializeField] private CanvasGroup endGamePanel;
+    [SerializeField] private TextMeshProUGUI endMessageText;
 
-    [SerializeField]
-    private GameObject scooterTransform;
-
-    [SerializeField]
-    private Transform playerEndGameTransform;
-    [SerializeField]
-    private Transform cameraEndGameTransform;
-    [SerializeField]
-    private Transform scooterEndGameTransform;
-
-    [SerializeField]
-    private CameraController cameraObject;
-
-    [SerializeField]
-    private float moveDuration = 2f; 
-
-
+    [Header("Tween References")]
+    [SerializeField] private float moveDuration = 2f;
 
     private void Awake()
     {
@@ -59,13 +50,12 @@ public class EndGameManager : MonoBehaviour
 
         if(setActive )
         {
-            endGamePoint.StartRotating();
-            Debug.Log("TEST CZY POINTER SIE POJAWIA ELO");
+            endGamePoint.StartPointerRotating();
             MusicManager.Instance.PlaySound(SoundNames.Fanfair);
         }
         else
         {
-            endGamePoint.StopRotating();
+            endGamePoint.StopPointerRotating();
         }            
     }
 
@@ -88,17 +78,15 @@ public class EndGameManager : MonoBehaviour
         GameController.Instance.CameraController.SetCameraFollowing(false);
 
         endMessageText.text = "After a while...";
-        yield return FadeIn(2.0f);
+        yield return Fade(1, 2.0f);
         yield return new WaitForSeconds(1.0f);
         GameController.Instance.UIPanelController.OpenHUDPanel(false);
-
 
 
         GameController.Instance.Animator.StopPlayback();
         GameController.Instance.Animator.transform.rotation = Quaternion.Euler(Vector3.zero);
     
         endGamePoint.gameObject.SetActive(false);
-
         scooterTransform.gameObject.SetActive(true);
 
         GameController.Instance.CameraController.SetEndGameCameraPosition();
@@ -106,41 +94,33 @@ public class EndGameManager : MonoBehaviour
         GameController.Instance.PlayerMovement.PlayerModelTransform.transform.position = playerEndGameTransform.transform.position;
         GameController.Instance.PlayerMovement.PlayerModelTransform.transform.rotation = playerEndGameTransform.transform.rotation;
 
-
         GameController.Instance.Animator.CrossFade(AnimatorStates.Surfing, .1f);
 
-        yield return FadeOut(3.0f);
+        yield return Fade(0,3.0f);
         MusicManager.Instance.PlaySound(SoundNames.Rideoff);
         endMessageText.text = "The End. <br> Thanks for playing!";
 
         MoveScooterToEnd();
         yield return new WaitForSeconds(2.0f);
 
-
-
-        yield return FadeIn(2.0f);
+        yield return Fade(1, 2.0f);
         yield return new WaitForSeconds(2.0f);
         endGamePanel.DOFade(1, 1).OnComplete(() => {
             endGamePanel.interactable = true;
             endGamePanel.blocksRaycasts = true;
         });
 
-        //   EndGameSequenceComplete();
     }
+
     public void MoveScooterToEnd()
     {
         GameController.Instance.Animator.transform.parent = scooterTransform.transform;
         scooterTransform.transform.DOMove(scooterEndGameTransform.position, moveDuration).SetEase(Ease.InOutQuad);
     }
-    private IEnumerator FadeIn(float duration)
-    {
-        fadeCanvas.DOFade(1, duration);  
-        yield return new WaitForSeconds(duration);
-    }
 
-    private IEnumerator FadeOut(float duration)
+    private IEnumerator Fade(float alpha, float duration)
     {
-        fadeCanvas.DOFade(0, duration);  
+        fadeCanvas.DOFade(alpha, duration);
         yield return new WaitForSeconds(duration);
     }
 

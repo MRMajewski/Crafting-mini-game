@@ -12,58 +12,44 @@ public enum InventoryMode
 }
 public class UIPanelController : MonoBehaviour
 {
-    private InventoryMode currentMode=InventoryMode.Inventory;
-    [SerializeField]
-    private GameObject inventoryPanel;
-    [SerializeField]
-    private GameObject pausePanel;
-    [SerializeField]
-    private GameObject inventoryItemDataGameObject;
-    [SerializeField]
-    private GameObject craftingPanelGameObject;
-    [SerializeField]
-    private GameObject topPanelHUDGameObject;
-    [SerializeField]
-    private CanvasGroup topPanelHUDCanvasGroup;
-    [SerializeField]
-    private InventoryUI inventoryUI;
-    [SerializeField]
-    private CraftingUI craftingUI;
-    [SerializeField] 
-    private CraftingController craftingController;
-    [SerializeField]
-    private CanvasGroup errorTextCanvasGroup;
-    [SerializeField]
-    private TextMeshProUGUI errorText;
+    private InventoryMode currentMode = InventoryMode.Inventory;
 
+    [Header("UI Panels")]
+    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject inventoryItemDataGameObject;
+    [SerializeField] private GameObject craftingPanelGameObject;
+    [SerializeField] private GameObject topPanelHUDGameObject;
+
+    [Header("CanvasGroups")]
+    [SerializeField] private CanvasGroup topPanelHUDCanvasGroup;
+    [SerializeField] private CanvasGroup errorTextCanvasGroup;
     [SerializeField] private CanvasGroup fadePanel;
-    public CanvasGroup FadePanel => fadePanel;
     [SerializeField] private CanvasGroup exitPanel;
-    public CanvasGroup ExitPanel => exitPanel;
 
+    [Header("UI Elements")]
+    [SerializeField] private TextMeshProUGUI errorText;
+    [SerializeField] private InventoryUI inventoryUI;
+    [SerializeField] private CraftingUI craftingUI;
+    [SerializeField] private ItemListUI itemListUI;
+
+    [Header("Buttons")]
+    [SerializeField] private Button inventoryButton;
+    [SerializeField] private Button pauseButton;
     [SerializeField] private UIButtonPermamentSelection modeButtonSelector;
     [SerializeField] private Button inventoryModeButton;
     [SerializeField] private Button craftingModeButton;
 
-
-    [Header("Button references")]
-    [SerializeField]
-    private Button inventoryButton;
-    [Header("Button references")]
-    [SerializeField]
-    private Button pauseButton;
-
-    public float appearDuration = 0.2f;
-    public float blinkDuration = 0.1f;
-    public int blinkCount = 3;
-    public float disappearDuration = 0.2f;
-
+    [Header("Tween References")]
+    [SerializeField] private float appearDuration = 0.2f;
+    [SerializeField] private float blinkDuration = 0.1f;
+    [SerializeField] private int blinkCount = 3;
+    [SerializeField] private float disappearDuration = 0.2f;
     [SerializeField] private float fadeDuration = 1f;
 
     private Sequence activeSequence = null;
 
-    [SerializeField]
-    private ItemListUI itemListUI;
+    public CanvasGroup FadePanel => fadePanel;
 
     public void InitUI()
     {
@@ -116,7 +102,7 @@ public class UIPanelController : MonoBehaviour
                 break;
         }
 
-        craftingController.ClearCrafting();
+        GameController.Instance.CraftingController.ClearCrafting();
     }
     public void OnSlotClicked(InventorySlot slot)
     {
@@ -127,7 +113,8 @@ public class UIPanelController : MonoBehaviour
                 break;
 
             case InventoryMode.Crafting:
-                craftingController.AddItemToCrafting(slot); 
+                GameController.Instance.CraftingController.AddItemToCrafting(slot);
+
                 break;
         }
 
@@ -143,13 +130,13 @@ public class UIPanelController : MonoBehaviour
 
     public void OpenUIPanel()
     {
-        inventoryPanel.SetActive(true); 
-        SetMode((int)InventoryMode.Inventory);    
+        inventoryPanel.SetActive(true);
+        SetMode((int)InventoryMode.Inventory);
     }
 
     public void CloseUIPanel()
     {
-        inventoryPanel.SetActive(false);     
+        inventoryPanel.SetActive(false);
     }
 
     public void OpenHUDPanel(bool shouldActive)
@@ -158,7 +145,7 @@ public class UIPanelController : MonoBehaviour
     }
     public void OpenHUDPanelTween(bool shouldActive)
     {
-       
+
         if (topPanelHUDCanvasGroup == null)
         {
             return;
@@ -178,47 +165,37 @@ public class UIPanelController : MonoBehaviour
         }
     }
 
-    public void ToggleInventoryPanel()
-    {
-        if (inventoryPanel.activeSelf)
-        {
-            inventoryPanel.SetActive(false);
-            GameController.Instance.PlayerMovement.UnblockMovement();
-            GameController.Instance.PauseGame(false);
-        }
-        else
-        {
-            OpenUIPanel();
-            UpdateUIForMode(currentMode);
-            inventoryUI.UpdateInventoryUI();
-            GameController.Instance.PlayerMovement.BlockMovement();
-            GameController.Instance.PauseGame(true);
-        }
-
-        if (pausePanel.activeSelf)
-        {
-            pausePanel.gameObject.SetActive(false);
-        }
-    }
-
     public void TogglePausePanel()
     {
+        TogglePanel(pausePanel);
+        if (inventoryPanel.activeSelf)
+            inventoryPanel.SetActive(false);
+    }
+
+    public void ToggleInventoryPanel()
+    {
+        TogglePanel(inventoryPanel);
+        UpdateUIForMode(currentMode);
+        inventoryUI.UpdateInventoryUI();
+
         if (pausePanel.activeSelf)
+            pausePanel.SetActive(false);
+    }
+    private void TogglePanel(GameObject panel)
+    {
+        bool isActive = panel.activeSelf;
+
+        panel.SetActive(!isActive);
+
+        if (isActive)
         {
-            pausePanel.gameObject.SetActive(false);
             GameController.Instance.PlayerMovement.UnblockMovement();
             GameController.Instance.PauseGame(false);
         }
         else
         {
-            pausePanel.gameObject.SetActive(true);
             GameController.Instance.PlayerMovement.BlockMovement();
             GameController.Instance.PauseGame(true);
-        }
-
-        if (inventoryPanel.activeSelf)
-        {
-            inventoryPanel.SetActive(false);
         }
     }
 
@@ -226,22 +203,24 @@ public class UIPanelController : MonoBehaviour
     {
         errorText.text = message;
         errorTextCanvasGroup.alpha = 0;
-        errorTextCanvasGroup.DOKill();
 
-        Sequence blinkSequence = DOTween.Sequence();
+        if (activeSequence != null && activeSequence.IsActive())
+        {
+            activeSequence.Kill();
+        }
 
-        blinkSequence.Append(errorTextCanvasGroup.DOFade(1, appearDuration));
+        activeSequence = DOTween.Sequence();
 
-        blinkSequence.Append(errorTextCanvasGroup.DOFade(0, blinkDuration)
-            .SetLoops(blinkCount * 2, LoopType.Yoyo));
-
-        blinkSequence.Append(errorTextCanvasGroup.DOFade(0, disappearDuration));
+        activeSequence.Append(errorTextCanvasGroup.DOFade(1, appearDuration))
+                .Append(errorTextCanvasGroup.DOFade(0, blinkDuration)
+                .SetLoops(blinkCount * 2, LoopType.Yoyo))
+                .Append(errorTextCanvasGroup.DOFade(0, disappearDuration));
     }
 
     public void OpenExitPanel()
     {
         exitPanel.alpha = 0f;
-        exitPanel.gameObject.SetActive(true);   
+        exitPanel.gameObject.SetActive(true);
         exitPanel.DOFade(1f, fadeDuration / 2f);
     }
 

@@ -8,7 +8,6 @@ public class RequiredItemsChecker : MonoBehaviour
 
     [SerializeField]
     private Inventory playerInventory;
-
     public List<InventoryItem> RequiredItems => requiredItems;
 
     public bool AreAllItemsSupplied()

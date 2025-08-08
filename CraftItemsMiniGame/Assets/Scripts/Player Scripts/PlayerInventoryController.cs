@@ -1,11 +1,14 @@
 ﻿using DG.Tweening;
 using System.Collections;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class PlayerInventoryController : MonoBehaviour
 {
     [SerializeField]
     private float pickUpItemDelay = 1f;
+
+    [SerializeField] private float interactionAnimParameterValue = 3f;
 
     private Sequence spawnSequence = null;
 
@@ -16,7 +19,7 @@ public class PlayerInventoryController : MonoBehaviour
         player.PlayerMovement.BlockMovement();
         player.Animator.SetBool("isMoving", false);
 
-        if (TrytoAddItem(item))
+        if (TryToAddItem(item))
         {
             player.Animator.CrossFade(AnimatorStates.PickUp, .1f);
             StartCoroutine(AddItemAfterAnimation(item));
@@ -25,20 +28,21 @@ public class PlayerInventoryController : MonoBehaviour
         }
         else
         {
+            GameController.Instance.UIPanelController.DisplayErrorInfo("You cannot carry more items!");
             player.Animator.CrossFade(AnimatorStates.ShakeNo, .1f);
             MusicManager.Instance.PlaySound(SoundNames.Error);
             item.SetBusyState(false);
         }
     }
 
-    private bool TrytoAddItem(PickupItemInteractable item)
+    private bool TryToAddItem(PickupItemInteractable item)
     {
         return Inventory.Instance.AddItem(item.ItemData.itemName);
     }
 
     private IEnumerator AddItemAfterAnimation(PickupItemInteractable item)
     {
-        yield return new WaitForSecondsRealtime(GameController.Instance.PlayerMovement.InteractionDelay * 3f);
+        yield return new WaitForSecondsRealtime(GameController.Instance.PlayerMovement.InteractionDelay * interactionAnimParameterValue);
 
         AddToInventoryAnimation(item);
     }
@@ -57,5 +61,10 @@ public class PlayerInventoryController : MonoBehaviour
                 spawnSequence.Kill();
                 Destroy(item.gameObject);
             });
+    }
+
+    private void OnDisable()
+    {
+        spawnSequence?.Kill();
     }
 }

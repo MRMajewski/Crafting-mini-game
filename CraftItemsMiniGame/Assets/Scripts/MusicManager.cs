@@ -15,8 +15,8 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private Slider volumeSlider;
 
     private Dictionary<string, AudioClip> soundEffects = new Dictionary<string, AudioClip>();
-    private bool isPlaying = true;
 
+    private bool isPlaying = true;
     private bool isSliderOn = false;
     private void Awake()
     {
@@ -29,31 +29,6 @@ public class MusicManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    //private void Start()
-    //{
-    //    AddSoundsToDictionary(soundEntries);
-
-    //    UpdateButtonIcon();
-
-    //    SetVolume(.3f);
-    //    volumeSlider.value = musicSource.volume;
-
-    //    void AddSoundsToDictionary(List<SoundEntry> soundEntries)
-    //    {
-    //        foreach (var entry in soundEntries)
-    //        {
-    //            if (!soundEffects.ContainsKey(entry.name))
-    //            {
-    //                soundEffects.Add(entry.name, entry.clip);
-    //            }
-    //            else
-    //            {
-    //                Debug.LogWarning($"Duplikat nazwy dŸwiêku: {entry.name}");
-    //            }
-    //        }
-    //    }
-    //}
 
     public void InitMusicManager()
     {

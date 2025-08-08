@@ -33,8 +33,7 @@ public class CraftingUI : MonoBehaviour
                 {
                     OnCraftingSlotClicked?.Invoke(index);
                     MusicManager.Instance.PlaySound(SoundNames.Click);
-                }
-                  
+                }             
             });
         }
     }

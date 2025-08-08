@@ -48,7 +48,7 @@ public class ItemsSpawnerInteractable : MonoBehaviour, IInteractable
 
         if (objectToSpawn == null)
         {
-            DisplayError("LOL, wild error appeared!");
+            DisplayError("Wild error appeared!");
             isBusy = false;
             return;
         }

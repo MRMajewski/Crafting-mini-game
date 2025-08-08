@@ -35,8 +35,7 @@ public class ItemListUI : MonoBehaviour
     {
         playerInventory.OnInventoryChange += UpdateItemUI;
 
-        textMaterial = new Material(requiredItemTitleText.fontMaterial);
-      //  baseColor = requiredItemTitleText.faceColor;   
+        textMaterial = new Material(requiredItemTitleText.fontMaterial); 
         baseOutlineValue = textMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth);
         CreateItemUI();
         UpdateItemUI();
@@ -62,9 +61,9 @@ public class ItemListUI : MonoBehaviour
         {
             var item = requiredItemsChecker.GetItemAt(i);
             int itemCount = playerInventory.GetItemCount(item.itemData);
-            itemTextList[i].text = $"{item.itemData.itemName} {itemCount}/{item.requiredAmount}";
 
-            itemTextList[i].color = itemCount >= item.requiredAmount ? Color.green : baseColor;
+            UpdateItemText(i, item, itemCount);
+
         }
 
         bool allSupplied = requiredItemsChecker.AreAllItemsSupplied();
@@ -74,7 +73,15 @@ public class ItemListUI : MonoBehaviour
             SetRequiredItemsTitleBasic();
 
         EndGameManager.Instance.SetEndGamePointActive(allSupplied);
+
+
+        void  UpdateItemText(int index, InventoryItem requiredItem, int currentCount)
+    {
+        var text = itemTextList[index];
+        text.text = $"{requiredItem.itemData.itemName} {currentCount}/{requiredItem.requiredAmount}";
+        text.color = currentCount >= requiredItem.requiredAmount ? Color.green : baseColor;
     }
+}
 
     public void SetRequiredItemsTitleTweening()
     {
@@ -101,6 +108,8 @@ public class ItemListUI : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (textMaterial != null)
+            Destroy(textMaterial);
         pulsingTween?.Kill();
         playerInventory.OnInventoryChange -= UpdateItemUI;
     }

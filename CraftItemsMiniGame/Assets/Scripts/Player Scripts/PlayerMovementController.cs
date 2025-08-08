@@ -8,25 +8,26 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Player references")]
     [SerializeField]
     private Transform playerModelTransform;
-    public Transform PlayerModelTransform { get => playerModelTransform; }
+    public Transform PlayerModelTransform => playerModelTransform;
     [SerializeField]
     private NavMeshAgent agent;
     [SerializeField]
     private Animator animator;
-    [SerializeField]
-    private float rotationSpeed = 360f;
 
     [Header("Interaction references")]
     private Collider targetInteractionCollider = null;
     private bool isRotatingToInteract = false;
     private Vector3 interactionTargetDirection;
     private bool hasInteracted = false;
+    [SerializeField] private float interactionToleranceValue = 5f;
 
     [SerializeField]
     private float interactionDistance = 1f;
+    [SerializeField]
+    private float interactionDelay = .1f;
+    public float InteractionDelay => interactionDelay;
 
-
-    [Header("Stan Ruchu")]
+    [Header("Movement references")]
     private bool isMoving = false;
     public bool IsMoving { get => isMoving; set => isMoving = value; }
 
@@ -34,9 +35,7 @@ public class PlayerMovementController : MonoBehaviour
     private bool isMovementBlocked = false;
 
     [SerializeField]
-    private float interactionDelay = .1f;
-
-    public float InteractionDelay { get => interactionDelay; }
+    private float rotationSpeed = 360f;
 
 
     void Update()
@@ -116,7 +115,7 @@ public class PlayerMovementController : MonoBehaviour
         RotatePlayerModel(playerModelTransform.position + interactionTargetDirection);
 
         float angle = Vector3.Angle(playerModelTransform.forward, interactionTargetDirection);
-        if (angle < 5f && !hasInteracted)
+        if (angle < interactionToleranceValue && !hasInteracted)
         {
             if (targetInteractionCollider.TryGetComponent<IInteractable>(out var interactable))
             {
@@ -130,7 +129,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private IEnumerator ClearInteractionAfterFrame()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.05f);
         targetInteractionCollider = null;
         interactionTargetDirection = Vector3.zero;
         isRotatingToInteract = false;
@@ -200,12 +199,10 @@ public class PlayerMovementController : MonoBehaviour
     public void UnblockMovement()
     {
         isMovementBlocked = false;
-        Debug.Log("TEST");
     }
 
     public void UnblockMovementWithDelay()
     {
-        Debug.Log("TEST delay");
         StartCoroutine(UnblockMovementAfterDelay());
 
         IEnumerator UnblockMovementAfterDelay()

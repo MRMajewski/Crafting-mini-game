@@ -27,6 +27,8 @@ public class GameController : MonoBehaviour
     public Animator Animator => animator;
     public CameraController CameraController => cameraController;
     public UIPanelController UIPanelController => uIPanelController;
+    public CraftingController CraftingController => craftingController;
+
 
     private bool isPaused;
     public bool IsPaused => isPaused;
@@ -41,7 +43,6 @@ public class GameController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
     }
    
     private void Start()
