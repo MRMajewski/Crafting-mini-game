@@ -46,6 +46,10 @@ public class UIPanelController : MonoBehaviour
     [SerializeField] private int blinkCount = 3;
     [SerializeField] private float disappearDuration = 0.2f;
     [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private float inventoryBlinkDuration = .25f;
+    [SerializeField] private float inventoryBlinkScale = 1.2f;
+    [SerializeField] private Ease inventoryBlinkEase= Ease.InOutSine;
+
 
     private Sequence activeSequence = null;
 
@@ -217,6 +221,10 @@ public class UIPanelController : MonoBehaviour
                 .Append(errorTextCanvasGroup.DOFade(0, disappearDuration));
     }
 
+    public void BlinkInventoryButton()
+    {
+        inventoryButton.transform.DOScale(inventoryBlinkScale, inventoryBlinkDuration).SetLoops(2,LoopType.Yoyo).SetEase(inventoryBlinkEase);
+    }
     public void OpenExitPanel()
     {
         exitPanel.alpha = 0f;

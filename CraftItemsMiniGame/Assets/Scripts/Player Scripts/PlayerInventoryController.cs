@@ -59,6 +59,7 @@ public class PlayerInventoryController : MonoBehaviour
                 item.SetBusyState(false); 
                 spawnSequence.Kill();
                 Destroy(item.gameObject);
+                GameController.Instance.UIPanelController.BlinkInventoryButton();
             });
     }
 
