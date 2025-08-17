@@ -11093,8 +11093,6 @@ MonoBehaviour:
   craftingUI: {fileID: 1506931277}
   itemListUI: {fileID: 1054649049}
   inventoryButton: {fileID: 1286274947}
-  pauseButton: {fileID: 175659183}
-  infoButton: {fileID: 956916828}
   modeButtonSelector: {fileID: 275975031}
   inventoryModeButton: {fileID: 526273602}
   craftingModeButton: {fileID: 1895037635}
@@ -11104,8 +11102,7 @@ MonoBehaviour:
   disappearDuration: 0.2
   fadeDuration: 1
   inventoryBlinkDuration: 0.25
-  inventoryBlinkScale: 1.2
-  inventoryBlinkEase: 4
+  inventoryBlinkScale: 0.2
 --- !u!1 &1454293029
 GameObject:
   m_ObjectHideFlags: 0
@@ -11921,7 +11918,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507601663}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -12143,7 +12140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 8abac632ac87d8b47bc5ad5aba133861, type: 3}
+  - {fileID: 2100000, guid: fe173039c9e0fe242942f5c51b2233de, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

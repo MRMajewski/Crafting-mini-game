@@ -93,10 +93,7 @@ public class UIPanelController : MonoBehaviour
         foreach (var panel in panels)
         {
             panel.SetActive(false);
-        }
-
-        GameController.Instance.PlayerMovement.UnblockMovement();
-        GameController.Instance.PauseGame(false);
+        }    
     }
 
     public void CloseAllPanelsExcept(GameObject panelToOpen)

@@ -77,7 +77,6 @@ public class GameController : MonoBehaviour
         CameraController.SetMainMenuCameraPosition();
     }
 
-
     public void OpeningSequence()
     {
         mainMenu.OpeningSequence();
